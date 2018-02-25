@@ -1,5 +1,5 @@
 
-# Version: 1.3.3
+# Version: 1.3.4
 
 import pygame
 import pygame_textinput
@@ -97,7 +97,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 # Funcion Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
 def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
 	
-	global SELECT, VALORES, seleccion, PuntoInicio
+	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino
 	
 	'''
 	# Funcion que dibuja el tablero
@@ -221,27 +221,31 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					screen.blit(personaje.image, (x, y))
 					
 					# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
-					if not seleccion in SELECT: SELECT.append(seleccion)
+					#~ if not seleccion in SELECT: SELECT.append(seleccion)
 					
-			else:	# Se Elige El Punto De Inicio Y El Punto Final Para El Personaje en el Mapa.
+			else:	# Se Elige El Punto De Inicio Y El Punto Destino Para El Personaje en el Mapa.
 				
 				if not Iniciar and SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
 					
 					if seleccion != SelTemp:
 						
-						PuntoInicio = SelTemp
+						if PuntoInicio == None: PuntoInicio = SelTemp
+						elif PuntoDestino == None: PuntoDestino = SelTemp
+						else:
+							
+							if PuntoInicio != None and PuntoDestino != None:
+								PuntoInicio = SelTemp
+								PuntoDestino = None
+								
 						seleccion = SelTemp
-						#~ print(True, seleccion)
-						
-					else: pass
-					
+				
 			# Dibuja Temporalmente La Seleccion con el Clic en el Mapa.
 			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
 			
 			# Imprimir El Recorrido:
-			#~ if [LETRAS[i],j+1] in SELECT:
+			for Pos, Movs in SELECT:
 				
-				#~ dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1]) + 1), [x+1, y], Fuentes['Droid 10'], COLOR['Rojo'])
+				if [LETRAS[i],j+1] == Pos: dibujarTexto(screen, str(Movs), [x+1, y], Fuentes['Droid 10'], COLOR['Rojo'])
 			
 			# Dibuja Los Numeros En Y
 			if i == 0:
@@ -255,6 +259,9 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 		dibujarTexto(screen, LETRAS[i], 
 		[i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente],	# Posicion Centrada en su Columna Correspondiente.
 		Fuentes['Alice 30'], COLOR['Azul'])
+	
+	print(SELECT)
+
 
 #===================================================================================================
 
@@ -300,6 +307,8 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 
 def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 	
+	global SELECT, Movimientos
+	
 	PosLetra = LETRAS.index(Actual[0])
 	
 	x, y = PosLetra, Actual[1]
@@ -311,7 +320,25 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[2] == 'Pared': pass
-					else: Actual = [Actual[0],Actual[1]-1]
+					else:
+						
+						Actual = [Actual[0],Actual[1]-1]
+						
+						Add = False
+						Movimientos += 1
+						
+						for Pos, Movs in SELECT:
+							
+							if Actual == Pos:
+								Movs.append(Movimientos)
+								Add = False
+								break
+								
+							else: Add = True
+							
+						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						break
 		
 	elif Dir == 'D':
 		if   Actual[0] in LETRAS and Actual[1] == YPOS: pass
@@ -320,7 +347,25 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[2] == 'Pared': pass
-					else: Actual = [Actual[0],Actual[1]+1]
+					else:
+						
+						Actual = [Actual[0],Actual[1]+1]
+						
+						Add = False
+						Movimientos += 1
+						
+						for Pos, Movs in SELECT:
+							
+							if Actual == Pos:
+								Movs.append(Movimientos)
+								Add = False
+								break
+								
+							else: Add = True
+							
+						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						break
 		
 	elif Dir == 'L':
 		
@@ -335,7 +380,25 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[2] == 'Pared': pass
-					else: Actual = [LETRAS[PosLetra-1],Actual[1]]
+					else:
+						
+						Actual = [LETRAS[PosLetra-1],Actual[1]]
+						
+						Add = False
+						Movimientos += 1
+						
+						for Pos, Movs in SELECT:
+							
+							if Actual == Pos:
+								Movs.append(Movimientos)
+								Add = False
+								break
+								
+							else: Add = True
+							
+						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						break
 		
 	elif Dir == 'R':
 		
@@ -350,8 +413,26 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[2] == 'Pared': pass
-					else: Actual = [LETRAS[PosLetra+1],Actual[1]]
-	
+					else:
+						
+						Actual = [LETRAS[PosLetra+1],Actual[1]]
+						
+						Add = False
+						Movimientos += 1
+						
+						for Pos, Movs in SELECT:
+							
+							if Actual == Pos:
+								Movs.append(Movimientos)
+								Add = False
+								break
+								
+							else: Add = True
+							
+						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						break
+		
 	return Actual
 
 #===================================================================================================
@@ -568,6 +649,7 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 
 seleccion = None	# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
 PuntoInicio = None	# Posicion de Inicio, ejemplo [ 'A', 1 ].
+PuntoDestino = None	# Posicion de Destino, ejemplo [ 'O', 15 ].
 
 Error = False		
 Error2 = False		# Marca errores solamente en la seccion de seleccion de bloques, si hay repetidos.
@@ -575,6 +657,7 @@ CadenaError = ''
 CadenaError2 = ''	# Marca errores solamente en la seccion de seleccion de bloques, si hay repetidos.
 
 Iniciar = False
+Movimientos = 1
 
 NA      = 0
 Pared   = 0
@@ -590,7 +673,8 @@ Montaña = 0
 
 def main():
 	
-	global seleccion, PuntoInicio, Iniciar
+	global SELECT, Movimientos
+	global seleccion, PuntoInicio, PuntoDestino, Iniciar
 	global Error, Error2, CadenaError, CadenaError2
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña
 	
@@ -745,7 +829,7 @@ def main():
 			
 			elif evento.type == pygame.KEYDOWN:		# Manipulacion del Teclado.
 				
-				if Cargar and Iniciar:		# Si Ya Fue Cargado El Tablero y Se PResiono Iniciar.
+				if Cargar and Iniciar:		# Si Ya Fue Cargado El Tablero y Se Presiono Iniciar.
 					
 					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)	# Tecla Izquierda. Mueve Personaje.
 					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)	# Tecla Derecha. Mueve Personaje.
@@ -828,14 +912,17 @@ def main():
 					  
 					else:			# Si Se Selecciono Un Personaje, Se Iniciara.
 						
+						Movimientos = 1
 						Iniciar = True	# Inicia El Juego.
-						
+						seleccion = PuntoInicio
 						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
 																				  # Pasandole La Ruta de la Imagen Que se encuentra en el Diccionario (RutaPersonaje),
 																				  # Que corresponda al Nombre de Personaje de la lista (NombrePersonaje)
 																				  # Que este en la posicion del Numero de Personaje Elegido (NP)
 						
 						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
+						
+						SELECT.append((seleccion, [Movimientos]))
 						
 				elif Btn2Pressed and Error2:		# Si el Boton 2 Fue Presionado.
 					
@@ -857,7 +944,6 @@ def main():
 					
 					else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
 						
-						global SELECT
 						SELECT = []		# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
 						
 						Iniciar = False	# Aun no se permite Iniciar La Partida.
@@ -899,10 +985,11 @@ def main():
 						Objetos = {'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
 								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8}
 						
-						PuntoInicio	= None		# Se Inicializa la Variable Global PuntoInicio en None.
-						NP			= None		# Se Inicializa la Variable personaje en None.
-						CargarMapa	= False		# Indica que El Boton Cargar Mapa Dejo de ser Apretado.
-						Error		= False		# Indica Que No Hay Error.
+						PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
+						PuntoDestino = None		# Se Inicializa la Variable Global PuntoDestino en None.
+						NP			 = None		# Se Inicializa la Variable personaje en None.
+						CargarMapa	 = False	# Indica que El Boton Cargar Mapa Dejo de ser Apretado.
+						Error		 = False	# Indica Que No Hay Error.
 				
 				#=======================================================
 				
@@ -1131,22 +1218,22 @@ def main():
 			dibujarTexto(screen,  NombrePersonaje[NP], [122, 54], Fuentes['Droid 20'], COLOR['Morado'])
 			dibujarTexto(screen,  NombrePersonaje[NP], [123, 55], Fuentes['Droid 20'], COLOR['Negro'])
 		
-		dibujarTexto(screen, 'Posición Actual: ', [14, 85],  Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Posición Actual: ', [15, 86],  Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Posición Actual: ', [14, 95],  Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Posición Actual: ', [15, 96],  Fuentes['Droid 20'], COLOR['Azul'])
 		
 		if seleccion == None:		# Si Aun no hay nada en la Variable global seleccion, Dibuja 'Ninguna'.
 			
-			dibujarTexto(screen,  'Ninguna', [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
-			dibujarTexto(screen,  'Ninguna', [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen,  'Ninguna', [162, 95], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen,  'Ninguna', [163, 96], Fuentes['Droid 20'], COLOR['Negro'])
 			
 		else:						# De lo contrario, Dibuja la Posicion actual del Personaje.
 			
 			if Iniciar:		# Si se inicio el Juego
-				dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
-				dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+				dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [162, 95], Fuentes['Droid 20'], COLOR['Verde'])
+				dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [163, 96], Fuentes['Droid 20'], COLOR['Negro'])
 			else:			# Si no...
-				dibujarTexto(screen,  'Ninguna', [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
-				dibujarTexto(screen,  'Ninguna', [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+				dibujarTexto(screen,  'Ninguna', [162, 95], Fuentes['Droid 20'], COLOR['Verde'])
+				dibujarTexto(screen,  'Ninguna', [163, 96], Fuentes['Droid 20'], COLOR['Negro'])
 				
 		
 		Temp = 'Ninguno'			# Variable Temporal Que Imprime el Nombre del Terreno Actual.
@@ -1154,32 +1241,46 @@ def main():
 			if x[0] == seleccion: 	# Si La Posicion Del Valor en X es Igual a la Seleccion Actual (Posicion del Jugador).
 				Temp = x[2]			# Dibuja El Nombre Del Terreno en esa Posicion.
 		
-		dibujarTexto(screen, 'Terreno Actual: ', [14, 115],  Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Terreno Actual: ', [15, 116],  Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Terreno Actual: ', [14, 125],  Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Terreno Actual: ', [15, 126],  Fuentes['Droid 20'], COLOR['Azul'])
 		
 		if Iniciar and Temp != 'Ninguno':
 			
-			dibujarTexto(screen, str(Temp),		  	 [162, 115], Fuentes['Droid 20'], COLOR['Azul'])
-			dibujarTexto(screen, str(Temp),		  	 [163, 116], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, str(Temp),		  	 [162, 125], Fuentes['Droid 20'], COLOR['Azul'])
+			dibujarTexto(screen, str(Temp),		  	 [163, 126], Fuentes['Droid 20'], COLOR['Negro'])
 			
 		else:
 			
-			dibujarTexto(screen, 'Ninguno',		  	 [162, 115], Fuentes['Droid 20'], COLOR['Azul'])
-			dibujarTexto(screen, 'Ninguno',		  	 [163, 116], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Ninguno',		  	 [162, 125], Fuentes['Droid 20'], COLOR['Azul'])
+			dibujarTexto(screen, 'Ninguno',		  	 [163, 126], Fuentes['Droid 20'], COLOR['Negro'])
 			
 		
-		dibujarTexto(screen, 'Posición Inicio: ', [14, 145],  Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Posición Inicio: ', [15, 146],  Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Punto Inicio: ', [14, 165], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Punto Inicio: ', [15, 166], Fuentes['Droid 20'], COLOR['Azul'])
 		
 		if PuntoInicio == None:		# Si Aun no hay nada en la Variable Global PuntoInicio, Dibuja 'Ninguno'.
 			
-			dibujarTexto(screen,  'Ninguno', [162, 145], Fuentes['Droid 20'], COLOR['Verde'])
-			dibujarTexto(screen,  'Ninguno', [163, 146], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen,  'Ninguno', [162, 165], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen,  'Ninguno', [163, 166], Fuentes['Droid 20'], COLOR['Negro'])
 			
-		else:						# De lo contrario, Dibuja la Posicion actual del Personaje.
+		else:						# De lo contrario, Dibuja la Posicion Inicio del Personaje.
 			
-			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [162, 145], Fuentes['Droid 20'], COLOR['Verde'])
-			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [163, 146], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [162, 165], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [163, 166], Fuentes['Droid 20'], COLOR['Negro'])
+		
+		
+		dibujarTexto(screen, 'Punto Destino: ', [14, 195], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Punto Destino: ', [15, 196], Fuentes['Droid 20'], COLOR['Azul'])
+		
+		if PuntoDestino == None:		# Si Aun no hay nada en la Variable Global PuntoDestino, Dibuja 'Ninguno'.
+			
+			dibujarTexto(screen,  'Ninguno', [162, 195], Fuentes['Droid 20'], COLOR['Azul'])
+			dibujarTexto(screen,  'Ninguno', [163, 196], Fuentes['Droid 20'], COLOR['Negro'])
+			
+		else:						# De lo contrario, Dibuja la Posicion Destino del Personaje.
+			
+			dibujarTexto(screen, str(PuntoDestino[0])+', '+str(PuntoDestino[1]), [162, 195], Fuentes['Droid 20'], COLOR['Azul'])
+			dibujarTexto(screen, str(PuntoDestino[0])+', '+str(PuntoDestino[1]), [163, 196], Fuentes['Droid 20'], COLOR['Negro'])
 		
 					#===============================================================
 		
