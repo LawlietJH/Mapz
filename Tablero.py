@@ -1,5 +1,5 @@
 
-# Version: 1.3.2
+# Version: 1.3.3
 
 import pygame
 import pygame_textinput
@@ -95,9 +95,9 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 #===================================================================================================
 
 # Funcion Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
-def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, seleccion, SelTemp, Matriz, Lisy, Objetos):
+def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
 	
-	global SELECT, VALORES
+	global SELECT, VALORES, seleccion, PuntoInicio
 	
 	'''
 	# Funcion que dibuja el tablero
@@ -211,16 +211,30 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				bloque = Objetos['N/A']
 				screen.blit(bloque.image, (x,y))
 				
-			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1 and Iniciar:
+			if PuntoInicio != None and Iniciar:		# Si se Inicio cargara el personaje en la posicion de la seleccion.
 				
-				# Dibuja el Personaje Seleccionado.
-				Objetos['Personaje'].resize(DistX, DistY)
-				personaje = Objetos['Personaje']
-				screen.blit(personaje.image, (x, y))
+				if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
+					
+					# Dibuja el Personaje Seleccionado.
+					Objetos['Personaje'].resize(DistX, DistY)
+					personaje = Objetos['Personaje']
+					screen.blit(personaje.image, (x, y))
+					
+					# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
+					if not seleccion in SELECT: SELECT.append(seleccion)
+					
+			else:	# Se Elige El Punto De Inicio Y El Punto Final Para El Personaje en el Mapa.
 				
-				# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
-				if not seleccion in SELECT: SELECT.append(seleccion)
-				
+				if not Iniciar and SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
+					
+					if seleccion != SelTemp:
+						
+						PuntoInicio = SelTemp
+						seleccion = SelTemp
+						#~ print(True, seleccion)
+						
+					else: pass
+					
 			# Dibuja Temporalmente La Seleccion con el Clic en el Mapa.
 			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
 			
@@ -552,6 +566,8 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 	
 #===================================================================================================
 
+seleccion = None	# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
+PuntoInicio = None	# Posicion de Inicio, ejemplo [ 'A', 1 ].
 
 Error = False		
 Error2 = False		# Marca errores solamente en la seccion de seleccion de bloques, si hay repetidos.
@@ -574,7 +590,9 @@ Montaña = 0
 
 def main():
 	
-	global Error, Error2, CadenaError, CadenaError2, Iniciar, Bosque, Camino, Pared, Lava, Agua, Arena, Montaña
+	global seleccion, PuntoInicio, Iniciar
+	global Error, Error2, CadenaError, CadenaError2
+	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -596,6 +614,7 @@ def main():
 	
 	NP = None					# Numero de Personaje, Posicionamineto en la Lista.
 	seleccion = None			# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
+	PuntoInicio = None			# Posicion de Inicio, ejemplo [ 'A', 1 ].
 	seleccionPers1 = None		# Para Saber Si El Personaje 1 Fue Seleccionado.
 	seleccionPers2 = None		# Para Saber Si El Personaje 2 Fue Seleccionado.
 	seleccionPers3 = None		# Para Saber Si El Personaje 3 Fue Seleccionado.
@@ -773,16 +792,20 @@ def main():
 				if Cargar:		# Si se cargo el Mapa Permite Presionar los Botones de Flechas.
 					
 					X = 1006; Y = 168
+					
 					CadenaError = ''
 					CadenaError2 = ''
+					
 					LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7 = BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7)
 					
 				#=====================================================================================
 				
 				# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
-				if   (xr >= 29)  and (xr <= 82)  and (yr >= 199) and (yr <= 252): seleccionPers1 = True
-				elif (xr >= 99)  and (xr <= 152) and (yr >= 199) and (yr <= 252): seleccionPers2 = True
-				elif (xr >= 169) and (xr <= 222) and (yr >= 199) and (yr <= 252): seleccionPers3 = True
+				if Cargar:
+					
+					if   (xr >= 29)  and (xr <= 82)  and (yr >= 299) and (yr <= 352): seleccionPers1 = True
+					elif (xr >= 99)  and (xr <= 152) and (yr >= 299) and (yr <= 352): seleccionPers2 = True
+					elif (xr >= 169) and (xr <= 222) and (yr >= 299) and (yr <= 352): seleccionPers3 = True
 				
 				
 				
@@ -790,19 +813,33 @@ def main():
 				
 				#=======================================================
 				
-				if Btn2Pressed and not Error2:		# Si el Boton 2 Fue Presionado.
+				if Btn2Pressed and not Error2:		# Si el Boton 2 (Comenzar) Fue Presionado.
 					
-					Iniciar = True	# Inicia El Juego.
+					if NP == None:	# Si el Boton 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
+						
+						Error = True
+						CadenaError = 'Selecciona Un Personaje.'
+						Iniciar = False
 					
+					elif PuntoInicio == None:
+						
+						Error = True
+						CadenaError = 'Selecciona Punto Inicio.'
+					  
+					else:			# Si Se Selecciono Un Personaje, Se Iniciara.
+						
+						Iniciar = True	# Inicia El Juego.
+						
+						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
+																				  # Pasandole La Ruta de la Imagen Que se encuentra en el Diccionario (RutaPersonaje),
+																				  # Que corresponda al Nombre de Personaje de la lista (NombrePersonaje)
+																				  # Que este en la posicion del Numero de Personaje Elegido (NP)
+						
+						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
+						
 				elif Btn2Pressed and Error2:		# Si el Boton 2 Fue Presionado.
 					
 					CadenaError2 = 'Bloques Aun No Asignados.'
-					
-				elif Btn1Pressed and NP == None:	# Si el Boton 1 Fue Presionado Pero No se ha seleccionado Personaje.
-					
-					Error = True
-					CadenaError = 'Selecciona Un Personaje'
-					CargarMapa = False
 					
 				elif CargarMapa:		# Si el Boton 1 Fue Seleccionado y Hay Personaje Seleccionado.
 					
@@ -825,11 +862,6 @@ def main():
 						
 						Iniciar = False	# Aun no se permite Iniciar La Partida.
 						Cargar = True	# Se Dibuja El Mapa.
-						
-						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
-																				  # Pasandole La Ruta de la Imagen Que se encuentra en el Diccionario (RutaPersonaje),
-																				  # Que corresponda al Nombre de Personaje de la lista (NombrePersonaje)
-																				  # Que este en la posicion del Numero de Personaje Elegido (NP)
 						
 						# Se Crean Nuevos Objetos Bloque para el nuevo Mapa.
 						bloque1 = Bloque("img/Texturas/Pared.jpg")		# Objeto Pared.
@@ -864,12 +896,13 @@ def main():
 						puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)	# Se Indica El Punto de Inicio Para Dibujar La Matriz.
 						
 						# Se Reinicia el Diccionario Objetos con los Nuevos Objetos Generados.
-						Objetos = {'Personaje':personaje, 'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
+						Objetos = {'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
 								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8}
 						
-						seleccion = ['A', 1] 	# En esta Posicion Iniciara El Personaje Una Vez Cargado.
-						CargarMapa = False		# Indica que El Boton Cargar Mapa Dejo de ser Apretado.
-						Error = False			# Indica Que No Hay Error.
+						PuntoInicio	= None		# Se Inicializa la Variable Global PuntoInicio en None.
+						NP			= None		# Se Inicializa la Variable personaje en None.
+						CargarMapa	= False		# Indica que El Boton Cargar Mapa Dejo de ser Apretado.
+						Error		= False		# Indica Que No Hay Error.
 				
 				#=======================================================
 				
@@ -892,7 +925,7 @@ def main():
 		
 		if Cargar: # Si Cargar es Igual a True entonces Dibujara El Mapa.
 			
-			dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, seleccion, SelTemp, Matrixy, Lisy, Objetos)
+			dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
 			
 		else: # Si no, Dibujara solo un rectangulo en trasfondo para representar que ahi se dibujara el Mapa.
 			
@@ -1076,8 +1109,7 @@ def main():
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,   240, 540],  0)
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,   240, 540],  3)
 		pygame.draw.line(screen, COLOR['Negro'],  [9,  40], [250,  40],  3)
-		pygame.draw.line(screen, COLOR['Negro'],  [9, 155], [250,  155], 3)
-		pygame.draw.line(screen, COLOR['Negro'],  [9, 270], [250,  270], 3)
+		pygame.draw.line(screen, COLOR['Negro'],  [9, 255], [250,  255], 3)
 		
 		dibujarTexto(screen, 'Informacion', [69, 11],  Fuentes['Wendy 30'], COLOR['Verde'])
 		dibujarTexto(screen, 'Informacion', [70, 12],  Fuentes['Wendy 30'], COLOR['Verde Claro'])
@@ -1102,15 +1134,20 @@ def main():
 		dibujarTexto(screen, 'Posición Actual: ', [14, 85],  Fuentes['Droid 20'], COLOR['Negro'])
 		dibujarTexto(screen, 'Posición Actual: ', [15, 86],  Fuentes['Droid 20'], COLOR['Azul'])
 		
-		if seleccion == None:		# Si Aun no hay nada en la Variable Seleccion, Dibuja 'Ninguna'.
+		if seleccion == None:		# Si Aun no hay nada en la Variable global seleccion, Dibuja 'Ninguna'.
 			
 			dibujarTexto(screen,  'Ninguna', [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
 			dibujarTexto(screen,  'Ninguna', [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
 			
 		else:						# De lo contrario, Dibuja la Posicion actual del Personaje.
 			
-			dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
-			dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+			if Iniciar:		# Si se inicio el Juego
+				dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
+				dibujarTexto(screen, str(seleccion[0])+', '+str(seleccion[1]), [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+			else:			# Si no...
+				dibujarTexto(screen,  'Ninguna', [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
+				dibujarTexto(screen,  'Ninguna', [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+				
 		
 		Temp = 'Ninguno'			# Variable Temporal Que Imprime el Nombre del Terreno Actual.
 		for x in VALORES:			# Se Obtienen los Valores De cada Terreno en La Matriz.
@@ -1119,54 +1156,80 @@ def main():
 		
 		dibujarTexto(screen, 'Terreno Actual: ', [14, 115],  Fuentes['Droid 20'], COLOR['Negro'])
 		dibujarTexto(screen, 'Terreno Actual: ', [15, 116],  Fuentes['Droid 20'], COLOR['Azul'])
-		dibujarTexto(screen, str(Temp),		  	 [162, 115], Fuentes['Droid 20'], COLOR['Azul'])
-		dibujarTexto(screen, str(Temp),		  	 [163, 116], Fuentes['Droid 20'], COLOR['Negro'])
+		
+		if Iniciar and Temp != 'Ninguno':
+			
+			dibujarTexto(screen, str(Temp),		  	 [162, 115], Fuentes['Droid 20'], COLOR['Azul'])
+			dibujarTexto(screen, str(Temp),		  	 [163, 116], Fuentes['Droid 20'], COLOR['Negro'])
+			
+		else:
+			
+			dibujarTexto(screen, 'Ninguno',		  	 [162, 115], Fuentes['Droid 20'], COLOR['Azul'])
+			dibujarTexto(screen, 'Ninguno',		  	 [163, 116], Fuentes['Droid 20'], COLOR['Negro'])
+			
+		
+		dibujarTexto(screen, 'Posición Inicio: ', [14, 145],  Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Posición Inicio: ', [15, 146],  Fuentes['Droid 20'], COLOR['Azul'])
+		
+		if PuntoInicio == None:		# Si Aun no hay nada en la Variable Global PuntoInicio, Dibuja 'Ninguno'.
+			
+			dibujarTexto(screen,  'Ninguno', [162, 145], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen,  'Ninguno', [163, 146], Fuentes['Droid 20'], COLOR['Negro'])
+			
+		else:						# De lo contrario, Dibuja la Posicion actual del Personaje.
+			
+			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [162, 145], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [163, 146], Fuentes['Droid 20'], COLOR['Negro'])
 		
 					#===============================================================
 		
 					# Dibuja La Seccion 'Seleccion de Personaje':
 		
-		dibujarTexto(screen, 'Seleccionar Personaje', [27, 169], Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Seleccionar Personaje', [28, 170], Fuentes['Droid 20'], COLOR['Morado'])
-		
-		# Cambia el Tamaño de Las Miniaturas de los personajes en 50x50 pixeles.
-		Cuadro1.resize(50,50)
-		Cuadro2.resize(50,50)
-		Cuadro3.resize(50,50)
-		
-		# Dibuja recuadros Blancos con Margen Negro en donde iran las Miniaturas.
-		pygame.draw.rect(screen, COLOR['Blanco'], [28,  198, 54, 54], 0)
-		pygame.draw.rect(screen, COLOR['Negro'],  [28,  198, 54, 54], 2)
-		pygame.draw.rect(screen, COLOR['Blanco'], [98,  198, 54, 54], 0)
-		pygame.draw.rect(screen, COLOR['Negro'],  [98,  198, 54, 54], 2)
-		pygame.draw.rect(screen, COLOR['Blanco'], [168, 198, 54, 54], 0)
-		pygame.draw.rect(screen, COLOR['Negro'],  [168, 198, 54, 54], 2)
-		
-		# Se Colocan Las Miniaturas.
-		screen.blit(Cuadro1.image, (30,  200))
-		screen.blit(Cuadro2.image, (100, 200))
-		screen.blit(Cuadro3.image, (170, 200))
-		
-		if seleccionPers1:		# Si El Personaje 1 Fue Seleccionado
+		if Cargar and not Iniciar:
 			
-			pygame.draw.rect(screen, COLOR['Seleccion'], [30,  200, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
-			#~ CargarPers = False
-			seleccionPers1 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-			NP = 0						# Se Asigna a NP el Numero De Personaje.
+			pygame.draw.line(screen, COLOR['Negro'],  [9, 370], [250,  370], 3)
 			
-		elif seleccionPers2:		# Si El Personaje 2 Fue Seleccionado
+			dibujarTexto(screen, 'Seleccionar Personaje', [27, 269], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Seleccionar Personaje', [28, 270], Fuentes['Droid 20'], COLOR['Morado'])
 			
-			pygame.draw.rect(screen, COLOR['Seleccion'], [100, 200, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
-			#~ CargarPers = False
-			seleccionPers2 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-			NP = 1						# Se Asigna a NP el Numero De Personaje.
+			# Cambia el Tamaño de Las Miniaturas de los personajes en 50x50 pixeles.
+			Cuadro1.resize(50,50)
+			Cuadro2.resize(50,50)
+			Cuadro3.resize(50,50)
 			
-		elif seleccionPers3:		# Si El Personaje 3 Fue Seleccionado
+			# Dibuja recuadros Blancos con Margen Negro en donde iran las Miniaturas.
+			pygame.draw.rect(screen, COLOR['Blanco'], [28,  298, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [28,  298, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [98,  298, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [98,  298, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [168, 298, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [168, 298, 54, 54], 2)
 			
-			pygame.draw.rect(screen, COLOR['Seleccion'], [170, 200, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
-			#~ CargarPers = False
-			seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-			NP = 2						# Se Asigna a NP el Numero De Personaje.
+			# Se Colocan Las Miniaturas.
+			screen.blit(Cuadro1.image, (30,  300))
+			screen.blit(Cuadro2.image, (100, 300))
+			screen.blit(Cuadro3.image, (170, 300))
+			
+			if seleccionPers1:		# Si El Personaje 1 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  300, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
+				#~ CargarPers = False
+				seleccionPers1 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 0						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers2:		# Si El Personaje 2 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [100, 300, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
+				#~ CargarPers = False
+				seleccionPers2 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 1						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers3:		# Si El Personaje 3 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [170, 300, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
+				#~ CargarPers = False
+				seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 2						# Se Asigna a NP el Numero De Personaje.
 		
 		#===================================================================================================
 		
