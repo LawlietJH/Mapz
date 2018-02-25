@@ -40,14 +40,35 @@ class Bloque(pygame.sprite.Sprite, pygame.font.Font):
 	def resize(self, TX, TY):
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
+
+#Clases 
+class Personaje(pygame.sprite.Sprite, pygame.font.Font):
 	
+	def __init__(self, Nombre):
+		
+		pygame.sprite.Sprite.__init__(self)
+		self.image = load_image(Nombre, True)
+		self.image = pygame.transform.flip(self.image, True, False)
+		self.direccion = 'R'
+		
 	
+	def resize(self, TX, TY):
+		
+		self.image = pygame.transform.scale(self.image, (TX, TY))
+	
+	def flip(self, TX, TY=False):
+		
+		self.image = pygame.transform.flip(self.image, TX, TY)
+	
+	def setDireccion(self, direccion): self.direccion = direccion
+	
+	def getDireccion(self): return self.direccion
 
 
 
 #=======================================================================
 
-def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matriz, Lisy, Bloques):
+def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matriz, Lisy, Objetos):
 	
 	global SELECT, VALORES
 	
@@ -79,7 +100,11 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 			if Matriz[j][i] == Lisy[0]:
 				
 				VALORES.append(([LETRAS[i],j+1], Lisy[0], 'Camino'))
-				pygame.draw.rect(screen, COLOR[2], [x, y, dimension, dimension], 0)
+				#~ pygame.draw.rect(screen, COLOR[2], [x, y, dimension, dimension], 0)
+				
+				Objetos[3].resize(DistX, DistY)
+				bloque = Objetos[3]
+				screen.blit(bloque.image, (x,y))
 				
 			elif Matriz[j][i] == Lisy[1]:
 				
@@ -87,24 +112,30 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 				
 				#~ pygame.draw.rect(screen, COLOR[7], [x, y, dimension, dimension], 0)
 				
-				Bloques[0].resize(DistX, DistY)
-				screen.blit(Bloques[0].image, (x,y))
+				Objetos[1].resize(DistX, DistY)
+				bloque = Objetos[1]
+				screen.blit(bloque.image, (x,y))
 				
 			elif Matriz[j][i] == Lisy[2]:
 				
 				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Pasto'))
-				pygame.draw.rect(screen, COLOR[4], [x, y, dimension, dimension], 0)
+				
+				#~ pygame.draw.rect(screen, COLOR[4], [x, y, dimension, dimension], 0)
+				
+				Objetos[4].resize(DistX, DistY)
+				bloque = Objetos[4]
+				screen.blit(bloque.image, (x,y))
 				
 			else:
 				
 				VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
-				pygame.draw.rect(screen, COLOR[0], [x, y, dimension, dimension], 0)
 				
-				Bloques[1].resize(DistX, DistY)
-				bloque = Bloques[1]
+				#~ pygame.draw.rect(screen, COLOR[0], [x, y, dimension, dimension], 0)
+				
+				Objetos[2].resize(DistX, DistY)
+				bloque = Objetos[2]
 				screen.blit(bloque.image, (x,y))
 				
-			
 			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
 				
 				#~ pygame.draw.rect(screen, (0,255,0), [x, y, dimension, dimension], 0)
@@ -115,21 +146,32 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 					#~ if i == 0 and j == 0: pygame.draw.circle(screen, COLOR[5], (x+(DistX//2), y+(DistY//2)), 290//YPOS-8)
 					#~ elif (i > 0 and i < XPOS) or (j > 0 and j < YPOS): pygame.draw.circle(screen, COLOR[5], (x+(DistX//2), y+(DistY//2)), 290//YPOS-8)
 					
-					pygame.draw.circle(screen, COLOR[5], (x+(DistX//2), y+(DistY//2)), 290//YPOS-8)
-				
-				else: pygame.draw.circle(screen,  COLOR[5], (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
+					#~ pygame.draw.circle(screen, COLOR[5], (x+(DistX//2), y+(DistY//2)), 290//YPOS-8)
+					
+					Objetos[0].resize(DistX, DistY)
+					personaje = Objetos[0]
+					screen.blit(personaje.image, (x, y))
+					
+				else:
+					
+					Objetos[0].resize(DistX, DistY)
+					personaje = Objetos[0]
+					screen.blit(personaje.image, (x, y))
+					#~ pygame.draw.circle(screen,  COLOR[5], (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
 				
 				# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
 				if not seleccion in SELECT: SELECT.append(seleccion)
 				
 			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, SELECCIONA, [x, y, dimension, dimension], 0)
 			
-			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1]], fuentes[0], COLOR[5])
-			
 			# Imprimir El Recorrido:
 			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1]) + 1), [x+1, y], fuentes[5], COLOR[3])
 			
-		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0], p_inicio[1] - tamanio_fuente], fuentes[0], COLOR[5])
+			# Dibuja Los Numeros En Y
+			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1] + ((DistY // 2) - (tamanio_fuente//2))], fuentes[0], COLOR[5])
+			
+		# Dibuja Las Letras En X
+		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente], fuentes[0], COLOR[5])
 		
 
 def dibujarTexto(screen, texto, posicion, fuentes, color):
@@ -165,7 +207,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 	return actual
 
 
-def obtenerPosicion(XPOS, YPOS, Dir, Actual):
+def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 	
 	PosLetra = LETRAS.index(Actual[0])
 	
@@ -201,6 +243,11 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual):
 		
 	elif Dir == 'L':
 		
+		if personaje.getDireccion() == 'R':
+			
+			personaje.flip(True)
+			personaje.setDireccion('L')
+			
 		if   Actual[0] == LETRAS[0]  and Actual[1] in [x for x in range(1,YPOS+1)]:	pass
 		elif Actual[0] in LETRAS[1:] and Actual[1] in [x for x in range(1,YPOS+1)]:
 			
@@ -215,6 +262,11 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual):
 		
 	elif Dir == 'R':
 		
+		if personaje.getDireccion() == 'L':
+			
+			personaje.flip(True)
+			personaje.setDireccion('R')
+			
 		if   Actual[0] == LETRAS[XPOS-1]   and Actual[1] in [x for x in range(1,YPOS+1)]: pass
 		elif Actual[0] in LETRAS[0:XPOS-1] and Actual[1] in [x for x in range(1,YPOS+1)]:
 			
@@ -348,10 +400,13 @@ def main():
 	
 	puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
 	
+	personaje = Personaje("img/SinRostro.png")
 	bloque1 = Bloque("img/Bloque1.png")
 	bloque2 = Bloque("img/N-A.jpg")
+	bloque3 = Bloque("img/piedra.jpg")
+	bloque4 = Bloque("img/pasto.jpg")
 	
-	Bloques = [bloque1, bloque2]
+	Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
 	
 	while game_over is False:
 		
@@ -363,10 +418,10 @@ def main():
 			
 			elif evento.type == pygame.KEYDOWN:
 				
-				if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion)
-				elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion)
-				elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion)
-				elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion)
+				if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)
+				elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)
+				elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje)
+				elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje)
 			
 				if evento.key == pygame.K_ESCAPE: game_over = True
 				
@@ -417,7 +472,7 @@ def main():
 		dibujarTexto(screen, 'Terreno Actual: ', [16, 90],  fuentes[5], COLOR[1])
 		dibujarTexto(screen,  str(Temp),	  	 [150, 90], fuentes[5], COLOR[5])
 		
-		dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matrixy, Lisy, Bloques)
+		dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matrixy, Lisy, Objetos)
 		
 		pygame.display.flip()
 		
