@@ -18,12 +18,14 @@ FONDO  = (24,  25,  30)
 COLOR  = [BLANCO, NEGRO, ROJO, VERDE, AZUL, AZULL, FONDO, GRIS]
 
 SELECCIONA = (220, 200, 0)
-DIMENCIONES = (1120, 650)
+DIMENCIONES = (1120, 600)
 LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
 
+VALORES = []
 SELECT = []
 POSBLANCO = []
 POSAZUL = []
+
 
   # Clases 
 #~ class Bola(pygame.sprite.Sprite, pygame.font.Font): 
@@ -69,17 +71,26 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 			elif Matriz[j][i] == Lisy[1]:
 				VALORES.append(([LETRAS[i],j+1], Lisy[1], 'Gris'))
 				pygame.draw.rect(screen, COLOR[7], [x, y, dimension, dimension], 0)
+			elif Matriz[j][i] == Lisy[2]:
+				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Verde'))
+				pygame.draw.rect(screen, COLOR[3], [x, y, dimension, dimension], 0)
 			else:
 				VALORES.append(([LETRAS[i],j+1], 'N/A', 'Blanco'))
-				pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
+				pygame.draw.rect(screen, COLOR[0], [x, y, dimension, dimension], 0)
 			
 			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
 				
 				#~ pygame.draw.rect(screen, (0,255,0), [x, y, dimension, dimension], 0)
 				
 				# dibuja el círculo
-				if i == 0 and j == 0: pygame.draw.circle(screen, COLOR[3], (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
-				elif (i > 0 and i < XPOS) or (j > 0 and j < YPOS): pygame.draw.circle(screen, COLOR[3], (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
+				
+				if XPOS <= YPOS:
+					
+					if i == 0 and j == 0: pygame.draw.circle(screen, SELECCIONA, (x+(DistX//2), y+(DistY//2)), 290//YPOS-8)
+					elif (i > 0 and i < XPOS) or (j > 0 and j < YPOS): pygame.draw.circle(screen, SELECCIONA, (x+(DistX//2), y+(DistY//2)), 290//YPOS-8)
+				else:
+					if i == 0 and j == 0: pygame.draw.circle(screen, SELECCIONA, (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
+					elif (i > 0 and i < XPOS) or (j > 0 and j < YPOS): pygame.draw.circle(screen, SELECCIONA, (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
 				
 				# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
 				if not seleccion in SELECT: SELECT.append(seleccion)
@@ -89,7 +100,7 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1]], fuentes[0], COLOR[4])
 			
 			# Imprimir El Recorrido:
-			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1])), [x, y], fuentes[5], COLOR[2])
+			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1]) + 1), [x+1, y], fuentes[5], COLOR[2])
 			
 		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0], p_inicio[1] - tamanio_fuente], fuentes[0], COLOR[4])
 		
@@ -101,6 +112,7 @@ def dibujarTexto(screen, texto, posicion, fuentes, color):
 
 
 def ajustarMedidas(POS, tamanio_fuente):
+	
 	if DIMENCIONES[1] < DIMENCIONES[0]:
 		ancho = int((DIMENCIONES[1] - (tamanio_fuente * 2)) / POS)
 		inicio = tamanio_fuente + 260, tamanio_fuente + 10
@@ -120,7 +132,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 			
 			x = i * dimension + p_inicio[0]
 			y = j * dimension + p_inicio[1]
-			#~ print(i,j)
+			
 			if (xr >= x) and (xr <= x + dimension) and (yr >= y) and (yr <= y + dimension): actual = [LETRAS[i], j + 1]
 	
 	return actual
@@ -182,8 +194,6 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual):
 			x += 1
 			
 			for z in VALORES:
-				
-				print(z[0],'---', [LETRAS[x],y], z[2],'---', z[0] == [LETRAS[x],y])
 				
 				if z[0] == [LETRAS[x],y]:
 					
@@ -254,7 +264,9 @@ def main():
 	
 	for x in Matrixy:
 		for y in x:
-			if not y in Lisy: Lisy.append(y)
+			if not y in Lisy: Lisy.append(y,)
+	
+	Lisy = sorted(Lisy)
 	
 	FULL = False
 	XPOS = len(Matrixy[0])
@@ -285,8 +297,9 @@ def main():
 	
 	fuentes = [ pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", tamanio_fuente),
 				pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 15),
-				pygame.font.Font("fuentes/Wendy.ttf",tamanio_fuente),
-				pygame.font.Font("fuentes/Wendy.ttf",24),
+				pygame.font.Font("fuentes/Wendy.ttf", tamanio_fuente),
+				pygame.font.Font("fuentes/Wendy.ttf", 24),
+				pygame.font.Font("fuentes/Wendy.ttf", 20),
 				pygame.font.Font("fuentes/DroidSans.ttf", 16),
 				pygame.font.Font("fuentes/DroidSans.ttf", 12)]
 	
@@ -324,7 +337,7 @@ def main():
 				
 				pos = pygame.mouse.get_pos()
 				
-				print(pos)
+				#~ print(pos)
 				
 				pygame.mouse.set_visible(False)
 				SelTemp = seleccion
@@ -342,9 +355,19 @@ def main():
 		pygame.draw.rect(screen, NEGRO,  [10, 10,  240, 580], 3)
 		pygame.draw.line(screen, NEGRO,  [10, 40],[250,  40], 3)
 		
-		dibujarTexto(screen, 'Informacion', [80, 15], fuentes[3], COLOR[1])
-		dibujarTexto(screen, 'Personaje: ' + NombrePersonaje[0], [16, 50], fuentes[3], COLOR[4])
-		dibujarTexto(screen, 'Posicion Actual: ' + str(seleccion), [16, 70], fuentes[3], COLOR[4])
+		dibujarTexto(screen, 'Informacion',		  [80, 15],  fuentes[3], COLOR[3])
+		dibujarTexto(screen, 'Personaje: ',		  [16, 50],  fuentes[5], COLOR[1])
+		dibujarTexto(screen,  NombrePersonaje[0], [150, 50], fuentes[5], COLOR[4])
+		dibujarTexto(screen, 'Posicion Actual: ', [16, 70],  fuentes[5], COLOR[1])
+		dibujarTexto(screen,  str(seleccion),	  [150, 70], fuentes[5], COLOR[4])
+		
+		Temp = None
+		for x in VALORES:
+			
+			if x[0] == seleccion: Temp = x[2]
+				 
+		dibujarTexto(screen, 'Terreno Actual: ',  [16, 90],  fuentes[5], COLOR[1])
+		dibujarTexto(screen,  str(Temp),	  [150, 90], fuentes[5], COLOR[4])
 		
 		dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matrixy, Lisy)
 		pygame.display.flip()
