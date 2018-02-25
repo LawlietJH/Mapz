@@ -1,30 +1,41 @@
 import pygame
+import explorer
 import sys, os
 
-NEGRO = (0, 0, 0)
+
 BLANCO = (255, 255, 255)
-AZUL = (20, 80, 240)
-FONDO = (24, 25, 30)
+NEGRO  = (0,   0,   0)
+
+ROJO   = (255, 0,   0)
+VERDE  = (0,   255, 0)
+AZUL   = (20,  80,  240)
+AZULL  = (40,  210, 250)
+
+FONDO  = (24,  25,  30)
+
+COLOR  = [BLANCO, NEGRO, ROJO, VERDE, AZUL, AZULL, FONDO]
+
 SELECCIONA = (220, 200, 0)
 DIMENCIONES = (1120, 650)
 LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
-VALORES =[]
+
 SELECT = []
-POSBLANCO = [[2,3],[3,3],[4,3],[5,7],[5,8],[5,9],[5,10]]
-POSAZUL = [[1,3],[1,4],[1,5],[1,6],[3,4],[3,5]]
+POSBLANCO = []
+POSAZUL = []
 
   # Clases 
-class Bola(pygame.sprite.Sprite, pygame.font.Font): 
-    def __init__(self): 
-        pygame.sprite.Sprite.__init__(self) 
-        self.image = load_image("img/ball.png", True) 
-        self.rect = self.image.get_rect() 
-        self.rect.centerx = DIMENSIONES[0] / 2 
-        self.rect.centery = DIMENSIONES[1] / 2 
+#~ class Bola(pygame.sprite.Sprite, pygame.font.Font): 
+	#~ def __init__(self): 
+		#~ pygame.sprite.Sprite.__init__(self) 
+		#~ self.image = load_image("img/ball.png", True) 
+		#~ self.rect = self.image.get_rect() 
+		#~ self.rect.centerx = DIMENSIONES[0] / 2 
+		#~ self.rect.centery = DIMENSIONES[1] / 2 
 
-def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuente, fuenteT, seleccion, SelTemp):
+def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matriz, Lisy):
 	
 	global SELECT
+	
 	'''
 	# Funcion que dibuja el tablero
 	screen: 		referencia del lienzo donde dibujar
@@ -34,7 +45,6 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 	fuente: 		Objeto fuente 
 	seleccion: 		rectangulo seleccionado 
 	'''
-	color = [NEGRO, BLANCO, AZUL]
 	
 	for i in range(XPOS):
 		
@@ -43,77 +53,67 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 			x = i * dimension + p_inicio[0]
 			y = j * dimension + p_inicio[1]
 			
-			xp = i+1 * dimension + p_inicio[0]
-			yp = j+1 * dimension + p_inicio[1]
+			xp = (i+1) * dimension + p_inicio[0]
+			yp = (j+1) * dimension + p_inicio[1]
 			
-			DistX = (x + xp) // 2
-			DistY = (y + yp) // 2
-			print(DistX, DistY, i, j)
+			DistX = xp - x
+			DistY = yp - y
 			
-			if [i,j] in POSBLANCO: pygame.draw.rect(screen, color[1], [x, y, dimension, dimension], 0)
-			elif [i,j] in POSAZUL: pygame.draw.rect(screen, color[2], [x, y, dimension, dimension], 0)
-			else: pygame.draw.rect(screen, color[0], [x, y, dimension, dimension], 0)
+			if   Matriz[j][i] == Lisy[0]: pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
+			elif Matriz[j][i] == Lisy[1]: pygame.draw.rect(screen, COLOR[0], [x, y, dimension, dimension], 0)
+			else: pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
 			
 			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
-				#~ print(seleccion[0], seleccion[1])
+				
 				#~ pygame.draw.rect(screen, (0,255,0), [x, y, dimension, dimension], 0)
-				# establece las propiedades del círculo
 				
 				# dibuja el círculo
-				print(x)
-				if i == 0 and j == 0:		pygame.draw.circle(screen, (40, 210, 250), ((x+xp)//2, (y+yp)//2), 290//XPOS)
-				elif (i > 0 and i < XPOS):  pygame.draw.circle(screen, (40, 210, 250), ((x+xp)//2, (y+yp)//2), 290//XPOS)
-				elif (j > 0 and j < YPOS):  pygame.draw.circle(screen, (40, 210, 250), ((x+xp)//2, (y+yp)//2), 290//XPOS)
-				#~ elif (i > 0 and i < XPOS) and (j > 0 and j < YPOS): pygame.draw.circle(screen, (40, 210, 250), ((x+xp)//2, (y+yp)//2), x//XPOS)
-				else: pygame.draw.circle(screen, (40, 210, 250), (((x + (x-xd))+xp)//2, (y+yp)//2), 290//2)
-					
+				if i == 0 and j == 0: pygame.draw.circle(screen, COLOR[3], (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
+				elif (i > 0 and i < XPOS) or (j > 0 and j < YPOS): pygame.draw.circle(screen, COLOR[3], (x+(DistX//2), y+(DistY//2)), 290//XPOS-8)
 				
+				# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
 				if not seleccion in SELECT: SELECT.append(seleccion)
 				
-			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
-				#~ print(seleccion[0], seleccion[1])
-				
-				print([i,j],SELECT)
-				#~ os.system('Pause')
-				pygame.draw.rect(screen, SELECCIONA, [x, y, dimension, dimension], 0)
+			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, SELECCIONA, [x, y, dimension, dimension], 0)
 			
-			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1]], fuente, AZUL)
+			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1]], fuentes[0], COLOR[0])
 			
-			#~ if [LETRAS[i],j] in SELECT: dibujarTexto(screen, Cont, [x, y], fuenteT, AZUL)
+			# Imprimir El Recorrido:
+			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1])), [x, y], fuentes[5], COLOR[2])
 			
-		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0], p_inicio[1] - tamanio_fuente], fuente, AZUL)
+		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0], p_inicio[1] - tamanio_fuente], fuentes[0], COLOR[4])
 		
 
-def dibujarTexto(screen, texto, posicion, fuente, color):
+def dibujarTexto(screen, texto, posicion, fuentes, color):
 	
-    Texto = fuente.render(texto, 1, color)
-    screen.blit(Texto, posicion)
+	Texto = fuentes.render(texto, 1, color)
+	screen.blit(Texto, posicion)
 
 
 def ajustarMedidas(POS, tamanio_fuente):
-    if DIMENCIONES[1] < DIMENCIONES[0]:
-        ancho = int((DIMENCIONES[1] - (tamanio_fuente * 2)) / POS)
-        inicio = tamanio_fuente + 260, tamanio_fuente + 10
-    else:
-        ancho = int((DIMENCIONES[0] - (tamanio_fuente * 2)) / POS)
-        inicio = tamanio_fuente + 10, tamanio_fuente + 10
-    return [inicio, ancho]
+	if DIMENCIONES[1] < DIMENCIONES[0]:
+		ancho = int((DIMENCIONES[1] - (tamanio_fuente * 2)) / POS)
+		inicio = tamanio_fuente + 260, tamanio_fuente + 10
+	else:
+		ancho = int((DIMENCIONES[0] - (tamanio_fuente * 2)) / POS)
+		inicio = tamanio_fuente + 10, tamanio_fuente + 10
+	return [inicio, ancho]
 
 
 def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 	
-    xr, yr = mouse[0], mouse[1]
-    
-    for i in range(XPOS):
+	xr, yr = mouse[0], mouse[1]
+	
+	for i in range(XPOS):
 		
-        for j in range(YPOS):
+		for j in range(YPOS):
 			
-            x = i * dimension + p_inicio[0]
-            y = j * dimension + p_inicio[1]
-            #~ print(i,j)
-            if (xr >= x) and (xr <= x + dimension) and (yr >= y) and (yr <= y + dimension): actual = [LETRAS[i], j + 1]
-    
-    return actual
+			x = i * dimension + p_inicio[0]
+			y = j * dimension + p_inicio[1]
+			#~ print(i,j)
+			if (xr >= x) and (xr <= x + dimension) and (yr >= y) and (yr <= y + dimension): actual = [LETRAS[i], j + 1]
+	
+	return actual
 
 
 def obtenerPosicion(XPOS, YPOS, Dir, Actual):
@@ -142,31 +142,88 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual):
 	
 	return Actual
 
+
 def EscribirEnCuadricula(XPOS, YPOS, screen, dimension, p_inicio, fuente, seleccion):
 	
-	for i in range(XPOS):
+	pygame.draw.circle(screen, (40, 210, 250), (x+(DistX//2), y+(DistY//2)), 290//XPOS)
+
+
+def AbrirArchivo():
+	
+	Cadena = ''
+	Nombre = explorer.GetFileName()
+	
+	if Nombre == None: print('\n\n\t Error! Nombre de Archivo No Fue Especificado.'); sys.exit(1)
+	
+	with open(Nombre, 'r') as Archivo: Cadena = Archivo.read()
+	Archivo.close()
+	
+	return Cadena
+
+
+def ObtenerMatriz(Cadena):
+	
+	# Remplazamos de la Cadena los espacios y tabulaciones por cadenas vacia
+	# Luego Generamos una lista que estara dividida por cada salto de linea:
+	Lista = Cadena.replace(' ', '').replace('\t', '').split('\n')
+	
+	# Cuenta cuantos objetos de la lista son vacios y luego los elimina de la lista cada uno:
+	for x in range(Lista.count('')): Lista.remove('')
+	
+	Matriz = []
+	Longitud = len(Lista[0].replace(' ','').replace('\t','').split(','))
+	
+	for x in Lista:
 		
-		for j in range(YPOS):
+		x = x.replace(' ','').replace('\t','').split(',')
+		
+		if not Longitud == len(x): return True
+		
+		Longitud = len(x)
+		Matriz.append(x)
+	
+	for x in Matriz:
+		for y in x:
+			if not y.isdigit(): return False
 			
-			x = i * dimension + p_inicio[0]
-			y = j * dimension + p_inicio[1]
-			
-			dibujarTexto(screen, 'Informacion', [x, y], fuenteT, AZUL)
-			
+	return Matriz
+
+
+def Pause(Quiet = False): os.system('Pause') if Quiet == False else os.system('Pause > Nul')
+
 
 def main():
 	
-	FULL = False
-	XPOS = 12
-	YPOS = 12
-	POS = (XPOS if XPOS > YPOS else YPOS)
+	Cadena  = AbrirArchivo()
+	Matrixy = ObtenerMatriz(Cadena)
 	
-	if XPOS > 1 and YPOS > 1: pass
-	else: sys.exit(1)
+	if Matrixy == True: print('\n\n\t Error! La Cuadricula No Puede Ser Diseñada!\n\n\t No Todas Las Filas Son De La Misma Longitud.'); sys.exit(1)
+	elif Matrixy == False: print('\n\n\t Error! Ingrese Solo Numeros En La Cuadricula.'); sys.exit(1)
+	
+	Lisy = []
+	
+	for x in Matrixy:
+		for y in x:
+			if not y in Lisy: Lisy.append(y)
+	
+	FULL = False
+	XPOS = len(Matrixy[0])
+	YPOS = len(Matrixy)
+	
+	POS  = (XPOS if XPOS > YPOS else YPOS)
+	
+	if XPOS <= 1 or YPOS <= 1:
+		print('\n\n\t Error! La Cuadricula es Más Pequeña de lo permitido!')
+		print('\n\n\t Minimo Permitido: 2 x 2\n\n\t Valores Actuales: ' + str(XPOS) + ' x ' + str(YPOS))
+		sys.exit(1)
+	elif XPOS >= 16 or YPOS >= 16:
+		print('\n\n\t Error! La Cuadricula es Más Grande de lo permitido!')
+		print('\n\n\t Maximo Permitido: 15 x 15\n\n\t Valores Actuales: ' + str(XPOS) + ' x ' + str(YPOS))
+		sys.exit(1)
 	
 	pygame.init()
 	screen = pygame.display.set_mode(DIMENCIONES)
-	pygame.display.set_caption("__Tablero__")
+	pygame.display.set_caption("Laberinto")
 	game_over = False
 	clock = pygame.time.Clock()
 	tamanio_fuente = 30
@@ -176,9 +233,12 @@ def main():
 	seleccion = ['A', 1]
 	SelTemp = ['P',16]
 	
-	fuente  = pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", tamanio_fuente)
-	fuenteT = pygame.font.Font("fuentes/Wendy.ttf",30)
-	fuente2 = pygame.font.Font("fuentes/DroidSans.ttf", 16)
+	fuentes = [ pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", tamanio_fuente),
+				pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 15),
+				pygame.font.Font("fuentes/Wendy.ttf",tamanio_fuente),
+				pygame.font.Font("fuentes/Wendy.ttf",24),
+				pygame.font.Font("fuentes/DroidSans.ttf", 16),
+				pygame.font.Font("fuentes/DroidSans.ttf", 12)]
 	
 	puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
 	
@@ -213,8 +273,9 @@ def main():
 			elif evento.type == pygame.MOUSEBUTTONDOWN:
 				
 				pos = pygame.mouse.get_pos()
+				
 				print(pos)
-				#~ if pos > []
+				
 				pygame.mouse.set_visible(False)
 				SelTemp = seleccion
 				
@@ -224,31 +285,18 @@ def main():
 				
 				pygame.mouse.set_visible(True)
 				SelTemp = ['P',16]
-			
-			#~ if pygame.mouse.get_cursor()
-			
-			#~ # El usuario deja de presionar la tecla
-			#~ elif evento.type == pygame.KEYUP:
-				#~ # Si es una de las flechas, resetea el vector a cero.
-				#~ if evento.key == pygame.K_LEFT:
-					#~ x_speed = 0
-				#~ elif evento.key == pygame.K_RIGHT:
-					#~ x_speed = 0
-				#~ elif evento.key == pygame.K_UP:
-					#~ y_speed = 0
-				#~ elif evento.key == pygame.K_DOWN:
-					#~ y_speed = 0
 		
 		screen.fill(FONDO)
 		
-		pygame.draw.rect(screen, NEGRO, [10, 10, 240, 580], 3)
-		pygame.draw.line(screen, NEGRO, [10,40], [250,40], 3)
+		pygame.draw.rect(screen, BLANCO, [10, 10,  240, 580], 0)
+		pygame.draw.rect(screen, NEGRO,  [10, 10,  240, 580], 3)
+		pygame.draw.line(screen, NEGRO,  [10, 40],[250,  40], 3)
 		
-		dibujarTexto(screen, 'Informacion', [70, 15], fuenteT, AZUL)
-		dibujarTexto(screen, 'Personaje: ' + NombrePersonaje[0], [12, 50], fuenteT, NEGRO)
-		dibujarTexto(screen, 'Posicion Actual: ' + str(seleccion), [12, 70], fuenteT, NEGRO)
+		dibujarTexto(screen, 'Informacion', [80, 15], fuentes[3], COLOR[1])
+		dibujarTexto(screen, 'Personaje: ' + NombrePersonaje[0], [16, 50], fuentes[3], COLOR[4])
+		dibujarTexto(screen, 'Posicion Actual: ' + str(seleccion), [16, 70], fuentes[3], COLOR[4])
 		
-		dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, fuente, fuenteT, seleccion, SelTemp)
+		dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matrixy, Lisy)
 		pygame.display.flip()
 		
 		clock.tick(60)
@@ -257,4 +305,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+	
+	main()
