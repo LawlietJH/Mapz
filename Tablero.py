@@ -1,5 +1,5 @@
 
-# Version: 1.2.4
+# Version: 1.2.5
 import pygame
 from pygame.locals import *
 import explorer
@@ -26,9 +26,10 @@ SELECCIONA = (220, 200, 0)
 GRIS   = (189, 189, 189)
 FONDO  = (24,  25,  30)
 
-COLOR  = {'Blanco':BLANCO,        'Negro':NEGRO,       'Gris Claro':GRISC, 'Rojo':ROJO,       'Verde':VERDE,
-		  'Azul':AZUL,            'Azul Claro':AZULL,  'Gris':GRIS,        'Fondo':FONDO,     'Naranja':NARANJA,
-		  'Seleccion':SELECCIONA, 'Amarillo':AMARILLO, 'Morado':MORADO,    'Purpura':PURPURA, 'Verde Claro':VERDEC
+COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 216, 216), 'Rojo':(255, 0,   0),
+		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
+		  'Fondo':(24,  25,  30),   'Naranja':(255,120,0),  'Seleccion':(220, 200, 0),    'Amarillo':(255,255, 0),
+		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0)
 		 }
 
 DIMENCIONES = (1120, 600)
