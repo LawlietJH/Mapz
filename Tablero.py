@@ -1,5 +1,5 @@
 
-# Version: 1.2.9
+# Version: 1.3.0
 
 import pygame
 import pygame_textinput
@@ -27,65 +27,65 @@ POSAZUL = []
 
 #Clases 
  
-class Personaje(pygame.sprite.Sprite, pygame.font.Font):
+class Personaje(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para El Personaje Principal.
 	
-	def __init__(self, Nombre):
+	def __init__(self, Nombre):		# Pasamos La Ruta de la Imagen a Cargar Como Personaje.
 		
-		pygame.sprite.Sprite.__init__(self)
-		self.image = load_image(Nombre, True)
-		self.image = pygame.transform.flip(self.image, True, False)
-		self.direccion = 'R'
+		pygame.sprite.Sprite.__init__(self)							# Hereda de la Clase Sprite de pygame.
+		self.image = load_image(Nombre, True)						# Carga La Imagen Con la funcion load_image.
+		self.image = pygame.transform.flip(self.image, True, False)	# Gira La Imagen en Espejo de (Izquierda a Drecha en este caso).
+		self.direccion = 'R'										# Indica que la posicion Actual es volteando ahora a la derecha 'Right'.
 		
 	
-	def resize(self, TX, TY):
+	def resize(self, TX, TY):		# Cambia el tamaño de la imagen para cargarla al programa con las medidas necesarias.
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
 	
-	def flip(self, TX, TY=False):
+	def flip(self, TX, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
 		
 		self.image = pygame.transform.flip(self.image, TX, TY)
 	
-	def setDireccion(self, direccion): self.direccion = direccion
+	def setDireccion(self, direccion): self.direccion = direccion	# Se Almacena La Direccion: 'L' (Left), 'R' (Right).
 	
-	def getDireccion(self): return self.direccion
+	def getDireccion(self): return self.direccion		# Devuelve el Valor de la Direccion Actual: 'L' o 'R'.
 
 
-class Bloque(pygame.sprite.Sprite, pygame.font.Font):
+class Bloque(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Cada Tipo de Terreno.
 	
-	def __init__(self, Nombre):
+	def __init__(self, Nombre):		# Pasamos La Ruta de la Imagen a Cargar Como Bloque.
 		
-		pygame.sprite.Sprite.__init__(self)
-		self.image = load_image(Nombre, True)
+		pygame.sprite.Sprite.__init__(self)				# Hereda de la Clase Sprite de pygame.
+		self.image = load_image(Nombre, True)			# Carga La Imagen Con la funcion load_image.
 	
-	def resize(self, TX, TY):
-		
-		self.image = pygame.transform.scale(self.image, (TX, TY))
-
-
-class Boton(pygame.sprite.Sprite, pygame.font.Font):
-	
-	def __init__(self, Nombre):
-		
-		pygame.sprite.Sprite.__init__(self)
-		self.image = load_image(Nombre, True)
-	
-	def resize(self, TX, TY):
+	def resize(self, TX, TY):		# Cambia el tamaño de la imagen para cargarla al programa con las medidas necesarias.
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
 
 
-class BotonDir(pygame.sprite.Sprite, pygame.font.Font):
+class Boton(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Botones ('Cargar Mapa' y 'Comenzar').
 	
-	def __init__(self, Nombre):
+	def __init__(self, Nombre):		# Pasamos La Ruta de la Imagen a Cargar Como Bloque.
 		
-		pygame.sprite.Sprite.__init__(self)
-		self.image = load_image(Nombre, True)
+		pygame.sprite.Sprite.__init__(self)				# Hereda de la Clase Sprite de pygame.
+		self.image = load_image(Nombre, True)			# Carga La Imagen Con la funcion load_image.
 	
-	def resize(self, TX, TY):
+	def resize(self, TX, TY):		# Cambia el tamaño de la imagen para cargarla al programa con las medidas necesarias.
+		
+		self.image = pygame.transform.scale(self.image, (TX, TY))
+
+
+class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botones De Direccion (Flechas Izquierda y Derecha)
+	
+	def __init__(self, Nombre):		# Pasamos La Ruta de la Imagen a Cargar Como Bloque.
+		
+		pygame.sprite.Sprite.__init__(self)				# Hereda de la Clase Sprite de pygame.
+		self.image = load_image(Nombre, True)			# Carga La Imagen Con la funcion load_image.
+	
+	def resize(self, TX, TY):		# Cambia el tamaño de la imagen para cargarla al programa con las medidas necesarias.
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
 	
-	def flip(self, TX, TY=False):
+	def flip(self, TX, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
 		
 		self.image = pygame.transform.flip(self.image, TX, TY)
 	
@@ -94,7 +94,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):
 #===================================================================================================
 #===================================================================================================
 
-
+# Funcion Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
 def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, seleccion, SelTemp, Matriz, Lisy, Objetos):
 	
 	global SELECT, VALORES
@@ -215,21 +215,21 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			if i == 0:
 				
 				dibujarTexto(screen, str(j + 1), 
-				[p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1] + ((DistY // 2) - (tamanio_fuente//2))], 
+				[p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1] + ((DistY // 2) - (tamanio_fuente//2))],		# Posicion Centrada en su Fila Correspondiente.
 				Fuentes['Alice 30'], 
 				COLOR['Azul'])
 			
 		# Dibuja Las Letras En X
 		dibujarTexto(screen, LETRAS[i], 
-		[i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente], 
+		[i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente],	# Posicion Centrada en su Columna Correspondiente.
 		Fuentes['Alice 30'], COLOR['Azul'])
 
 #===================================================================================================
 
-def dibujarTexto(screen, texto, posicion, fuentes, color):
+def dibujarTexto(screen, texto, posicion, fuente, color):
 	
-	Texto = fuentes.render(texto, 1, color)
-	screen.blit(Texto, posicion)
+	Texto = fuente.render(texto, 1, color)		# Se Pasa El Texto Con La Fuente Especificada.
+	screen.blit(Texto, posicion)				# Se Dibuja En Pantalla El Texto en la Posicion Indicada.
 
 #===================================================================================================
 
@@ -1027,7 +1027,7 @@ def main():
 		
 		#===================================================================================================
 		
-		pygame.display.flip()
+		pygame.display.flip()	# Actualiza Los Datos En La Interfaz.
 		
 		clock.tick(60)
 		
