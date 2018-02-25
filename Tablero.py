@@ -11,9 +11,11 @@ VERDE  = (0,   255, 0)
 AZUL   = (20,  80,  240)
 AZULL  = (40,  210, 250)
 
+GRIS   = (189, 189, 189)
+
 FONDO  = (24,  25,  30)
 
-COLOR  = [BLANCO, NEGRO, ROJO, VERDE, AZUL, AZULL, FONDO]
+COLOR  = [BLANCO, NEGRO, ROJO, VERDE, AZUL, AZULL, FONDO, GRIS]
 
 SELECCIONA = (220, 200, 0)
 DIMENCIONES = (1120, 650)
@@ -34,7 +36,7 @@ POSAZUL = []
 
 def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matriz, Lisy):
 	
-	global SELECT
+	global SELECT, VALORES
 	
 	'''
 	# Funcion que dibuja el tablero
@@ -45,6 +47,8 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 	fuente: 		Objeto fuente 
 	seleccion: 		rectangulo seleccionado 
 	'''
+	
+	VALORES = []
 	
 	for i in range(XPOS):
 		
@@ -59,9 +63,15 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 			DistX = xp - x
 			DistY = yp - y
 			
-			if   Matriz[j][i] == Lisy[0]: pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
-			elif Matriz[j][i] == Lisy[1]: pygame.draw.rect(screen, COLOR[0], [x, y, dimension, dimension], 0)
-			else: pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
+			if Matriz[j][i] == Lisy[0]:
+				VALORES.append(([LETRAS[i],j+1], Lisy[0], 'Negro'))
+				pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
+			elif Matriz[j][i] == Lisy[1]:
+				VALORES.append(([LETRAS[i],j+1], Lisy[1], 'Gris'))
+				pygame.draw.rect(screen, COLOR[7], [x, y, dimension, dimension], 0)
+			else:
+				VALORES.append(([LETRAS[i],j+1], 'N/A', 'Blanco'))
+				pygame.draw.rect(screen, COLOR[1], [x, y, dimension, dimension], 0)
 			
 			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
 				
@@ -76,7 +86,7 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 				
 			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, SELECCIONA, [x, y, dimension, dimension], 0)
 			
-			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1]], fuentes[0], COLOR[0])
+			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1]], fuentes[0], COLOR[4])
 			
 			# Imprimir El Recorrido:
 			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1])), [x, y], fuentes[5], COLOR[2])
@@ -120,25 +130,65 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual):
 	
 	PosLetra = LETRAS.index(Actual[0])
 	
+	x, y = PosLetra, Actual[1]
+	
 	if Dir == 'U':
 		
 		if   Actual[0] in LETRAS and Actual[1] == 1: pass
-		elif Actual[0] in LETRAS and Actual[1] in [x for x in range(2,YPOS+1)]: Actual = [Actual[0],Actual[1]-1]
+		elif Actual[0] in LETRAS and Actual[1] in [x for x in range(2,YPOS+1)]:
+			
+			y -= 1
+			
+			for z in VALORES:
+				
+				if z[0] == [LETRAS[x],y]:
+					
+					if z[2] == 'Gris': pass
+					else: Actual = [Actual[0],Actual[1]-1]
 		
 	elif Dir == 'D':
 		
 		if   Actual[0] in LETRAS and Actual[1] == YPOS: pass
-		elif Actual[0] in LETRAS and Actual[1] in [x for x in range(1,YPOS)]: Actual = [Actual[0],Actual[1]+1]
+		elif Actual[0] in LETRAS and Actual[1] in [x for x in range(1,YPOS)]:
+			
+			y += 1
+			
+			for z in VALORES:
+				
+				if z[0] == [LETRAS[x],y]:
+					
+					if z[2] == 'Gris': pass
+					else: Actual = [Actual[0],Actual[1]+1]
 		
 	elif Dir == 'L':
 		
 		if   Actual[0] == LETRAS[0]  and Actual[1] in [x for x in range(1,YPOS+1)]:	pass
-		elif Actual[0] in LETRAS[1:] and Actual[1] in [x for x in range(1,YPOS+1)]:	Actual = [LETRAS[PosLetra-1],Actual[1]]
+		elif Actual[0] in LETRAS[1:] and Actual[1] in [x for x in range(1,YPOS+1)]:
+			
+			x -= 1
+			
+			for z in VALORES:
+				
+				if z[0] == [LETRAS[x],y]:
+					
+					if z[2] == 'Gris': pass
+					else: Actual = [LETRAS[PosLetra-1],Actual[1]]
 		
 	elif Dir == 'R':
 		
 		if   Actual[0] == LETRAS[XPOS-1]   and Actual[1] in [x for x in range(1,YPOS+1)]: pass
-		elif Actual[0] in LETRAS[0:XPOS-1] and Actual[1] in [x for x in range(1,YPOS+1)]: Actual = [LETRAS[PosLetra+1],Actual[1]]
+		elif Actual[0] in LETRAS[0:XPOS-1] and Actual[1] in [x for x in range(1,YPOS+1)]:
+			
+			x += 1
+			
+			for z in VALORES:
+				
+				print(z[0],'---', [LETRAS[x],y], z[2],'---', z[0] == [LETRAS[x],y])
+				
+				if z[0] == [LETRAS[x],y]:
+					
+					if z[2] == 'Gris': pass
+					else: Actual = [LETRAS[PosLetra+1],Actual[1]]
 	
 	return Actual
 
