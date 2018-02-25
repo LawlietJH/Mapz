@@ -1,5 +1,5 @@
 
-# Version: 1.2.5
+# Version: 1.2.6
 import pygame
 from pygame.locals import *
 import explorer
@@ -199,20 +199,12 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuen
 				bloque = Objetos['N/A']
 				screen.blit(bloque.image, (x,y))
 				
-			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
+			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1 and Iniciar:
 				
-				if XPOS <= YPOS:
-					
-					Objetos['Personaje'].resize(DistX, DistY)
-					personaje = Objetos['Personaje']
-					screen.blit(personaje.image, (x, y))
-					
-				else:
-					
-					Objetos['Personaje'].resize(DistX, DistY)
-					personaje = Objetos['Personaje']
-					screen.blit(personaje.image, (x, y))
-					
+				Objetos['Personaje'].resize(DistX, DistY)
+				personaje = Objetos['Personaje']
+				screen.blit(personaje.image, (x, y))
+				
 				# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
 				if not seleccion in SELECT: SELECT.append(seleccion)
 				
@@ -471,6 +463,8 @@ def TODOArchivo():
 Error = False
 CadenaError = ''
 
+Iniciar = False
+
 NA = 0
 Pared = 0
 Camino = 0
@@ -483,7 +477,7 @@ Agua = 0
 
 def main():
 	
-	global Error, CadenaError
+	global Error, CadenaError, Iniciar, Pasto, Camino, Pared, Lava, Agua
 	
 	XPOS = 1
 	YPOS = 1
@@ -497,7 +491,7 @@ def main():
 	LisyPos5 = 0
 	
 	CargarMapa = None
-	ElegirPers = False
+	CargarPers = False
 	FULL = False
 	Cargar = False
 	
@@ -569,8 +563,8 @@ def main():
 	
 	boton1 = Boton("img/BotonRojo.png")
 	boton2 = Boton("img/BotonNaranja.png")
-	#~ botonPers1 = Boton("img/BotonPurpura.png")
-	#~ botonPers2 = Boton("img/BotonAzul.png")
+	botonPers1 = Boton("img/BotonPurpura.png")
+	botonPers2 = Boton("img/BotonAzul.png")
 	
 	BtnIzq1 = BotonDir("img/BotonIzq.png")
 	BtnDer1 = BotonDir("img/BotonIzq.png")
@@ -627,7 +621,7 @@ def main():
 			
 			elif evento.type == pygame.KEYDOWN:
 				
-				if Cargar:
+				if Cargar and Iniciar:
 					
 					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)
 					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)
@@ -657,7 +651,11 @@ def main():
 				xr, yr = pos[0], pos[1]
 				
 				# Cooredenadas Boton 1:
-				if (xr >= 927) and (xr <= 1077) and (yr >= 44) and (yr <= 80): Btn1Pressed = True; CargarMapa = True
+				if (xr >= 927) and (xr <= 1077) and (yr >= 44) and (yr <= 80):  Btn1Pressed = True; CargarMapa = True
+				# Cooredenadas Boton 2:
+				if Cargar:
+					
+					if (xr >= 150) and (xr <= 250) and (yr >= 565) and (yr <= 590): Btn2Pressed = True
 				
 				# ======= Cooredenadas Boton Izquierda y Derecha =======
 				
@@ -704,7 +702,11 @@ def main():
 				
 				#=======================================================
 				
-				if Btn1Pressed and NP == None:
+				if Btn2Pressed:
+					
+					Iniciar = True
+					
+				elif Btn1Pressed and NP == None:
 					
 					Error = True
 					CadenaError = 'Selecciona Un Personaje'
@@ -725,6 +727,7 @@ def main():
 						global SELECT
 						SELECT = []
 						
+						Iniciar = False
 						Cargar = True
 						
 						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]])
@@ -739,11 +742,12 @@ def main():
 						Matrixy = xMatrixy
 						Lisy = [-1]
 						Lisy = Lisy + xLisy
-						LisyPos1 = 0
-						LisyPos2 = 0
-						LisyPos3 = 0
-						LisyPos4 = 0
-						LisyPos5 = 0
+						Pared  = LisyPos1 = 0
+						Camino = LisyPos2 = 0
+						Pasto  = LisyPos3 = 0
+						Lava   = LisyPos4 = 0
+						Agua   = LisyPos5 = 0
+						
 						XPOS = xXPOS
 						YPOS = xYPOS
 						POS = xPOS
@@ -758,6 +762,7 @@ def main():
 				#=======================================================
 				
 				Btn1Pressed = False
+				Btn2Pressed = False
 				
 				pygame.mouse.set_visible(True)
 				SelTemp = ['P',16]
@@ -859,22 +864,22 @@ def main():
 		if seleccionPers1:
 			pygame.draw.rect(screen, COLOR['Seleccion'], [30,  200, 51, 51], 0)
 			NP = 0
-			ElegirPers = False
+			#~ CargarPers = False
 			seleccionPers1 = False
 		elif seleccionPers2:
 			pygame.draw.rect(screen, COLOR['Seleccion'], [100, 200, 51, 51], 0)
 			NP = 1
-			ElegirPers = False
+			#~ CargarPers = False
 			seleccionPers2 = False
 		elif seleccionPers3:
 			pygame.draw.rect(screen, COLOR['Seleccion'], [170, 200, 51, 51], 0)
 			NP = 2
-			ElegirPers = False
+			#~ CargarPers = False
 			seleccionPers3 = False
 		
 					#===============================================================
 		
-		if Cargar:
+		if Cargar and Iniciar == False:
 			
 			dibujarTexto(screen, 'Asignar Valores a Bloques', [13, 284], Fuentes['Droid 20'], COLOR['Negro'])
 			dibujarTexto(screen, 'Asignar Valores a Bloques', [14, 285], Fuentes['Droid 20'], COLOR['Morado'])
@@ -959,15 +964,21 @@ def main():
 			
 			dibujarTexto(screen, str(Lisy[LisyPos5]), [140, 535], Fuentes['Droid 20'], COLOR['Negro'])
 			
-			global Pasto, Camino, Pared, Lava, Agua
-			
 			Pared  = LisyPos1
 			Camino = LisyPos2
 			Pasto  = LisyPos3
 			Lava   = LisyPos4
 			Agua   = LisyPos5
-		
-		
+			
+			botonPers1.resize(100,35)
+			botonPers2.resize(100,35)
+			
+			if Btn2Pressed == False: screen.blit(botonPers1.image, (150,560))
+			else: screen.blit(botonPers2.image, (150,560))
+			
+			dibujarTexto(screen, 'Comenzar', [160, 565], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Comenzar', [161, 566], Fuentes['Wendy 25'], COLOR['Purpura'])
+			
 		#===================================================================================================
 		
 		pygame.display.flip()
