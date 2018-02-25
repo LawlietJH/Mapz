@@ -1,5 +1,5 @@
 
-# Version: 1.3.4
+# Version: 1.3.5
 
 import pygame
 import pygame_textinput
@@ -11,15 +11,13 @@ COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 2
 		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
 		  'Fondo':(24,  25,  30),   'Naranja':(255,120,0),  'Seleccion':(220, 200, 0),    'Amarillo':(255,255, 0),
 		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0)
-		 }
+		 }	# Diccionario de Colores.
 
-DIMENCIONES = (1120, 600)
-LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
+DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
+LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']	# Letras Para La Matriz.
 
-VALORES   = []
-SELECT    = []
-POSBLANCO = []
-POSAZUL   = []
+VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
+SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Numero de Visita.
 
 #===================================================================================================
 #===================================================================================================
@@ -259,8 +257,6 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 		dibujarTexto(screen, LETRAS[i], 
 		[i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente],	# Posicion Centrada en su Columna Correspondiente.
 		Fuentes['Alice 30'], COLOR['Azul'])
-	
-	print(SELECT)
 
 
 #===================================================================================================
@@ -910,9 +906,13 @@ def main():
 						Error = True
 						CadenaError = 'Selecciona Punto Inicio.'
 					  
+					elif PuntoDestino == None:
+						
+						Error = True
+						CadenaError = 'Selecciona Punto Destino.'
+					  
 					else:			# Si Se Selecciono Un Personaje, Se Iniciara.
 						
-						Movimientos = 1
 						Iniciar = True	# Inicia El Juego.
 						seleccion = PuntoInicio
 						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
@@ -922,6 +922,7 @@ def main():
 						
 						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
 						
+						Movimientos += 1
 						SELECT.append((seleccion, [Movimientos]))
 						
 				elif Btn2Pressed and Error2:		# Si el Boton 2 Fue Presionado.
@@ -985,6 +986,7 @@ def main():
 						Objetos = {'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
 								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8}
 						
+						Movimientos  = 0
 						PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
 						PuntoDestino = None		# Se Inicializa la Variable Global PuntoDestino en None.
 						NP			 = None		# Se Inicializa la Variable personaje en None.
@@ -1161,7 +1163,6 @@ def main():
 			
 			else:
 				
-				#~ Error2 = False
 				ConTer = 0
 				
 				if Pared   > 0 and Pared   < len(Lisy): ConTer += 1
@@ -1174,8 +1175,7 @@ def main():
 				
 				if ConTer == len(Lisy)-1: Error2 = False; CadenaError2 = ''
 				else:
-					if not Error2:  Error2 = True; CadenaError2 = ''# CadenaError2 = 'Bloques Aun No Asignados.'
-					#~ else: Error2 = True; CadenaError2 = ''
+					if not Error2:  Error2 = True; CadenaError2 = ''
 				
 			botonPers1.resize(100,35)
 			botonPers2.resize(100,35)
@@ -1281,6 +1281,20 @@ def main():
 			
 			dibujarTexto(screen, str(PuntoDestino[0])+', '+str(PuntoDestino[1]), [162, 195], Fuentes['Droid 20'], COLOR['Azul'])
 			dibujarTexto(screen, str(PuntoDestino[0])+', '+str(PuntoDestino[1]), [163, 196], Fuentes['Droid 20'], COLOR['Negro'])
+		
+		
+		dibujarTexto(screen, 'Movimientos: ', [14, 235], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Movimientos: ', [15, 236], Fuentes['Droid 20'], COLOR['Azul'])
+		
+		if PuntoDestino == None:		# Si Aun no hay nada en la Variable Global PuntoDestino, Dibuja 'Ninguno'.
+			
+			dibujarTexto(screen,  '0', [162, 235], Fuentes['Droid 20'], COLOR['Rojo'])
+			dibujarTexto(screen,  '0', [163, 236], Fuentes['Droid 20'], COLOR['Negro'])
+			
+		else:						# De lo contrario, Dibuja la Posicion Destino del Personaje.
+			
+			dibujarTexto(screen, str(Movimientos), [162, 235], Fuentes['Droid 20'], COLOR['Rojo'])
+			dibujarTexto(screen, str(Movimientos), [163, 236], Fuentes['Droid 20'], COLOR['Negro'])
 		
 					#===============================================================
 		
