@@ -85,7 +85,7 @@ class Boton(pygame.sprite.Sprite, pygame.font.Font):
 
 #=======================================================================
 
-def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matriz, Lisy, Objetos):
+def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, seleccion, SelTemp, Matriz, Lisy, Objetos):
 	
 	global SELECT, VALORES
 	
@@ -182,13 +182,13 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, fuen
 			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, SELECCIONA, [x, y, dimension, dimension], 0)
 			
 			# Imprimir El Recorrido:
-			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1]) + 1), [x+1, y], fuentes[5], COLOR['Rojo'])
+			if [LETRAS[i],j+1] in SELECT: dibujarTexto(screen, str(SELECT.index([LETRAS[i],j+1]) + 1), [x+1, y], Fuentes['Droid 15'], COLOR['Rojo'])
 			
 			# Dibuja Los Numeros En Y
-			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1] + ((DistY // 2) - (tamanio_fuente//2))], fuentes[0], COLOR['Azul'])
+			if i == 0: dibujarTexto(screen, str(j + 1), [p_inicio[0] - tamanio_fuente, j * dimension + p_inicio[1] + ((DistY // 2) - (tamanio_fuente//2))], Fuentes['Wendy 30'], COLOR['Azul'])
 			
 		# Dibuja Las Letras En X
-		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente], fuentes[0], COLOR['Azul'])
+		dibujarTexto(screen, LETRAS[i], [i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente], Fuentes['Wendy 30'], COLOR['Azul'])
 		
 
 def dibujarTexto(screen, texto, posicion, fuentes, color):
@@ -286,10 +286,17 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 
 def AbrirArchivo():
 	
+	global Error, CadenaError
+	
 	Cadena = ''
 	Nombre = explorer.GetFileName()
 	
-	if Nombre == None: print('\n\n\t Error! Nombre de Archivo No Fue Especificado.'); sys.exit(1)
+	if Nombre == None:
+		
+		CadenaError = 'Archivo No Especificado.'
+		Error = True
+		return None
+		#~ print('\n\n\t Error! Nombre de Archivo No Fue Especificado.'); sys.exit(1)
 	
 	with open(Nombre, 'r') as Archivo: Cadena = Archivo.read()
 	Archivo.close()
@@ -299,7 +306,14 @@ def AbrirArchivo():
 
 def ObtenerMatriz(Cadena):
 	
-	if Cadena == '':  print('\n\n\t Error! Archvio Vacio.'); sys.exit(1)
+	global Error, CadenaError
+	
+	if Cadena == '':
+		
+		CadenaError = 'Error! Archivo Vacio.'
+		Error = True
+		return None
+		#~ print('\n\n\t Error! Archvo Vacio.'); sys.exit(1)
 	
 	# Remplazamos de la Cadena los espacios y tabulaciones por cadenas vacia
 	# Luego Generamos una lista que estara dividida por cada salto de linea:
@@ -335,8 +349,10 @@ def Pause(Quiet = False): os.system('Pause') if Quiet == False else os.system('P
 # Funciones 
 def load_image(filename, transparent=False):
 	
+	global Error
+	
 	try: image = pygame.image.load(filename)
-	except pygame.error as message: raise SystemExit
+	except pygame.error as message: raise SystemError
 	
 	image = image.convert()
 	
@@ -350,11 +366,28 @@ def load_image(filename, transparent=False):
 
 def TODOArchivo():
 	
-	Cadena  = AbrirArchivo()
+	global Error, CadenaError
+	
+	Cadena = AbrirArchivo()
+	
+	if Cadena == None: return None, None, None, None, None
+	
 	Matrixy = ObtenerMatriz(Cadena)
 	
-	if Matrixy == True: print('\n\n\t Error! La Cuadricula No Puede Ser Diseñada!\n\n\t No Todas Las Filas Son De La Misma Longitud.'); sys.exit(1)
-	elif Matrixy == False: print('\n\n\t Error! Ingrese Solo Numeros En La Cuadricula.'); sys.exit(1)
+	if Matrixy == None: return None, None, None, None, None
+	
+	if Matrixy == True:
+		
+		CadenaError = 'Archivo No Compatible.'
+		Error = True
+		return None, None, None, None, None
+		#~ print('\n\n\t Error! La Cuadricula No Puede Ser Diseñada!\n\n\t No Todas Las Filas Son De La Misma Longitud.'); sys.exit(1)
+	elif Matrixy == False:
+		
+		CadenaError = 'Archivo No Compatible.'
+		Error = True
+		return None, None, None, None, None
+		#~ print('\n\n\t Error! Ingrese Solo Numeros En La Cuadricula.'); sys.exit(1)
 	
 	Lisy = []
 	
@@ -370,13 +403,24 @@ def TODOArchivo():
 	POS  = (XPOS if XPOS > YPOS else YPOS)
 	
 	if XPOS <= 1 or YPOS <= 1:
-		print('\n\n\t Error! La Cuadricula es Más Pequeña de lo permitido!')
-		print('\n\n\t Minimo Permitido: 2 x 2\n\n\t Valores Actuales: ' + str(XPOS) + ' x ' + str(YPOS))
-		sys.exit(1)
+		
+		CadenaError = 'Cuadricula Minima: 2x2.'
+		Error = True
+		return None, None, None, None, None
+		
+		#~ print('\n\n\t Error! La Cuadricula es Más Pequeña de lo permitido!')
+		#~ print('\n\n\t Minimo Permitido: 2 x 2\n\n\t Valores Actuales: ' + str(XPOS) + ' x ' + str(YPOS))
+		#~ sys.exit(1)
+		
 	elif XPOS >= 16 or YPOS >= 16:
-		print('\n\n\t Error! La Cuadricula es Más Grande de lo permitido!')
-		print('\n\n\t Maximo Permitido: 15 x 15\n\n\t Valores Actuales: ' + str(XPOS) + ' x ' + str(YPOS))
-		sys.exit(1)
+		
+		CadenaError = 'Cuadricula Maxima: 15x15.'
+		Error = True
+		return None, None, None, None, None
+		
+		#~ print('\n\n\t Error! La Cuadricula es Más Grande de lo permitido!')
+		#~ print('\n\n\t Maximo Permitido: 15 x 15\n\n\t Valores Actuales: ' + str(XPOS) + ' x ' + str(YPOS))
+		#~ sys.exit(1)
 	
 	return Matrixy, Lisy, XPOS, YPOS, POS
 
@@ -387,9 +431,13 @@ def TODOArchivo():
 Error = False
 CadenaError = ''
 
+
 def main():
 	
+	global Error
+	
 	CargarMapa = None
+	ElegirPers = None
 	FULL = False
 	Cargar = False
 	
@@ -408,17 +456,33 @@ def main():
 	clock = pygame.time.Clock()
 	tamanio_fuente = 30
 	
-	NombrePersonaje = ['Hombre','Mono','Pez']
-	seleccion = ['A', 1]
+	NombrePersonaje = ['Hombre','Mono','Pez','Fantasma']
+	NP = None
+	seleccion = None
 	SelTemp = ['P',16]
 	
-	fuentes = [ pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", tamanio_fuente),
-				pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 15),
-				pygame.font.Font("fuentes/Wendy.ttf", tamanio_fuente),
-				pygame.font.Font("fuentes/Wendy.ttf", 24),
-				pygame.font.Font("fuentes/Wendy.ttf", 20),
-				pygame.font.Font("fuentes/DroidSans.ttf", 16),
-				pygame.font.Font("fuentes/DroidSans.ttf", 12)]
+	Fuentes = {'Alice 40':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 40),
+			   'Alice 35':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 35),
+			   'Alice 30':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 30),
+			   'Alice 25':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 25),
+			   'Alice 20':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 20),
+			   'Alice 15':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 15),
+			   'Alice 10':pygame.font.Font("fuentes/AliceandtheWickedMonster.ttf", 10),
+			   'Wnedy 40':pygame.font.Font("fuentes/Wendy.ttf", 40),
+			   'Wendy 35':pygame.font.Font("fuentes/Wendy.ttf", 35),
+			   'Wendy 30':pygame.font.Font("fuentes/Wendy.ttf", 30),
+			   'Wendy 25':pygame.font.Font("fuentes/Wendy.ttf", 25),
+			   'Wendy 20':pygame.font.Font("fuentes/Wendy.ttf", 20),
+			   'Wendy 15':pygame.font.Font("fuentes/Wendy.ttf", 15),
+			   'Wendy 10':pygame.font.Font("fuentes/Wendy.ttf", 10),
+			   'Droid 40':pygame.font.Font("fuentes/DroidSans.ttf", 40),
+			   'Droid 35':pygame.font.Font("fuentes/DroidSans.ttf", 35),
+			   'Droid 30':pygame.font.Font("fuentes/DroidSans.ttf", 30),
+			   'Droid 25':pygame.font.Font("fuentes/DroidSans.ttf", 25),
+			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
+			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
+			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10)
+			   }
 	
 	puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
 	
@@ -427,13 +491,16 @@ def main():
 	#~ bloque2 = Bloque("img/N-A.jpg")
 	#~ bloque3 = Bloque("img/piedra.jpg")
 	#~ bloque4 = Bloque("img/pasto.jpg")
-	boton1 = Boton("img/Boton6.png")
-	boton2 = Boton("img/Boton5.png")
+	boton1 = Boton("img/BotonRojo.png")
+	boton2 = Boton("img/BotonNaranja.png")
+	botonPers1 = Boton("img/BotonPurpura.png")
+	botonPers2 = Boton("img/BotonAzul.png")
 	
 	#~ Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
 	
 	# Botones:
 	Btn1Pressed = False
+	Btn2Pressed = False
 	
 	while game_over is False:
 		
@@ -441,14 +508,18 @@ def main():
 		
 		for evento in pygame.event.get():
 			
+			#~ print(evento.type)
+			
 			if evento.type == pygame.QUIT: game_over = True
 			
 			elif evento.type == pygame.KEYDOWN:
 				
-				if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)
-				elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)
-				elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje)
-				elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje)
+				if Cargar:
+					
+					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)
+					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)
+					elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje)
+					elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje)
 			
 				if evento.key == pygame.K_ESCAPE: game_over = True
 				
@@ -460,7 +531,8 @@ def main():
 					else:
 						screen = pygame.display.set_mode(DIMENCIONES)
 						FULL = False
-				
+			
+			#~ elif evento.type == pygame.JOYBUTTONDOWN
 			elif evento.type == pygame.MOUSEBUTTONDOWN:
 				
 				pos = pygame.mouse.get_pos()
@@ -469,36 +541,49 @@ def main():
 				
 				SelTemp = obtenerPosicionClic(XPOS, YPOS, pos, dimension, puntoInicio, SelTemp)
 				
-				
 				xr, yr = pos[0], pos[1]
-				if (xr >= 900) and (xr <= 1050) and (yr >= 44) and (yr <= 80):
-					
-					Btn1Pressed = True
-					CargarMapa = True
-					
+				if (xr >= 900) and (xr <= 1050) and (yr >= 44) and (yr <= 80): Btn1Pressed = True; CargarMapa = True
+				
+				if (xr >= 100) and (xr <= 150) and (yr >= 20) and (yr <= 70): Btn2Pressed = True; ElegirPers = True
+				
 			elif evento.type == pygame.MOUSEBUTTONUP:
 				
 				if CargarMapa:
 					
 					Cargar = True
 					
-					Matrixy, Lisy, XPOS, YPOS, POS = TODOArchivo()
-					puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
-					CargarMapa = False
+					global SELECT
+					SELECT = []
+					
 					personaje = Personaje("img/SinRostro.png")
 					bloque1 = Bloque("img/Bloque1.png")
 					bloque2 = Bloque("img/N-A.jpg")
 					bloque3 = Bloque("img/camino.jpg")
 					bloque4 = Bloque("img/pasto.jpg")
 					
-					Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
+					Matrixy, Lisy, XPOS, YPOS, POS = TODOArchivo()
 					
-					seleccion = ['A', 1]
+					if Matrixy == None:
+						
+						Cargar = False
+						CargarMapa = False
+						seleccion = None
+						XPOS = 1
+						YPOS = 1
+						POS  = (XPOS if XPOS > YPOS else YPOS)
 					
-					global SELECT
-					SELECT = []
+					else:
+						
+						puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
+						Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
+						seleccion = ['A', 1]
+						CargarMapa = False
+						Error = False
+						
+				#~ if ElegirPers:
 				
 				Btn1Pressed = False
+				Btn2Pressed = False
 				pygame.mouse.set_visible(True)
 				SelTemp = ['P',16]
 		
@@ -515,14 +600,15 @@ def main():
 		pygame.draw.rect(screen, COLOR['Negro'],  [10, 10,  240, 580], 3)
 		pygame.draw.line(screen, COLOR['Negro'],  [10, 40],[250,  40], 3)
 		#~ [BLANCO, NEGRO, GRISC, ROJO, VERDE, AZUL, AZULL, FONDO, GRIS]
-		dibujarTexto(screen, 'Informacion',		  [80, 15],  fuentes[3], COLOR['Verde'])
-		dibujarTexto(screen, 'Personaje: ',		  [16, 50],  fuentes[5], COLOR['Negro'])
-		dibujarTexto(screen,  NombrePersonaje[0], [150, 50], fuentes[5], COLOR['Azul'])
-		dibujarTexto(screen, 'Posicion Actual: ', [16, 70],  fuentes[5], COLOR['Negro'])
-		dibujarTexto(screen,  str(seleccion),	  [150, 70], fuentes[5], COLOR['Azul'])
-		dibujarTexto(screen, 'Cargar Mapa',		  [912, 47], fuentes[2], COLOR['Naranja'])
+		dibujarTexto(screen, 'Informacion',		  [70, 12],  Fuentes['Wendy 30'], COLOR['Verde'])
+		dibujarTexto(screen, 'Personaje: ',		  [16, 50],  Fuentes['Wendy 20'], COLOR['Negro'])
 		
-		#~ if Error: dibujarTexto(screen, CadenaError, PosicionError, fuente[2], COLOR[3])
+		if NP == None: dibujarTexto(screen,  'None', [150, 50], Fuentes['Wendy 20'], COLOR['Azul'])
+		else: dibujarTexto(screen,  NombrePersonaje[NP], [150, 50], Fuentes['Wendy 20'], COLOR['Azul'])
+		
+		dibujarTexto(screen, 'Posicion Actual: ', [16, 70],  Fuentes['Wendy 20'], COLOR['Negro'])
+		dibujarTexto(screen,  str(seleccion),	  [150, 70], Fuentes['Wendy 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Cargar Mapa',		  [912, 47], Fuentes['Wendy 30'], COLOR['Naranja'])
 		
 		Temp = None
 		
@@ -530,11 +616,16 @@ def main():
 			
 			if x[0] == seleccion: Temp = x[2]
 				 
-		dibujarTexto(screen, 'Terreno Actual: ', [16, 90],  fuentes[5], COLOR['Negro'])
-		dibujarTexto(screen,  str(Temp),	  	 [150, 90], fuentes[5], COLOR['Azul'])
+		dibujarTexto(screen, 'Terreno Actual: ', [16, 90],  Fuentes['Wendy 20'], COLOR['Negro'])
+		dibujarTexto(screen,  str(Temp),	  	 [150, 90], Fuentes['Wendy 20'], COLOR['Azul'])
 		
-		if Cargar: dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, fuentes, seleccion, SelTemp, Matrixy, Lisy, Objetos)
+		#~ if Btn2Pressed == False: screen.blit(botonPers1.image, (50, 50))
+		#~ else: screen.blit(botonPers2.image, (50, 50))
 		
+		if Cargar: dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, seleccion, SelTemp, Matrixy, Lisy, Objetos)
+		
+		if Error: dibujarTexto(screen, CadenaError, [900, 90], Fuentes['Droid 15'], COLOR['Rojo'])
+			
 		pygame.display.flip()
 		
 		clock.tick(60)
