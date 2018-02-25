@@ -116,21 +116,21 @@ def dibujarTablero(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuen
 			
 			if Matriz[j][i] == Lisy[0]:
 				
-				VALORES.append(([LETRAS[i],j+1], Lisy[0], 'Camino'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[0], 'Pared'))
 				#~ pygame.draw.rect(screen, COLOR[2], [x, y, dimension, dimension], 0)
 				
-				Objetos[3].resize(DistX, DistY)
-				bloque = Objetos[3]
+				Objetos[1].resize(DistX, DistY)
+				bloque = Objetos[1]
 				screen.blit(bloque.image, (x,y))
 				
 			elif Matriz[j][i] == Lisy[1]:
 				
-				VALORES.append(([LETRAS[i],j+1], Lisy[1], 'Pared'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[1], 'Camino'))
 				
 				#~ pygame.draw.rect(screen, COLOR[7], [x, y, dimension, dimension], 0)
 				
-				Objetos[1].resize(DistX, DistY)
-				bloque = Objetos[1]
+				Objetos[3].resize(DistX, DistY)
+				bloque = Objetos[3]
 				screen.blit(bloque.image, (x,y))
 				
 			elif Matriz[j][i] == Lisy[2]:
@@ -293,7 +293,7 @@ def AbrirArchivo():
 	
 	if Nombre == None:
 		
-		CadenaError = 'Archivo No Especificado.'
+		CadenaError = 'Archivo No Especificado'
 		Error = True
 		return None
 		#~ print('\n\n\t Error! Nombre de Archivo No Fue Especificado.'); sys.exit(1)
@@ -310,7 +310,7 @@ def ObtenerMatriz(Cadena):
 	
 	if Cadena == '':
 		
-		CadenaError = 'Error! Archivo Vacio.'
+		CadenaError = '  Error! Archivo Vacio'
 		Error = True
 		return None
 		#~ print('\n\n\t Error! Archvo Vacio.'); sys.exit(1)
@@ -550,29 +550,36 @@ def main():
 				
 				if CargarMapa:
 					
-					Cargar = True
+					xMatrixy, xLisy, xXPOS, xYPOS, xPOS = TODOArchivo()
 					
-					global SELECT
-					SELECT = []
-					
-					personaje = Personaje("img/SinRostro.png")
-					bloque1 = Bloque("img/Bloque1.png")
-					bloque2 = Bloque("img/N-A.jpg")
-					bloque3 = Bloque("img/camino.jpg")
-					bloque4 = Bloque("img/pasto.jpg")
-					
-					Matrixy, Lisy, XPOS, YPOS, POS = TODOArchivo()
-					
-					if Matrixy == None:
+					if xMatrixy == None:
 						
-						Cargar = False
+						if Cargar == False: pass
+						else: Cargar = True
 						CargarMapa = False
-						seleccion = None
-						XPOS = 1
-						YPOS = 1
-						POS  = (XPOS if XPOS > YPOS else YPOS)
+						#~ seleccion = None
+						#~ XPOS = 1
+						#~ YPOS = 1
+						#~ POS  = (XPOS if XPOS > YPOS else YPOS)
 					
 					else:
+						
+						global SELECT
+						SELECT = []
+						
+						Cargar = True
+						
+						personaje = Personaje("img/SinRostro.png")
+						bloque1 = Bloque("img/Bloque1.png")
+						bloque2 = Bloque("img/N-A.jpg")
+						bloque3 = Bloque("img/camino.jpg")
+						bloque4 = Bloque("img/pasto.jpg")
+						
+						Matrixy = xMatrixy
+						Lisy = xLisy
+						XPOS = xXPOS
+						YPOS = xYPOS
+						POS = xPOS
 						
 						puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
 						Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
