@@ -1,7 +1,8 @@
 
-# Version: 1.2.8
+# Version: 1.2.9
 
 import pygame
+import pygame_textinput
 from pygame.locals import *
 import explorer
 import sys, os
@@ -574,6 +575,8 @@ def main():
 	tamanio_fuente = 30				# Constante, para hacer manipulacion del tamaño de algunas letras y en la matriz
 									# para tener un margen correcto y otras cosas más.
 	
+	#~ textinput = pygame_textinput.TextInput()
+	
 	#===================================================================
 	
 	# Fuentes de Letra:
@@ -671,6 +674,8 @@ def main():
 		# Chequeo Constante de Eventos del Teclado:
 		for evento in pygame.event.get():
 			
+			#~ textinput.update(pygame.event.get())
+		
 			if evento.type == pygame.QUIT: game_over = True		# Si Se Presiona El Boton Cerrar, Cerrara El Juego.
 			
 			elif evento.type == pygame.KEYDOWN:		# Manipulacion del Teclado.
@@ -825,7 +830,9 @@ def main():
 		else: # Si no, Dibujara solo un rectangulo en trasfondo para representar que ahi se dibujara el Mapa.
 			
 			pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension, dimension], 0)
-			
+		
+		#~ screen.blit(textinput.get_surface(), (700, 300))
+		
 		#======================================== Seccion Derecha ========================================
 		
 		# Mismas Imagenes pero con diferente Color, Para el Boton 1 (Cargar Mapa).
@@ -850,16 +857,84 @@ def main():
 		pygame.draw.rect(screen, COLOR['Gris'],   [900, 120,  200, 460], 0)
 		pygame.draw.rect(screen, COLOR['Gris'],   [900, 120,  200, 460], 3)
 		
+			# Dibuja la Seccion para 'Asignar Valores a Terrenos'.
+		
+		if Cargar and Iniciar == False:		# Si Ya Se Cargo el Mapa y Aun no se ha iniciado el Juego con el Boton 'Comenzar':
+			
+			#==========================================================================================================================
+			
+			dibujarTexto(screen, 'Asignar Valores', [909, 119], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Asignar Valores', [910, 120], Fuentes['Droid 20'], COLOR['Morado'])
+		
+				# Bloque 1:	============================================
+			
+			DibujarMiniaturaTextura(screen, Objetos10, BtnIzq1, BtnDer1, 910, 150, 'Pared', Lisy, LisyPos1, Fuentes)
+		
+				# Bloque 2:	============================================
+			
+			if LisyPos2 in [LisyPos1] and LisyPos2 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared)
+				
+				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes, True)
+			
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes)
+			
+				# Bloque 3:	============================================
+			
+			if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino)
+				
+				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Pasto', Lisy, LisyPos3, Fuentes, True)
+			
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Pasto', Lisy, LisyPos3, Fuentes)
+			
+				# Bloque 4:	============================================
+			
+			if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto)
+				
+				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes, True)
+			
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes)
+			
+				# Bloque 5:	============================================
+			
+			if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto, Lava)
+				
+				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes, True)
+			
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes)
+			
+			#==========================================================================================================================
+			
+			# Asigna Los Valores a las Variables Globales Siguientes:
+			Pared  = LisyPos1
+			Camino = LisyPos2
+			Pasto  = LisyPos3
+			Lava   = LisyPos4
+			Agua   = LisyPos5
+			
+			botonPers1.resize(100,35)
+			botonPers2.resize(100,35)
+			
+			if Btn2Pressed == False: screen.blit(botonPers1.image, (950,550))
+			else: screen.blit(botonPers2.image, (950,550))
+			
+			dibujarTexto(screen, 'Comenzar', [960, 557], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Comenzar', [961, 558], Fuentes['Wendy 25'], COLOR['Purpura'])
+			
+		
 		#======================================== Seccion Izquierda ========================================
 		
 		# Dibuja El Rectangulo Para la Seccion Izquierda.
 		pygame.draw.rect(screen, COLOR['Blanco'], [10, 10,  240, 30], 0)
 		pygame.draw.rect(screen, COLOR['Blanco'], [10, 10,  240, 30], 3)
-		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,  240, 550], 0)
-		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,  240, 550], 3)
+		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,  240, 540], 0)
+		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,  240, 540], 3)
 		pygame.draw.line(screen, COLOR['Negro'],  [9, 40],[250,  40], 3)
 		pygame.draw.line(screen, COLOR['Negro'],  [9, 155],[250,  155], 3)
-		pygame.draw.line(screen, COLOR['Negro'],  [9, 265],[250,  265], 3)
+		pygame.draw.line(screen, COLOR['Negro'],  [9, 270],[250,  270], 3)
 		
 		dibujarTexto(screen, 'Informacion',		  [69, 11],  Fuentes['Wendy 30'], COLOR['Verde'])
 		dibujarTexto(screen, 'Informacion',		  [70, 12],  Fuentes['Wendy 30'], COLOR['Verde Claro'])
@@ -949,77 +1024,7 @@ def main():
 			#~ CargarPers = False
 			seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 			NP = 2						# Se Asigna a NP el Numero De Personaje.
-			
-					#===============================================================
 		
-					# Dibuja la Seccion para 'Asignar Valores a Terrenos'.
-		
-		
-		if Cargar and Iniciar == False:		# Si Ya Se Cargo el Mapa y Aun no se ha iniciado el Juego con el Boton 'Comenzar':
-			
-			#==========================================================================================================================
-			
-			dibujarTexto(screen, 'Asignar Valores', [909, 119], Fuentes['Droid 20'], COLOR['Negro'])
-			dibujarTexto(screen, 'Asignar Valores', [910, 120], Fuentes['Droid 20'], COLOR['Morado'])
-		
-				# Bloque 1:	============================================
-			
-			DibujarMiniaturaTextura(screen, Objetos10, BtnIzq1, BtnDer1, 910, 150, 'Pared', Lisy, LisyPos1, Fuentes)
-		
-				# Bloque 2:	============================================
-			
-			if LisyPos2 in [LisyPos1] and LisyPos2 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared)
-				
-				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes, True)
-			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes)
-			
-				# Bloque 3:	============================================
-			
-			if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino)
-				
-				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Pasto', Lisy, LisyPos3, Fuentes, True)
-			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Pasto', Lisy, LisyPos3, Fuentes)
-			
-				# Bloque 4:	============================================
-			
-			if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto)
-				
-				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes, True)
-			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes)
-			
-				# Bloque 5:	============================================
-			
-			if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto, Lava)
-				
-				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes, True)
-			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes)
-			
-			#==========================================================================================================================
-			
-			# Asigna Los Valores a las Variables Globales Siguientes:
-			Pared  = LisyPos1
-			Camino = LisyPos2
-			Pasto  = LisyPos3
-			Lava   = LisyPos4
-			Agua   = LisyPos5
-			
-			botonPers1.resize(100,35)
-			botonPers2.resize(100,35)
-			
-			if Btn2Pressed == False: screen.blit(botonPers1.image, (950,550))
-			else: screen.blit(botonPers2.image, (950,550))
-			
-			dibujarTexto(screen, 'Comenzar', [960, 557], Fuentes['Wendy 25'], COLOR['Negro'])
-			dibujarTexto(screen, 'Comenzar', [961, 558], Fuentes['Wendy 25'], COLOR['Purpura'])
-			
 		#===================================================================================================
 		
 		pygame.display.flip()
