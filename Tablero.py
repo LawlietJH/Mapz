@@ -1,5 +1,5 @@
 
-# Version: 1.3.0
+# Version: 1.3.1
 
 import pygame
 import pygame_textinput
@@ -142,7 +142,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[0], 'Pared'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared'))
 				
 				Objetos['Pared'].resize(DistX, DistY)
 				bloque = Objetos['Pared']
@@ -151,7 +151,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Camino]:	# Dibuja el Bloque de Camino.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[1], 'Camino'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Camino'))
 				
 				Objetos['Camino'].resize(DistX, DistY)
 				bloque = Objetos['Camino']
@@ -160,7 +160,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Pasto]:	# Dibuja el Bloque de Pasto.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Pasto'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Pasto'))
 				
 				Objetos['Pasto'].resize(DistX, DistY)
 				bloque = Objetos['Pasto']
@@ -169,7 +169,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Lava]:	# Dibuja el Bloque de Lava.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Lava'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Pasto], 'Lava'))
 				
 				Objetos['Lava'].resize(DistX, DistY)
 				bloque = Objetos['Lava']
@@ -178,10 +178,19 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Agua]:	# Dibuja el Bloque de Agua.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Agua'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Agua], 'Agua'))
 				
 				Objetos['Agua'].resize(DistX, DistY)
 				bloque = Objetos['Agua']
+				screen.blit(bloque.image, (x,y))
+				
+			elif Matriz[j][i] == Lisy[Arena]:	# Dibuja el Bloque de Arena.
+				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
+				VALORES.append(([LETRAS[i],j+1], Lisy[Arena], 'Arena'))
+				
+				Objetos['Arena'].resize(DistX, DistY)
+				bloque = Objetos['Arena']
 				screen.blit(bloque.image, (x,y))
 				
 			else:	# Dibuja el Bloque Vacio.
@@ -479,7 +488,7 @@ def DibujarMiniaturaTextura(screen, Objetos, BtnIzq, BtnDer, X, Y, Nombre, List,
 	else: dibujarTexto(screen, str(List[LisyPosX]), [X+125, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	
 
-def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5):
+def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6):
 	
 	# Miniatura Bloque Pared:
 	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
@@ -515,7 +524,14 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
 		if LisyPos5 >= 0 and LisyPos5 < len(Lisy)-1: LisyPos5 += 1
 	
-	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5
+	# Miniatua Bloque Arena:
+	Y += 50
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos6 > 0 and LisyPos6 < len(Lisy): LisyPos6 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos6 >= 0 and LisyPos6 < len(Lisy)-1: LisyPos6 += 1
+	
+	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6
 	
 	
 #===================================================================================================
@@ -526,19 +542,20 @@ CadenaError = ''
 
 Iniciar = False
 
-NA = 0
-Pared = 0
+NA     = 0
+Pared  = 0
 Camino = 0
-Pasto = 0
-Lava = 0
-Agua = 0
+Pasto  = 0
+Lava   = 0
+Agua   = 0
+Arena  = 0
 
 
 #===================================================================================================
 
 def main():
 	
-	global Error, CadenaError, Iniciar, Pasto, Camino, Pared, Lava, Agua
+	global Error, CadenaError, Iniciar, Pasto, Camino, Pared, Lava, Agua, Arena
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -550,6 +567,7 @@ def main():
 	LisyPos3 = 0		# Para Terreno Tipo Pasto
 	LisyPos4 = 0		# Para Terreno Tipo Lava
 	LisyPos5 = 0		# Para Terreno Tipo Agua
+	LisyPos6 = 0		# Para Terreno Tipo Arena
 	
 	CargarMapa = None		# Variable Booleana Para Hacer Validaciones al Cargar Mapa.
 	CargarPers = False		# Variable Booleana Para Hacer Validaciones al Cargar Un Personaje.
@@ -605,6 +623,7 @@ def main():
 	bloque4 = Bloque("img/pasto.jpg")		# Objeto Pasto.
 	bloque5 = Bloque("img/Lava Cracks.jpg")	# Objeto Lava.
 	bloque6 = Bloque("img/Agua.jpg")		# Objeto Agua.
+	bloque7 = Bloque("img/Arena.jpg")		# Objeto Arena.
 	
 	# Miniaturas para eleccion de Terrenos para el Mapa:
 	bloque11 = Bloque("img/Bloque1.png")
@@ -613,6 +632,7 @@ def main():
 	bloque14 = Bloque("img/pasto.jpg")
 	bloque15 = Bloque("img/Lava Cracks.jpg")
 	bloque16 = Bloque("img/Agua.jpg")
+	bloque17 = Bloque("img/Arena.jpg")
 	
 	# Boton Cargar Mapa:
 	boton1 = Boton("img/BotonRojo.png")
@@ -634,6 +654,8 @@ def main():
 	BtnDer4 = BotonDir("img/BotonIzq.png"); BtnDer4.flip(True)		# Boton Derecha   Para Eleccion de Lava. =====
 	BtnIzq5 = BotonDir("img/BotonIzq.png")							# Boton Izquierda Para Eleccion de Agua.
 	BtnDer5 = BotonDir("img/BotonIzq.png"); BtnDer5.flip(True)		# Boton Derecha   Para Eleccion de Agua. =====
+	BtnIzq6 = BotonDir("img/BotonIzq.png")							# Boton Izquierda Para Eleccion de Arena.
+	BtnDer6 = BotonDir("img/BotonIzq.png"); BtnDer5.flip(True)		# Boton Derecha   Para Eleccion de Arena. ====
 	
 	Cuadro1 = Personaje("img/personaje.gif")	# Miniatura Para Personaje Hombre.
 	Cuadro2 = Personaje("img/CatBug.png")		# Miniatura Para Personaje Gato.
@@ -648,11 +670,11 @@ def main():
 	
 	# Diccionario Con Objetos Para Mapa:
 	Objetos = {'Personaje':personaje, 'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Pasto':bloque4,
-			   'Lava':bloque5, 'Agua':bloque6}
+			   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7}
 	
 	# Diccionario Con Objetos Para Miniaturas:
 	Objetos10 = {'Personaje':personaje, 'Pared':bloque11, 'N/A':bloque12, 'Camino':bloque13, 'Pasto':bloque14,
-				 'Lava':bloque15, 'Agua':bloque16}
+				 'Lava':bloque15, 'Agua':bloque16, 'Arena':bloque17}
 	
 	#===================================================================
 	
@@ -675,7 +697,7 @@ def main():
 		for evento in pygame.event.get():
 			
 			#~ textinput.update(pygame.event.get())
-		
+			
 			if evento.type == pygame.QUIT: game_over = True		# Si Se Presiona El Boton Cerrar, Cerrara El Juego.
 			
 			elif evento.type == pygame.KEYDOWN:		# Manipulacion del Teclado.
@@ -722,7 +744,7 @@ def main():
 					
 					X = 1006; Y = 168
 					
-					LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5 = BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5)
+					LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6 = BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6)
 					
 				#=====================================================================================
 				
@@ -777,6 +799,7 @@ def main():
 						bloque4 = Bloque("img/pasto.jpg")		# Objeto Pasto.
 						bloque5 = Bloque("img/Lava Cracks.jpg")	# Objeto Lava.
 						bloque6 = Bloque("img/Agua.jpg")		# Objeto Agua.
+						bloque7 = Bloque("img/Arena.jpg")		# Objeto Arena.
 						
 						# Se Pasan los valores Temporales a los Originales.
 						Matrixy = xMatrixy			
@@ -790,6 +813,7 @@ def main():
 						Pasto  = LisyPos3 = 0
 						Lava   = LisyPos4 = 0
 						Agua   = LisyPos5 = 0
+						Arena  = LisyPos6 = 0
 						
 						# Obtenemos El Ancho y Alto del Mapa, Para Cargar La Matriz Correctamente.
 						XPOS = xXPOS		# Valor de las Letras.
@@ -800,7 +824,7 @@ def main():
 						
 						# Se Reinicia el Diccionario Objetos con los Nuevos Objetos Generados.
 						Objetos = {'Personaje':personaje, 'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Pasto':bloque4,
-								   'Lava':bloque5, 'Agua':bloque6}
+								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7}
 						
 						seleccion = ['A', 1] 	# En esta Posicion Iniciara El Personaje Una Vez Cargado.
 						CargarMapa = False		# Indica que El Boton Cargar Mapa Dejo de ser Apretado.
@@ -906,6 +930,15 @@ def main():
 			
 			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes)
 			
+				# Bloque 6:	============================================
+			
+			if LisyPos6 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5] and LisyPos6 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto, Lava, Agua)
+				
+				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq6, BtnDer6, 910, 400, 'Arena', Lisy, LisyPos6, Fuentes, True)
+			
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq6, BtnDer6, 910, 400, 'Arena', Lisy, LisyPos6, Fuentes)
+			
 			#==========================================================================================================================
 			
 			# Asigna Los Valores a las Variables Globales Siguientes:
@@ -914,6 +947,7 @@ def main():
 			Pasto  = LisyPos3
 			Lava   = LisyPos4
 			Agua   = LisyPos5
+			Arena  = LisyPos6
 			
 			botonPers1.resize(100,35)
 			botonPers2.resize(100,35)
