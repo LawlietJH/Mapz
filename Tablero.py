@@ -428,6 +428,7 @@ def TODOArchivo():
 Error = False
 CadenaError = ''
 
+
 #===================================================================================================
 
 def main():
@@ -512,10 +513,10 @@ def main():
 	Cuadro3 = Personaje("img/SinRostro.png")
 	
 	RutaPersonaje = {
-				  'Hombre':"img/personaje.gif",
-				  'Gato':"img/CatBug.png",
-				  'Fantasma':"img/SinRostro.png"
-				 }
+					'Hombre':"img/personaje.gif",
+					'Gato':"img/CatBug.png",
+					'Fantasma':"img/SinRostro.png"
+					}
 	
 	#~ Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
 	
@@ -584,7 +585,13 @@ def main():
 				
 				#=======================================================
 				
-				if CargarMapa:
+				if Btn1Pressed and NP == None:
+					
+					Error = True
+					CadenaError = 'Selecciona Un Personaje'
+					CargarMapa = False
+					
+				elif CargarMapa:
 					
 					xMatrixy, xLisy, xXPOS, xYPOS, xPOS = TODOArchivo()
 					
@@ -601,33 +608,24 @@ def main():
 						
 						Cargar = True
 						
-						try:
-							personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]])
-							
-							bloque1 = Bloque("img/Bloque1.png")
-							bloque2 = Bloque("img/N-A.jpg")
-							bloque3 = Bloque("img/camino.jpg")
-							bloque4 = Bloque("img/pasto.jpg")
-							
-							Matrixy = xMatrixy
-							Lisy = xLisy
-							XPOS = xXPOS
-							YPOS = xYPOS
-							POS = xPOS
-							
-							puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
-							Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
-							seleccion = ['A', 1]
-							CargarMapa = False
-							Error = False
-							
-						except:
-							
-							if Cargar == True: Cargar = False
-							CargarMapa = False
-							
-							Error = True
-							CadenaError = 'Selecciona Un Personaje'
+						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]])
+						
+						bloque1 = Bloque("img/Bloque1.png")
+						bloque2 = Bloque("img/N-A.jpg")
+						bloque3 = Bloque("img/camino.jpg")
+						bloque4 = Bloque("img/pasto.jpg")
+						
+						Matrixy = xMatrixy
+						Lisy = xLisy
+						XPOS = xXPOS
+						YPOS = xYPOS
+						POS = xPOS
+						
+						puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)
+						Objetos = [personaje, bloque1, bloque2, bloque3, bloque4]
+						seleccion = ['A', 1]
+						CargarMapa = False
+						Error = False
 				
 				#=======================================================
 				
@@ -645,7 +643,8 @@ def main():
 		#======================================== Seccion Central ========================================
 		
 		if Cargar: dibujarTablero(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, seleccion, SelTemp, Matrixy, Lisy, Objetos)
-		
+		else: pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension, dimension], 0)
+			
 		#======================================== Seccion Derecha ========================================
 		
 		boton1.resize(150, 50)
@@ -659,17 +658,12 @@ def main():
 			dibujarTexto(screen, CadenaError, [920, 89], Fuentes['Droid 15'], COLOR['Naranja'])
 			dibujarTexto(screen, CadenaError, [921, 90], Fuentes['Droid 15'], COLOR['Rojo'])
 		
-		dibujarTexto(screen, 'Cargar Mapa',		  [937, 45], Fuentes['Wendy 30'], COLOR['Naranja'])
-		dibujarTexto(screen, 'Cargar Mapa',		  [938, 46], Fuentes['Wendy 30'], COLOR['Naranja'])
-		dibujarTexto(screen, 'Cargar Mapa',		  [939, 47], Fuentes['Wendy 30'], COLOR['Amarillo'])
-		
+		dibujarTexto(screen, 'Cargar Mapa',	[937, 45], Fuentes['Wendy 30'], COLOR['Naranja'])
+		dibujarTexto(screen, 'Cargar Mapa', [938, 46], Fuentes['Wendy 30'], COLOR['Naranja'])
+		dibujarTexto(screen, 'Cargar Mapa', [939, 47], Fuentes['Wendy 30'], COLOR['Amarillo'])
 		
 		#======================================== Seccion Izquierda ========================================
-				
-		#~ COLOR  = {'Blanco':BLANCO,        'Negro':NEGRO,       'Gris Claro':GRISC, 'Rojo':ROJO,       'Verde':VERDE,
-				  #~ 'Azul':AZUL,            'Azul Claro':AZULL,  'Gris':GRIS,        'Fondo':FONDO,     'Naranja':NARANJA,
-				  #~ 'Seleccion':SELECCIONA, 'Amarillo':AMARILLO, 'Morado':MORADO,    'Purpura':PURPURA, 'Verde Claro':VERDEC
-				 #~ }
+		
 		pygame.draw.rect(screen, COLOR['Blanco'], [10, 10,  240, 30], 0)
 		pygame.draw.rect(screen, COLOR['Blanco'], [10, 10,  240, 30], 3)
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,  240, 550], 0)
@@ -679,19 +673,40 @@ def main():
 		dibujarTexto(screen, 'Informacion',		  [69, 11],  Fuentes['Wendy 30'], COLOR['Verde'])
 		dibujarTexto(screen, 'Informacion',		  [70, 12],  Fuentes['Wendy 30'], COLOR['Verde Claro'])
 		
-		dibujarTexto(screen, 'Personaje: ',		  [15, 49],  Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Personaje: ',		  [16, 50],  Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Personaje: ',		  [15, 54],  Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Personaje: ',		  [16, 55],  Fuentes['Droid 20'], COLOR['Azul'])
+		
+		if NP == None:
+			dibujarTexto(screen, 'Seleccionar', [122, 54], Fuentes['Droid 20'], COLOR['Morado'])
+			dibujarTexto(screen, 'Seleccionar', [123, 55], Fuentes['Droid 20'], COLOR['Negro'])
+		else:
+			dibujarTexto(screen,  NombrePersonaje[NP], [122, 54], Fuentes['Droid 20'], COLOR['Morado'])
+			dibujarTexto(screen,  NombrePersonaje[NP], [123, 55], Fuentes['Droid 20'], COLOR['Negro'])
+		
+		dibujarTexto(screen, 'Posición Actual: ', [14, 85],  Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Posición Actual: ', [15, 86],  Fuentes['Droid 20'], COLOR['Azul'])
+		
+		if seleccion == None:
+			dibujarTexto(screen,  'Ninguna',	  [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen,  'Ninguna',	  [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+		else:
+			dibujarTexto(screen,  str(seleccion[0])+', '+str(seleccion[1]),	  [162, 85], Fuentes['Droid 20'], COLOR['Verde'])
+			dibujarTexto(screen,  str(seleccion[0])+', '+str(seleccion[1]),	  [163, 86], Fuentes['Droid 20'], COLOR['Negro'])
+		
+		Temp = 'Ninguno'
+		
+		for x in VALORES:
+			
+			if x[0] == seleccion: Temp = x[2]
+				 
+		dibujarTexto(screen, 'Terreno Actual: ', [14, 115],  Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Terreno Actual: ', [15, 116],  Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen,  str(Temp),	  	 [162, 115], Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen,  str(Temp),	  	 [163, 116], Fuentes['Droid 20'], COLOR['Negro'])
 		
 		dibujarTexto(screen, 'Seleccionar Personaje', [27, 169], Fuentes['Droid 20'], COLOR['Negro'])
 		dibujarTexto(screen, 'Seleccionar Personaje', [28, 170], Fuentes['Droid 20'], COLOR['Morado'])
 			
-		if NP == None:
-			dibujarTexto(screen, 'Seleccionar', [122, 49], Fuentes['Droid 20'], COLOR['Morado'])
-			dibujarTexto(screen, 'Seleccionar', [123, 50], Fuentes['Droid 20'], COLOR['Negro'])
-		else:
-			dibujarTexto(screen,  NombrePersonaje[NP], [162, 49], Fuentes['Droid 20'], COLOR['Morado'])
-			dibujarTexto(screen,  NombrePersonaje[NP], [163, 50], Fuentes['Droid 20'], COLOR['Negro'])
-		
 		Cuadro1.resize(50,50)
 		Cuadro2.resize(50,50)
 		Cuadro3.resize(50,50)
@@ -723,26 +738,6 @@ def main():
 			ElegirPers = False
 			seleccionPers3 = False
 		
-		dibujarTexto(screen, 'Posición Actual: ', [14, 70],  Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Posición Actual: ', [15, 71],  Fuentes['Droid 20'], COLOR['Azul'])
-		
-		if seleccion == None:
-			dibujarTexto(screen,  'Ninguna',	  [162, 70], Fuentes['Droid 20'], COLOR['Verde'])
-			dibujarTexto(screen,  'Ninguna',	  [163, 71], Fuentes['Droid 20'], COLOR['Negro'])
-		else:
-			dibujarTexto(screen,  str(seleccion[0])+', '+str(seleccion[1]),	  [162, 70], Fuentes['Droid 20'], COLOR['Verde'])
-			dibujarTexto(screen,  str(seleccion[0])+', '+str(seleccion[1]),	  [163, 71], Fuentes['Droid 20'], COLOR['Negro'])
-		
-		Temp = 'Ninguno'
-		
-		for x in VALORES:
-			
-			if x[0] == seleccion: Temp = x[2]
-				 
-		dibujarTexto(screen, 'Terreno Actual: ', [14, 90],  Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Terreno Actual: ', [15, 91],  Fuentes['Droid 20'], COLOR['Azul'])
-		dibujarTexto(screen,  str(Temp),	  	 [162, 90], Fuentes['Droid 20'], COLOR['Azul'])
-		dibujarTexto(screen,  str(Temp),	  	 [163, 91], Fuentes['Droid 20'], COLOR['Negro'])
 		
 		#===================================================================================================
 		
