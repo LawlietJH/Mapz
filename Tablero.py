@@ -1,30 +1,10 @@
 
-# Version: 1.2.7
+# Version: 1.2.8
+
 import pygame
 from pygame.locals import *
 import explorer
 import sys, os
-
-
-BLANCO = (255, 255, 255)
-NEGRO  = (0,   0,   0)
-
-GRISC  = (216, 216, 216)
-ROJO   = (255, 0,   0)
-VERDE  = (4,   180, 4)
-VERDEC  = (0,   255, 0)
-
-AZUL   = (20,  80,  240)
-AZULL  = (40,  210, 250)
-AMARILLO = (255,255, 0)
-
-NARANJA = (255,120,0)
-MORADO = (76, 11, 95)
-PURPURA = (56, 11, 97)
-
-SELECCIONA = (220, 200, 0)
-GRIS   = (189, 189, 189)
-FONDO  = (24,  25,  30)
 
 COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 216, 216), 'Rojo':(255, 0,   0),
 		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
@@ -120,12 +100,18 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 	
 	'''
 	# Funcion que dibuja el tablero
-	screen: 		referencia del lienzo donde dibujar
-	dimension: 		tamanio de los rectangulos
-	p_inicio: 		coordenadas del punto de inicio del tablero
-	tamanio_fuente: tamanio de fuente segun el tablero
-	fuente: 		Objeto fuente 
-	seleccion: 		rectangulo seleccionado 
+	XPOS:			Cantidad de Columnas (Letras)
+	YPOS:			Cantidad de Fila (Numeros)
+	screen: 		Objeto Principal, Referencia a la Vantana Para Dibujar en ella.
+	dimension: 		Tamanio de Los Rectangulos. (Tamanio de los Terrenos en Pixeles)
+	p_inicio: 		Coordenadas en Pixeles del Punto de Inicio del Mapa a Dibujar en La Ventana.
+	tamanio_fuente: Tamanio de fuente para las letras y numeros de la matriz. (Margen)
+	Fuentes: 		Diccionario con Fuentes de Letras.
+	seleccion: 		Posicion del Personaje.
+	SelTemp: 		Posicion de Seleccion Temporal Al Dar Clic.
+	Matriz:			Matriz con los valores Cargados del Archivo.txt
+	Lisy			Lista con los valores Ordenados y sin Repetir, Cargados del Archivo.txt
+	Objetos:		Diccionario con los Objetos tipo Bloque Para Dibujarlos En La Pantalla, en su posicion correspondiente.
 	'''
 	
 	VALORES = []
@@ -134,65 +120,72 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 		
 		for j in range(YPOS):
 			
-			x = i * dimension + p_inicio[0]
-			y = j * dimension + p_inicio[1]
+			x = i * dimension + p_inicio[0]		# Se Obtiene La Posicion X en Pixeles, del Bloque Matriz[j][i]
+			y = j * dimension + p_inicio[1]		# Se Obtiene La Posicion Y en Pixeles, del Bloque Matriz[j][i]
 			
-			xp = (i+1) * dimension + p_inicio[0]
-			yp = (j+1) * dimension + p_inicio[1]
+			xp = (i+1) * dimension + p_inicio[0]	# Se Obtiene La Posicion siguiente de X en Pixeles, del Bloque Matriz[j][i+1]
+			yp = (j+1) * dimension + p_inicio[1]	# Se Obtiene La Posicion siguiente de Y en Pixeles, del Bloque Matriz[j+1][i]
 			
-			DistX = xp - x
-			DistY = yp - y
+			DistX = xp - x		# Se Calcula La Distancia en Pixeles en X desde la Posicion Matriz[i][j] hasta Matriz[i+1][j]
+			DistY = yp - y		# Se Calcula La Distancia en Pixeles en Y desde la Posicion Matriz[i][j] hasta Matriz[i][j+1]
 			
-			if Matriz[j][i] == '-1':
+			if Matriz[j][i] == '-1':	# Dibuja el Bloque Vacio.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
 				
 				Objetos['N/A'].resize(DistX, DistY)
 				bloque = Objetos['N/A']
 				screen.blit(bloque.image, (x,y))
 			
-			elif Matriz[j][i] == Lisy[Pared]:
+			elif Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[0], 'Pared'))
 				
 				Objetos['Pared'].resize(DistX, DistY)
 				bloque = Objetos['Pared']
 				screen.blit(bloque.image, (x,y))
 				
-			elif Matriz[j][i] == Lisy[Camino]:
+			elif Matriz[j][i] == Lisy[Camino]:	# Dibuja el Bloque de Camino.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[1], 'Camino'))
 				
 				Objetos['Camino'].resize(DistX, DistY)
 				bloque = Objetos['Camino']
 				screen.blit(bloque.image, (x,y))
 				
-			elif Matriz[j][i] == Lisy[Pasto]:
+			elif Matriz[j][i] == Lisy[Pasto]:	# Dibuja el Bloque de Pasto.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Pasto'))
 				
 				Objetos['Pasto'].resize(DistX, DistY)
 				bloque = Objetos['Pasto']
 				screen.blit(bloque.image, (x,y))
 				
-			elif Matriz[j][i] == Lisy[Lava]:
+			elif Matriz[j][i] == Lisy[Lava]:	# Dibuja el Bloque de Lava.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Lava'))
 				
 				Objetos['Lava'].resize(DistX, DistY)
 				bloque = Objetos['Lava']
 				screen.blit(bloque.image, (x,y))
 				
-			elif Matriz[j][i] == Lisy[Agua]:
+			elif Matriz[j][i] == Lisy[Agua]:	# Dibuja el Bloque de Agua.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[2], 'Agua'))
 				
 				Objetos['Agua'].resize(DistX, DistY)
 				bloque = Objetos['Agua']
 				screen.blit(bloque.image, (x,y))
 				
-			else:
+			else:	# Dibuja el Bloque Vacio.
 				
+				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
 				
 				Objetos['N/A'].resize(DistX, DistY)
@@ -201,6 +194,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				
 			if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1 and Iniciar:
 				
+				# Dibuja el Personaje Seleccionado.
 				Objetos['Personaje'].resize(DistX, DistY)
 				personaje = Objetos['Personaje']
 				screen.blit(personaje.image, (x, y))
@@ -208,7 +202,8 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
 				if not seleccion in SELECT: SELECT.append(seleccion)
 				
-			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, SELECCIONA, [x, y, dimension, dimension], 0)
+			# Dibuja Temporalmente La Seleccion con el Clic en el Mapa.
+			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
 			
 			# Imprimir El Recorrido:
 			#~ if [LETRAS[i],j+1] in SELECT:
@@ -482,6 +477,45 @@ def DibujarMiniaturaTextura(screen, Objetos, BtnIzq, BtnDer, X, Y, Nombre, List,
 	if Repetido: dibujarTexto(screen, str(List[LisyPosX]), [X+125, Y+15], Fuentes['Droid 20'], COLOR['Rojo'])
 	else: dibujarTexto(screen, str(List[LisyPosX]), [X+125, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	
+
+def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5):
+	
+	# Miniatura Bloque Pared:
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos1 > 0 and LisyPos1 < len(Lisy): LisyPos1 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos1 >= 0 and LisyPos1 < len(Lisy)-1: LisyPos1 += 1
+
+	# Miniatura Bloque Camino:
+	Y += 50
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos2 > 0 and LisyPos2 < len(Lisy): LisyPos2 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos2 >= 0 and LisyPos2 < len(Lisy)-1: LisyPos2 += 1
+
+	# Miniatua Bloque Pasto:
+	Y += 50
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos3 > 0 and LisyPos3 < len(Lisy): LisyPos3 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos3 >= 0 and LisyPos3 < len(Lisy)-1: LisyPos3 += 1
+
+	# Miniatua Bloque Lava:
+	Y += 50
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos4 > 0 and LisyPos4 < len(Lisy): LisyPos4 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos4 >= 0 and LisyPos4 < len(Lisy)-1: LisyPos4 += 1
+
+	# Miniatua Bloque Agua:
+	Y += 50
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos5 > 0 and LisyPos5 < len(Lisy): LisyPos5 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos5 >= 0 and LisyPos5 < len(Lisy)-1: LisyPos5 += 1
+	
+	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5
+	
 	
 #===================================================================================================
 
@@ -675,41 +709,15 @@ def main():
 				
 				# Cooredenadas Boton 2:
 				if Cargar: 				# Solo Se Puede Presionar el Boton si se cargo ya el Mapa
-					if (xr >= 150) and (xr <= 250) and (yr >= 565) and (yr <= 590): Btn2Pressed = True
+					if (xr >= 950) and (xr <= 1050) and (yr >= 555) and (yr <= 580): Btn2Pressed = True
 				
 				# ================= Cooredenadas Boton Izquierda y Derecha =================
 				
 				if Cargar:		# Si se cargo el Mapa Permite Presionar los Botones de Flechas.
 					
-					# Miniatura Bloque Pared:
-					if (xr >= 111) and (xr <= 136) and (yr >= 338) and (yr <= 358):
-						if LisyPos1 > 0 and LisyPos1 < len(Lisy): LisyPos1 -= 1
-					elif (xr >= 161) and (xr <= 186) and (yr >= 338) and (yr <= 358):
-						if LisyPos1 >= 0 and LisyPos1 < len(Lisy)-1: LisyPos1 += 1
+					X = 1006; Y = 168
 					
-					# Miniatura Bloque Camino:
-					elif (xr >= 111) and (xr <= 136) and (yr >= 388) and (yr <= 408):
-						if LisyPos2 > 0 and LisyPos2 < len(Lisy): LisyPos2 -= 1
-					elif (xr >= 161) and (xr <= 186) and (yr >= 388) and (yr <= 408):
-						if LisyPos2 >= 0 and LisyPos2 < len(Lisy)-1: LisyPos2 += 1
-					
-					# Miniatua Bloque Pasto:
-					elif (xr >= 111) and (xr <= 136) and (yr >= 438) and (yr <= 458):
-						if LisyPos3 > 0 and LisyPos3 < len(Lisy): LisyPos3 -= 1
-					elif (xr >= 161) and (xr <= 186) and (yr >= 438) and (yr <= 458):
-						if LisyPos3 >= 0 and LisyPos3 < len(Lisy)-1: LisyPos3 += 1
-					
-					# Miniatua Bloque Lava:
-					elif (xr >= 111) and (xr <= 136) and (yr >= 488) and (yr <= 508):
-						if LisyPos4 > 0 and LisyPos4 < len(Lisy): LisyPos4 -= 1
-					elif (xr >= 161) and (xr <= 186) and (yr >= 488) and (yr <= 508):
-						if LisyPos4 >= 0 and LisyPos4 < len(Lisy)-1: LisyPos4 += 1
-					
-					# Miniatua Bloque Agua:
-					elif (xr >= 111) and (xr <= 136) and (yr >= 538) and (yr <= 558):
-						if LisyPos5 > 0 and LisyPos5 < len(Lisy): LisyPos5 -= 1
-					elif (xr >= 161) and (xr <= 186) and (yr >= 538) and (yr <= 558):
-						if LisyPos5 >= 0 and LisyPos5 < len(Lisy)-1: LisyPos5 += 1
+					LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5 = BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5)
 					
 				#=====================================================================================
 				
@@ -945,53 +953,54 @@ def main():
 					#===============================================================
 		
 					# Dibuja la Seccion para 'Asignar Valores a Terrenos'.
-				
+		
+		
 		if Cargar and Iniciar == False:		# Si Ya Se Cargo el Mapa y Aun no se ha iniciado el Juego con el Boton 'Comenzar':
 			
 			#==========================================================================================================================
 			
-			dibujarTexto(screen, 'Asignar Valores a Bloques', [13, 284], Fuentes['Droid 20'], COLOR['Negro'])
-			dibujarTexto(screen, 'Asignar Valores a Bloques', [14, 285], Fuentes['Droid 20'], COLOR['Morado'])
-			
+			dibujarTexto(screen, 'Asignar Valores', [909, 119], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Asignar Valores', [910, 120], Fuentes['Droid 20'], COLOR['Morado'])
+		
 				# Bloque 1:	============================================
 			
-			DibujarMiniaturaTextura(screen, Objetos10, BtnIzq1, BtnDer1, 15, 320, 'Pared', Lisy, LisyPos1, Fuentes)
-			
+			DibujarMiniaturaTextura(screen, Objetos10, BtnIzq1, BtnDer1, 910, 150, 'Pared', Lisy, LisyPos1, Fuentes)
+		
 				# Bloque 2:	============================================
 			
 			if LisyPos2 in [LisyPos1] and LisyPos2 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 15, 370, 'Camino', Lisy, LisyPos2, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes, True)
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 15, 370, 'Camino', Lisy, LisyPos2, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes)
 			
 				# Bloque 3:	============================================
 			
 			if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 15, 420, 'Pasto', Lisy, LisyPos3, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Pasto', Lisy, LisyPos3, Fuentes, True)
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 15, 420, 'Pasto', Lisy, LisyPos3, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Pasto', Lisy, LisyPos3, Fuentes)
 			
 				# Bloque 4:	============================================
 			
 			if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 15, 470, 'Lava', Lisy, LisyPos4, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes, True)
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 15, 470, 'Lava', Lisy, LisyPos4, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes)
 			
 				# Bloque 5:	============================================
 			
 			if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Pasto, Lava)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 15, 520, 'Agua', Lisy, LisyPos5, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes, True)
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 15, 520, 'Agua', Lisy, LisyPos5, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes)
 			
 			#==========================================================================================================================
 			
@@ -1005,11 +1014,11 @@ def main():
 			botonPers1.resize(100,35)
 			botonPers2.resize(100,35)
 			
-			if Btn2Pressed == False: screen.blit(botonPers1.image, (150,560))
-			else: screen.blit(botonPers2.image, (150,560))
+			if Btn2Pressed == False: screen.blit(botonPers1.image, (950,550))
+			else: screen.blit(botonPers2.image, (950,550))
 			
-			dibujarTexto(screen, 'Comenzar', [160, 565], Fuentes['Wendy 25'], COLOR['Negro'])
-			dibujarTexto(screen, 'Comenzar', [161, 566], Fuentes['Wendy 25'], COLOR['Purpura'])
+			dibujarTexto(screen, 'Comenzar', [960, 557], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Comenzar', [961, 558], Fuentes['Wendy 25'], COLOR['Purpura'])
 			
 		#===================================================================================================
 		
