@@ -1,5 +1,5 @@
 
-# Version: 1.3.5
+# Version: 1.3.6
 
 import pygame
 import pygame_textinput
@@ -128,16 +128,16 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			DistX = xp - x		# Se Calcula La Distancia en Pixeles en X desde la Posicion Matriz[i][j] hasta Matriz[i+1][j]
 			DistY = yp - y		# Se Calcula La Distancia en Pixeles en Y desde la Posicion Matriz[i][j] hasta Matriz[i][j+1]
 			
-			if Matriz[j][i] == '-1':	# Dibuja el Bloque Vacio.
+			#~ if Matriz[j][i] == '-1':	# Dibuja el Bloque Vacio.
 				
-				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
+				#~ # Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
+				#~ VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
 				
-				Objetos['N/A'].resize(DistX, DistY)
-				bloque = Objetos['N/A']
-				screen.blit(bloque.image, (x,y))
+				#~ Objetos['N/A'].resize(DistX, DistY)
+				#~ bloque = Objetos['N/A']
+				#~ screen.blit(bloque.image, (x,y))
 			
-			elif Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
+			if Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared'))
@@ -200,14 +200,23 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				bloque = Objetos['Montaña']
 				screen.blit(bloque.image, (x,y))
 				
-			else:	# Dibuja el Bloque Vacio.
+			elif Matriz[j][i] == Lisy[Nieve]:	# Dibuja el Bloque de Nieve.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Nieve'))
 				
-				Objetos['N/A'].resize(DistX, DistY)
-				bloque = Objetos['N/A']
+				Objetos['Nieve'].resize(DistX, DistY)
+				bloque = Objetos['Nieve']
 				screen.blit(bloque.image, (x,y))
+				
+			#~ else:	# Dibuja el Bloque Vacio.
+				
+				#~ # Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
+				#~ VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
+				
+				#~ Objetos['N/A'].resize(DistX, DistY)
+				#~ bloque = Objetos['N/A']
+				#~ screen.blit(bloque.image, (x,y))
 				
 			if PuntoInicio != None and Iniciar:		# Si se Inicio cargara el personaje en la posicion de la seleccion.
 				
@@ -588,7 +597,7 @@ def DibujarMiniaturaTextura(screen, Objetos, BtnIzq, BtnDer, X, Y, Nombre, List,
 	else: dibujarTexto(screen, str(List[LisyPosX]), [X+125, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	
 
-def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7):
+def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7, LisyPos8):
 	
 	# Miniatura Bloque Pared:
 	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
@@ -638,7 +647,14 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
 		if LisyPos7 >= 0 and LisyPos7 < len(Lisy)-1: LisyPos7 += 1
 	
-	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7
+	# Miniatua Bloque Nieve:
+	Y += 50
+	if (xr >= X) and (xr <= X+25) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos8 > 0 and LisyPos8 < len(Lisy): LisyPos8 -= 1
+	elif (xr >= X+50) and (xr <= X+75) and (yr >= Y) and (yr <= Y+20):
+		if LisyPos8 >= 0 and LisyPos8 < len(Lisy)-1: LisyPos8 += 1
+	
+	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7, LisyPos8
 	
 	
 #===================================================================================================
@@ -663,6 +679,7 @@ Lava    = 0
 Agua    = 0
 Arena   = 0
 Montaña = 0
+Nieve	= 0
 
 
 #===================================================================================================
@@ -672,7 +689,7 @@ def main():
 	global SELECT, Movimientos
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar
 	global Error, Error2, CadenaError, CadenaError2
-	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña
+	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -686,6 +703,7 @@ def main():
 	LisyPos5 = 0		# Para Terreno Tipo Agua
 	LisyPos6 = 0		# Para Terreno Tipo Arena
 	LisyPos7 = 0		# Para Terreno Tipo Montaña
+	LisyPos8 = 0		# Para Terreno Tipo Nieve
 	
 	CargarMapa = None		# Variable Booleana Para Hacer Validaciones al Cargar Mapa.
 	CargarPers = False		# Variable Booleana Para Hacer Validaciones al Cargar Un Personaje.
@@ -698,7 +716,8 @@ def main():
 	seleccionPers1 = None		# Para Saber Si El Personaje 1 Fue Seleccionado.
 	seleccionPers2 = None		# Para Saber Si El Personaje 2 Fue Seleccionado.
 	seleccionPers3 = None		# Para Saber Si El Personaje 3 Fue Seleccionado.
-	SelTemp = ['P',16]
+	SelTemp = ['P',16]			# Seleccion Temporal.
+	
 	NombrePersonaje = ['Hombre','Gato','Fantasma']	# Lista de Personajes.
 	
 	pygame.init()				# Inicia El Juego.
@@ -726,7 +745,7 @@ def main():
 			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
 			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
 			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10)
-			   }
+			  }
 	
 	#===================================================================
 	
@@ -744,6 +763,7 @@ def main():
 	bloque6 = Bloque("img/Texturas/Agua.jpg")		# Objeto Agua.
 	bloque7 = Bloque("img/Texturas/Arena.jpg")		# Objeto Arena.
 	bloque8 = Bloque("img/Texturas/Montania.jpg")	# Objeto Montaña.
+	bloque9 = Bloque("img/Texturas/Nieve.jpg")		# Objeto Nieve.
 	
 	# Miniaturas para eleccion de Terrenos para el Mapa:
 	bloque11 = Bloque("img/Texturas/Pared.jpg")
@@ -754,6 +774,7 @@ def main():
 	bloque16 = Bloque("img/Texturas/Agua.jpg")
 	bloque17 = Bloque("img/Texturas/Arena.jpg")
 	bloque18 = Bloque("img/Texturas/Montania.jpg")
+	bloque19 = Bloque("img/Texturas/Nieve.jpg")
 	
 	# Boton Cargar Mapa:
 	boton1 = Boton("img/Botones/BotonRojo.png")
@@ -779,6 +800,8 @@ def main():
 	BtnDer6 = BotonDir("img/Botones/BotonIzq.png"); BtnDer6.flip(True)		# Boton Derecha   Para Eleccion de Arena. ====
 	BtnIzq7 = BotonDir("img/Botones/BotonIzq.png")							# Boton Izquierda Para Eleccion de Montaña.
 	BtnDer7 = BotonDir("img/Botones/BotonIzq.png"); BtnDer7.flip(True)		# Boton Derecha   Para Eleccion de Montaña. ==
+	BtnIzq8 = BotonDir("img/Botones/BotonIzq.png")							# Boton Izquierda Para Eleccion de Nieve.
+	BtnDer8 = BotonDir("img/Botones/BotonIzq.png"); BtnDer8.flip(True)		# Boton Derecha   Para Eleccion de Nieve. ====
 	
 	Cuadro1 = Personaje("img/Personajes/personaje.gif")		# Miniatura Para Personaje Hombre.
 	Cuadro2 = Personaje("img/Personajes/CatBug.png")		# Miniatura Para Personaje Gato.
@@ -793,11 +816,11 @@ def main():
 	
 	# Diccionario Con Objetos Para Mapa:
 	Objetos = {'Personaje':personaje, 'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
-			   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8}
+			   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8, 'Nieve':bloque9}
 	
 	# Diccionario Con Objetos Para Miniaturas:
 	Objetos10 = {'Personaje':personaje, 'Pared':bloque11, 'N/A':bloque12, 'Camino':bloque13, 'Bosque':bloque14,
-				 'Lava':bloque15, 'Agua':bloque16, 'Arena':bloque17, 'Montaña':bloque18}
+				 'Lava':bloque15, 'Agua':bloque16, 'Arena':bloque17, 'Montaña':bloque18, 'Nieve':bloque19}
 	
 	#===================================================================
 	
@@ -855,7 +878,7 @@ def main():
 				xr, yr = pos[0], pos[1]		# Posicion X y Y del Mouse por separado, Coordenadas por Pixeles.
 				
 				# Cooredenadas Boton 1 (Cargar Mapa):
-				if (xr >= 927) and (xr <= 1077) and (yr >= 44) and (yr <= 80):
+				if (xr >= 927) and (xr <= 1077) and (yr >= 24) and (yr <= 56):
 					
 					Btn1Pressed = True
 					CargarMapa = True
@@ -865,27 +888,28 @@ def main():
 				# Cooredenadas Boton 2 (Comenzar):
 				if Cargar: 			# Solo Se Puede Presionar el Boton si se cargo ya el Mapa.
 					
-					if (xr >= 950) and (xr <= 1050) and (yr >= 555) and (yr <= 580): Btn2Pressed = True
+					if (xr >= 950) and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
+					#~ if (xr >= 950) and (xr <= 1050) and (yr >= 555) and (yr <= 580): Btn2Pressed = True
 				
 				# ================= Cooredenadas Boton Izquierda y Derecha =================
 				
 				if Cargar:		# Si se cargo el Mapa Permite Presionar los Botones de Flechas.
 					
-					X = 1006; Y = 168
+					X = 1006; Y = 193
 					
 					CadenaError = ''
 					CadenaError2 = ''
 					
-					LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7 = BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7)
+					LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
 					
 				#=====================================================================================
 				
 				# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
 				if Cargar:
 					
-					if   (xr >= 29)  and (xr <= 82)  and (yr >= 299) and (yr <= 352): seleccionPers1 = True
-					elif (xr >= 99)  and (xr <= 152) and (yr >= 299) and (yr <= 352): seleccionPers2 = True
-					elif (xr >= 169) and (xr <= 222) and (yr >= 299) and (yr <= 352): seleccionPers3 = True
+					if   (xr >= 29)  and (xr <= 82)  and (yr >= 319) and (yr <= 372): seleccionPers1 = True
+					elif (xr >= 99)  and (xr <= 152) and (yr >= 319) and (yr <= 372): seleccionPers2 = True
+					elif (xr >= 169) and (xr <= 222) and (yr >= 319) and (yr <= 372): seleccionPers3 = True
 				
 				
 				
@@ -959,6 +983,7 @@ def main():
 						bloque6 = Bloque("img/Texturas/Agua.jpg")		# Objeto Agua.
 						bloque7 = Bloque("img/Texturas/Arena.jpg")		# Objeto Arena.
 						bloque8 = Bloque("img/Texturas/Montania.jpg")	# Objeto Montaña.
+						bloque9 = Bloque("img/Texturas/Nieve.jpg")		# Objeto Nieve.
 						
 						# Se Pasan los valores Temporales a los Originales.
 						Matrixy = xMatrixy			
@@ -974,6 +999,7 @@ def main():
 						Agua    = LisyPos5 = 0
 						Arena   = LisyPos6 = 0
 						Montaña = LisyPos7 = 0
+						Nieve	= LisyPos8 = 0
 						
 						# Obtenemos El Ancho y Alto del Mapa, Para Cargar La Matriz Correctamente.
 						XPOS = xXPOS		# Valor de las Letras.
@@ -984,7 +1010,8 @@ def main():
 						
 						# Se Reinicia el Diccionario Objetos con los Nuevos Objetos Generados.
 						Objetos = {'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
-								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8}
+								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8,
+								   'Nieve':bloque9}
 						
 						Movimientos  = 0
 						PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
@@ -1012,13 +1039,15 @@ def main():
 		#======================================== Seccion Central ========================================
 		#=================================================================================================
 		
+		pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension*XPOS, dimension*YPOS], 0)
+		
 		if Cargar: # Si Cargar es Igual a True entonces Dibujara El Mapa.
 			
 			dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
 			
-		else: # Si no, Dibujara solo un rectangulo en trasfondo para representar que ahi se dibujara el Mapa.
+		#~ else: # Si no, Dibujara solo un rectangulo en trasfondo para representar que ahi se dibujara el Mapa.
 			
-			pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension, dimension], 0)
+			#~ pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension, dimension], 0)
 		
 		#~ screen.blit(textinput.get_surface(), (700, 300))
 		
@@ -1030,43 +1059,55 @@ def main():
 		boton1.resize(150, 50)		# Se Ajusta el Tamanio para el boton1.
 		boton2.resize(150, 50)		# Se Ajusta el Tamanio para el boton2.
 		
-		if Btn1Pressed == False: screen.blit(boton1.image, (927, 35))		# Si el Boton 1 No Ha Sido Presionado, se Mostrara el objeto boton1
-		else: screen.blit(boton2.image, (927, 35))							# Si no, se mostrara el objeto boton2 mientras este presionado el Boton.
+		if Btn1Pressed == False: screen.blit(boton1.image, (927, 15))		# Si el Boton 1 No Ha Sido Presionado, se Mostrara el objeto boton1
+		else: screen.blit(boton2.image, (927, 15))							# Si no, se mostrara el objeto boton2 mientras este presionado el Boton.
+		
+		# Dibuja El Texto en El Boton. Los 2 Textos Son el Mismo, Dan el Efecto de Profundidad.
+		dibujarTexto(screen, 'Cargar Mapa',	[937, 25], Fuentes['Wendy 30'], COLOR['Naranja'])
+		dibujarTexto(screen, 'Cargar Mapa', [938, 26], Fuentes['Wendy 30'], COLOR['Naranja'])
+		dibujarTexto(screen, 'Cargar Mapa', [939, 27], Fuentes['Wendy 30'], COLOR['Amarillo'])
 		
 		if Error:	# Si Ocurrio Un Error, Esta Seccion Es La Que se Encargara de Mostrarlo.
 			
 			if Error2 and CadenaError2 != '':
 				# Dibuja El Texto en Pantalla. Ambos Son El Mismo, Pero 1 Pixel de diferencia uno del otro, da efecto de profundidad.
-				dibujarTexto(screen, CadenaError2, [920, 89], Fuentes['Droid 15'], COLOR['Naranja'])
-				dibujarTexto(screen, CadenaError2, [921, 90], Fuentes['Droid 15'], COLOR['Rojo'])
+				dibujarTexto(screen, CadenaError2, [920, 69], Fuentes['Droid 15'], COLOR['Naranja'])
+				dibujarTexto(screen, CadenaError2, [921, 70], Fuentes['Droid 15'], COLOR['Rojo'])
 				CadenaError = ''
 				Error = False
 			else:
 				# Dibuja El Texto en Pantalla. Ambos Son El Mismo, Pero 1 Pixel de diferencia uno del otro, da efecto de profundidad.
-				dibujarTexto(screen, CadenaError, [920, 89], Fuentes['Droid 15'], COLOR['Naranja'])
-				dibujarTexto(screen, CadenaError, [921, 90], Fuentes['Droid 15'], COLOR['Rojo'])
+				dibujarTexto(screen, CadenaError, [920, 69], Fuentes['Droid 15'], COLOR['Naranja'])
+				dibujarTexto(screen, CadenaError, [921, 70], Fuentes['Droid 15'], COLOR['Rojo'])
 				CadenaError2 = ''
 				Error2 = False
 				
 		elif Error2:
+			
 			# Dibuja El Texto en Pantalla. Ambos Son El Mismo, Pero 1 Pixel de diferencia uno del otro, da efecto de profundidad.
-			dibujarTexto(screen, CadenaError2, [920, 89], Fuentes['Droid 15'], COLOR['Naranja'])
-			dibujarTexto(screen, CadenaError2, [921, 90], Fuentes['Droid 15'], COLOR['Rojo'])
+			dibujarTexto(screen, CadenaError2, [920, 69], Fuentes['Droid 15'], COLOR['Naranja'])
+			dibujarTexto(screen, CadenaError2, [921, 70], Fuentes['Droid 15'], COLOR['Rojo'])
 			CadenaError = ''
 			Error = False
-
-		# Dibuja El Texto en El Boton. Los 2 Textos Son el Mismo, Dan el Efecto de Profundidad.
-		dibujarTexto(screen, 'Cargar Mapa',	[937, 45], Fuentes['Wendy 30'], COLOR['Naranja'])
-		dibujarTexto(screen, 'Cargar Mapa', [938, 46], Fuentes['Wendy 30'], COLOR['Naranja'])
-		dibujarTexto(screen, 'Cargar Mapa', [939, 47], Fuentes['Wendy 30'], COLOR['Amarillo'])
 		
 		# Dibuja Recuadro Derecha.
-		pygame.draw.rect(screen, COLOR['Gris'],   [900, 120,  200, 460], 0)
-		pygame.draw.rect(screen, COLOR['Gris'],   [900, 120,  200, 460], 3)
+		pygame.draw.rect(screen, COLOR['Gris'],   [900, 100,  200, 480], 0)
+		pygame.draw.rect(screen, COLOR['Gris'],   [900, 100,  200, 480], 3)
 		
 			# Dibuja la Seccion para 'Asignar Valores a Terrenos'.
 		
 		if Cargar and Iniciar == False:		# Si Ya Se Cargo el Mapa y Aun no se ha iniciado el Juego con el Boton 'Comenzar':
+			
+			botonPers1.resize(100,35)
+			botonPers2.resize(100,35)
+			
+			#~ if Btn2Pressed == False: screen.blit(botonPers1.image, (950,550))
+			if Btn2Pressed == False: screen.blit(botonPers1.image, (950,105))
+			else: screen.blit(botonPers2.image, (950,105))
+			
+			#~ dibujarTexto(screen, 'Comenzar', [960, 557], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Comenzar', [960, 111], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Comenzar', [961, 112], Fuentes['Wendy 25'], COLOR['Purpura'])
 			
 			Er1 = False
 			Er2 = False
@@ -1074,75 +1115,93 @@ def main():
 			Er4 = False
 			Er5 = False
 			Er6 = False
+			Er7 = False
 			
 			#==========================================================================================================================
 			
-			dibujarTexto(screen, 'Asignar Valores', [909, 119], Fuentes['Droid 20'], COLOR['Negro'])
-			dibujarTexto(screen, 'Asignar Valores', [910, 120], Fuentes['Droid 20'], COLOR['Morado'])
+			dibujarTexto(screen, 'Asignar Valores', [909, 139], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Asignar Valores', [910, 140], Fuentes['Droid 20'], COLOR['Morado'])
 			
 				# Bloque 1:	============================================
 			
-			DibujarMiniaturaTextura(screen, Objetos10, BtnIzq1, BtnDer1, 910, 150, 'Pared', Lisy, LisyPos1, Fuentes)
+			DibujarMiniaturaTextura(screen, Objetos10, BtnIzq1, BtnDer1, 910, 170, 'Pared', Lisy, LisyPos1, Fuentes)
 		
 				# Bloque 2:	============================================
 			
-			if LisyPos2 in [LisyPos1] and LisyPos2 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared)
+			if LisyPos2 in [LisyPos1] and LisyPos2 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 220, 'Camino', Lisy, LisyPos2, Fuentes, True)
 				Er1= True
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 200, 'Camino', Lisy, LisyPos2, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq2, BtnDer2, 910, 220, 'Camino', Lisy, LisyPos2, Fuentes)
 			
 				# Bloque 3:	============================================
 			
-			if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:		# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino)
+			if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Bosque', Lisy, LisyPos3, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 270, 'Bosque', Lisy, LisyPos3, Fuentes, True)
 				Er2 = True
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 250, 'Bosque', Lisy, LisyPos3, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq3, BtnDer3, 910, 270, 'Bosque', Lisy, LisyPos3, Fuentes)
 			
 				# Bloque 4:	============================================
 			
-			if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque)
+			if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 320, 'Lava', Lisy, LisyPos4, Fuentes, True)
 				Er3 = True
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 300, 'Lava', Lisy, LisyPos4, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq4, BtnDer4, 910, 320, 'Lava', Lisy, LisyPos4, Fuentes)
 			
 				# Bloque 5:	============================================
 			
-			if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava)
+			if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 370, 'Agua', Lisy, LisyPos5, Fuentes, True)
 				Er4 = True
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 350, 'Agua', Lisy, LisyPos5, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq5, BtnDer5, 910, 370, 'Agua', Lisy, LisyPos5, Fuentes)
 			
 				# Bloque 6:	============================================
 			
-			if LisyPos6 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5] and LisyPos6 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua)
+			if LisyPos6 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5] and LisyPos6 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq6, BtnDer6, 910, 400, 'Arena', Lisy, LisyPos6, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq6, BtnDer6, 910, 425, 'Arena', Lisy, LisyPos6, Fuentes, True)
 				Er5 = True
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq6, BtnDer6, 910, 400, 'Arena', Lisy, LisyPos6, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq6, BtnDer6, 910, 425, 'Arena', Lisy, LisyPos6, Fuentes)
 			
 				# Bloque 7:	============================================
 			
-			if LisyPos7 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6] and LisyPos7 != 0:	# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena)
+			if LisyPos7 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6] and LisyPos7 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena)
 				
 				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
-				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq7, BtnDer7, 910, 450, 'Montaña', Lisy, LisyPos7, Fuentes, True)
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq7, BtnDer7, 910, 475, 'Montaña', Lisy, LisyPos7, Fuentes, True)
 				Er6 = True
 			
-			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq7, BtnDer7, 910, 450, 'Montaña', Lisy, LisyPos7, Fuentes)
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq7, BtnDer7, 910, 475, 'Montaña', Lisy, LisyPos7, Fuentes)
+			
+				# Bloque 8:	============================================
+			
+			if LisyPos8 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7] and LisyPos8 != 0:
+				# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena, Montaña)
+				
+				# Dibuja La Asignacion En Rojo Por Estar Repetido El Valor.
+				DibujarMiniaturaTextura(screen, Objetos10, BtnIzq8, BtnDer8, 910, 525, 'Nieve', Lisy, LisyPos8, Fuentes, True)
+				Er7 = True
+			
+			else: DibujarMiniaturaTextura(screen, Objetos10, BtnIzq8, BtnDer8, 910, 525, 'Nieve', Lisy, LisyPos8, Fuentes)
 			
 			#==========================================================================================================================
 			
@@ -1154,9 +1213,10 @@ def main():
 			Agua    = LisyPos5
 			Arena   = LisyPos6
 			Montaña = LisyPos7
+			Nieve	= LisyPos8
 			
 			# Marcando Errores:
-			if Er1 or Er2 or Er3 or Er4 or Er5 or Er6:
+			if Er1 or Er2 or Er3 or Er4 or Er5 or Er6 or Er7:
 				
 				Error2 = True
 				CadenaError2 = 'Hay Bloques Repetidos.'
@@ -1172,19 +1232,11 @@ def main():
 				if Agua    > 0 and Agua    < len(Lisy): ConTer += 1
 				if Arena   > 0 and Arena   < len(Lisy): ConTer += 1
 				if Montaña > 0 and Montaña < len(Lisy): ConTer += 1
+				if Nieve   > 0 and Nieve   < len(Lisy): ConTer += 1
 				
 				if ConTer == len(Lisy)-1: Error2 = False; CadenaError2 = ''
 				else:
 					if not Error2:  Error2 = True; CadenaError2 = ''
-				
-			botonPers1.resize(100,35)
-			botonPers2.resize(100,35)
-			
-			if Btn2Pressed == False: screen.blit(botonPers1.image, (950,550))
-			else: screen.blit(botonPers2.image, (950,550))
-			
-			dibujarTexto(screen, 'Comenzar', [960, 557], Fuentes['Wendy 25'], COLOR['Negro'])
-			dibujarTexto(screen, 'Comenzar', [961, 558], Fuentes['Wendy 25'], COLOR['Purpura'])
 			
 		#===================================================================================================
 		#======================================== Seccion Izquierda ========================================
@@ -1196,7 +1248,7 @@ def main():
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,   240, 540],  0)
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,   240, 540],  3)
 		pygame.draw.line(screen, COLOR['Negro'],  [9,  40], [250,  40],  3)
-		pygame.draw.line(screen, COLOR['Negro'],  [9, 255], [250,  255], 3)
+		pygame.draw.line(screen, COLOR['Negro'],  [9, 275], [250,  275], 3)
 		
 		dibujarTexto(screen, 'Informacion', [69, 11],  Fuentes['Wendy 30'], COLOR['Verde'])
 		dibujarTexto(screen, 'Informacion', [70, 12],  Fuentes['Wendy 30'], COLOR['Verde Claro'])
@@ -1302,10 +1354,8 @@ def main():
 		
 		if Cargar and not Iniciar:
 			
-			pygame.draw.line(screen, COLOR['Negro'],  [9, 370], [250,  370], 3)
-			
-			dibujarTexto(screen, 'Seleccionar Personaje', [27, 269], Fuentes['Droid 20'], COLOR['Negro'])
-			dibujarTexto(screen, 'Seleccionar Personaje', [28, 270], Fuentes['Droid 20'], COLOR['Morado'])
+			dibujarTexto(screen, 'Seleccionar Personaje', [27, 289], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Seleccionar Personaje', [28, 290], Fuentes['Droid 20'], COLOR['Morado'])
 			
 			# Cambia el Tamaño de Las Miniaturas de los personajes en 50x50 pixeles.
 			Cuadro1.resize(50,50)
@@ -1313,39 +1363,41 @@ def main():
 			Cuadro3.resize(50,50)
 			
 			# Dibuja recuadros Blancos con Margen Negro en donde iran las Miniaturas.
-			pygame.draw.rect(screen, COLOR['Blanco'], [28,  298, 54, 54], 0)
-			pygame.draw.rect(screen, COLOR['Negro'],  [28,  298, 54, 54], 2)
-			pygame.draw.rect(screen, COLOR['Blanco'], [98,  298, 54, 54], 0)
-			pygame.draw.rect(screen, COLOR['Negro'],  [98,  298, 54, 54], 2)
-			pygame.draw.rect(screen, COLOR['Blanco'], [168, 298, 54, 54], 0)
-			pygame.draw.rect(screen, COLOR['Negro'],  [168, 298, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [28,  318, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [28,  318, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [98,  318, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [98,  318, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [168, 318, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [168, 318, 54, 54], 2)
 			
 			# Se Colocan Las Miniaturas.
-			screen.blit(Cuadro1.image, (30,  300))
-			screen.blit(Cuadro2.image, (100, 300))
-			screen.blit(Cuadro3.image, (170, 300))
+			screen.blit(Cuadro1.image, (30,  320))
+			screen.blit(Cuadro2.image, (100, 320))
+			screen.blit(Cuadro3.image, (170, 320))
 			
 			if seleccionPers1:		# Si El Personaje 1 Fue Seleccionado
 				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  300, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
+				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  320, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
 				#~ CargarPers = False
 				seleccionPers1 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 0						# Se Asigna a NP el Numero De Personaje.
 				
 			elif seleccionPers2:		# Si El Personaje 2 Fue Seleccionado
 				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [100, 300, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
+				pygame.draw.rect(screen, COLOR['Seleccion'], [100, 320, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
 				#~ CargarPers = False
 				seleccionPers2 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 1						# Se Asigna a NP el Numero De Personaje.
 				
 			elif seleccionPers3:		# Si El Personaje 3 Fue Seleccionado
 				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [170, 300, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
+				pygame.draw.rect(screen, COLOR['Seleccion'], [170, 320, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
 				#~ CargarPers = False
 				seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 2						# Se Asigna a NP el Numero De Personaje.
 		
+			pygame.draw.line(screen, COLOR['Negro'],  [9, 390], [250,  390], 3)
+			
 		#===================================================================================================
 		
 		pygame.display.flip()		# Actualiza Los Datos En La Interfaz.
