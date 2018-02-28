@@ -1,5 +1,5 @@
 
-# Version: 1.3.6
+# Version: 1.3.7
 
 import pygame
 import pygame_textinput
@@ -18,6 +18,7 @@ LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
 SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Numero de Visita.
+#~ INFO	  = []		# Lista con la informacion del Bloque temporalmente seleccionado.
 
 #===================================================================================================
 #===================================================================================================
@@ -95,7 +96,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 # Funcion Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
 def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
 	
-	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino
+	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, DibujarInfo, InfoSelTemp
 	
 	'''
 	# Funcion que dibuja el tablero
@@ -247,8 +248,15 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 						seleccion = SelTemp
 				
 			# Dibuja Temporalmente La Seleccion con el Clic en el Mapa.
-			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1: pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
-			
+			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
+				
+				if Iniciar:
+					
+					DibujarInfo = True
+					InfoSelTemp = SelTemp
+				
 			# Imprimir El Recorrido:
 			for Pos, Movs in SELECT:
 				
@@ -267,6 +275,25 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 		[i * dimension + p_inicio[0] + ((DistX // 2) - 7), p_inicio[1] - tamanio_fuente],	# Posicion Centrada en su Columna Correspondiente.
 		Fuentes['Alice 30'], COLOR['Azul'])
 
+
+def DibujarInformacionClic(screen, Fuentes, SelTemp):
+	
+	dibujarTexto(screen, 'Movimientos: ', [920, 130], Fuentes['Droid 15'], COLOR['Azul'])
+	
+	Cont = 0
+	
+	for Pos, Movs in SELECT:
+		
+		if InfoSelTemp == Pos:
+			
+			for mov in Movs:
+				
+				if Cont == len(Movs)-1: dibujarTexto(screen, str(mov), [920 + ((Cont%5)*30), 150 + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
+				else: dibujarTexto(screen, str(mov)+',', [920 + ((Cont%5)*30), 150 + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
+				
+				Cont += 1
+				
+	#~ dibujarTexto(screen, 'xD', [920, 150], Fuentes['Droid 15'], COLOR['Azul'])
 
 #===================================================================================================
 
@@ -497,6 +524,7 @@ def ObtenerMatriz(Cadena):
 			
 	return Matriz
 
+#===================================================================================================
 
 def Pause(Quiet = False): os.system('Pause') if Quiet == False else os.system('Pause > Nul')
 
@@ -571,6 +599,7 @@ def TODOArchivo():
 	
 	return Matrixy, Lisy, XPOS, YPOS, POS
 
+#===================================================================================================
 
 def DibujarMiniaturaTextura(screen, Objetos, BtnIzq, BtnDer, X, Y, Nombre, List, LisyPosX, Fuentes, Repetido=False):
 	
@@ -595,7 +624,8 @@ def DibujarMiniaturaTextura(screen, Objetos, BtnIzq, BtnDer, X, Y, Nombre, List,
 	# Dibuja El Numero De Terreno Que se Le Sera Asignado.
 	if Repetido: dibujarTexto(screen, str(List[LisyPosX]), [X+125, Y+15], Fuentes['Droid 20'], COLOR['Rojo'])
 	else: dibujarTexto(screen, str(List[LisyPosX]), [X+125, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
-	
+
+#===================================================================================================
 
 def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7, LisyPos8):
 	
@@ -655,8 +685,7 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 		if LisyPos8 >= 0 and LisyPos8 < len(Lisy)-1: LisyPos8 += 1
 	
 	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7, LisyPos8
-	
-	
+
 #===================================================================================================
 
 seleccion = None	# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
@@ -669,9 +698,11 @@ CadenaError = ''
 CadenaError2 = ''	# Marca errores solamente en la seccion de seleccion de bloques, si hay repetidos.
 
 Iniciar = False
+DibujarInfo = False
+InfoSelTemp = []		# Lista que almacenara la Seleccion Temporal para poder mostrar la Informacion Constante.
 Movimientos = 1
 
-NA      = 0
+#~ NA      = 0
 Pared   = 0
 Camino  = 0
 Bosque  = 0
@@ -686,7 +717,7 @@ Nieve	= 0
 
 def main():
 	
-	global SELECT, Movimientos
+	global SELECT, Movimientos, DibujarInfo
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar
 	global Error, Error2, CadenaError, CadenaError2
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve
@@ -756,7 +787,7 @@ def main():
 	#Objetos Para El Mapa:
 	personaje = None		# Inicializamos la variable objeto para el futuro personaje a elegir.
 	bloque1 = Bloque("img/Texturas/Pared.jpg")		# Objeto Pared.
-	bloque2 = Bloque("img/Texturas/N-A.jpg")		# Objeto Vacio.
+	#~ bloque2 = Bloque("img/Texturas/N-A.jpg")		# Objeto Vacio.
 	bloque3 = Bloque("img/Texturas/Camino.jpg")		# Objeto Camino.
 	bloque4 = Bloque("img/Texturas/Bosque.jpg")		# Objeto Bosque.
 	bloque5 = Bloque("img/Texturas/Lava.jpg")		# Objeto Lava.
@@ -767,7 +798,7 @@ def main():
 	
 	# Miniaturas para eleccion de Terrenos para el Mapa:
 	bloque11 = Bloque("img/Texturas/Pared.jpg")
-	bloque12 = Bloque("img/Texturas/N-A.jpg")
+	#~ bloque12 = Bloque("img/Texturas/N-A.jpg")
 	bloque13 = Bloque("img/Texturas/camino.jpg")
 	bloque14 = Bloque("img/Texturas/Bosque.jpg")
 	bloque15 = Bloque("img/Texturas/Lava.jpg")
@@ -815,12 +846,12 @@ def main():
 					}
 	
 	# Diccionario Con Objetos Para Mapa:
-	Objetos = {'Personaje':personaje, 'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
+	Objetos = {'Personaje':personaje, 'Pared':bloque1, 'Camino':bloque3, 'Bosque':bloque4,
 			   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8, 'Nieve':bloque9}
 	
 	# Diccionario Con Objetos Para Miniaturas:
-	Objetos10 = {'Personaje':personaje, 'Pared':bloque11, 'N/A':bloque12, 'Camino':bloque13, 'Bosque':bloque14,
-				 'Lava':bloque15, 'Agua':bloque16, 'Arena':bloque17, 'Montaña':bloque18, 'Nieve':bloque19}
+	Objetos10 = {'Personaje':personaje, 'Pared':bloque11, 'Camino':bloque13, 'Bosque':bloque14, 'Lava':bloque15,
+				 'Agua':bloque16, 'Arena':bloque17, 'Montaña':bloque18, 'Nieve':bloque19}
 	
 	#===================================================================
 	
@@ -843,6 +874,8 @@ def main():
 		for evento in pygame.event.get():
 			
 			#~ textinput.update(pygame.event.get())
+			
+			#~ print(evento)
 			
 			if evento.type == pygame.QUIT: game_over = True		# Si Se Presiona El Boton Cerrar, Cerrara El Juego.
 			
@@ -911,6 +944,11 @@ def main():
 					elif (xr >= 99)  and (xr <= 152) and (yr >= 319) and (yr <= 372): seleccionPers2 = True
 					elif (xr >= 169) and (xr <= 222) and (yr >= 319) and (yr <= 372): seleccionPers3 = True
 				
+				#=====================================================================================
+				
+				# Si se Presiono el Clic Derecho del Mouse (boton 3) y La Variable Global 'DibujarInfo' esta en True entonces se cambia a false.
+				# Dejara de mostrar la Informacion del Bloque Seleccionado con el Mouse.
+				if evento.button == 3 and DibujarInfo: DibujarInfo = False
 				
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Boton del Mouse. ==============================
@@ -976,7 +1014,7 @@ def main():
 						
 						# Se Crean Nuevos Objetos Bloque para el nuevo Mapa.
 						bloque1 = Bloque("img/Texturas/Pared.jpg")		# Objeto Pared.
-						bloque2 = Bloque("img/Texturas/N-A.jpg")		# Objeto Vacio.
+						#~ bloque2 = Bloque("img/Texturas/N-A.jpg")		# Objeto Vacio.
 						bloque3 = Bloque("img/Texturas/Camino.jpg")		# Objeto Camino.
 						bloque4 = Bloque("img/Texturas/Bosque.jpg")		# Objeto Bosque.
 						bloque5 = Bloque("img/Texturas/Lava.jpg")		# Objeto Lava.
@@ -1009,9 +1047,8 @@ def main():
 						puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)	# Se Indica El Punto de Inicio Para Dibujar La Matriz.
 						
 						# Se Reinicia el Diccionario Objetos con los Nuevos Objetos Generados.
-						Objetos = {'Pared':bloque1, 'N/A':bloque2, 'Camino':bloque3, 'Bosque':bloque4,
-								   'Lava':bloque5, 'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8,
-								   'Nieve':bloque9}
+						Objetos = {'Pared':bloque1, 'Camino':bloque3, 'Bosque':bloque4, 'Lava':bloque5, 
+								   'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8,  'Nieve':bloque9}
 						
 						Movimientos  = 0
 						PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
@@ -1237,6 +1274,12 @@ def main():
 				if ConTer == len(Lisy)-1: Error2 = False; CadenaError2 = ''
 				else:
 					if not Error2:  Error2 = True; CadenaError2 = ''
+		
+		
+		#===============================================================
+		
+		if DibujarInfo: DibujarInformacionClic(screen, Fuentes, SelTemp)
+			
 			
 		#===================================================================================================
 		#======================================== Seccion Izquierda ========================================
