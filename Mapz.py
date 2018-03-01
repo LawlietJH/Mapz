@@ -18,7 +18,6 @@ LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
 SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Numero de Visita.
-#~ INFO	  = []		# Lista con la informacion del Bloque temporalmente seleccionado.
 
 #===================================================================================================
 #===================================================================================================
@@ -210,7 +209,29 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					Objetos['Personaje'].resize(DistX, DistY)
 					personaje = Objetos['Personaje']
 					screen.blit(personaje.image, (x, y))
-					
+				
+				# Imprimir El Recorrido: ===============================
+				
+				TempCont = 0
+				DT = dimension / 3
+				
+				if XPOS < 7 and YPOS < 7: F = 'Droid 10'
+				elif XPOS > 7 and XPOS < 12 and YPOS > 7 and YPOS < 12: F = 'Droid 8'
+				else: F = 'Droid 6'
+				
+				for Pos, Movs in SELECT:
+			
+					if [LETRAS[i],j+1] == Pos:
+						
+						for mov in Movs:
+							
+							if TempCont == len(Movs)-1: dibujarTexto(screen, str(mov), [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
+							else: dibujarTexto(screen, str(mov)+',', [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
+							
+							TempCont += 1
+				
+				#=======================================================
+			
 			else:	# Se Elige El Punto De Inicio Y El Punto Destino Para El Personaje en el Mapa.
 				
 				if not Iniciar and SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
@@ -236,32 +257,6 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					
 					DibujarInfo = True
 					InfoSelTemp = SelTemp
-				
-			# Imprimir El Recorrido: ===================================
-			
-			TempCont = 0
-			DT = dimension / 3
-			
-			if XPOS < 7 and YPOS < 7: F = 'Droid 10'
-			elif XPOS > 7 and XPOS < 12 and YPOS > 7 and YPOS < 12: F = 'Droid 8'
-			else: F = 'Droid 6'
-			
-			for Pos, Movs in SELECT:
-		
-				if [LETRAS[i],j+1] == Pos:
-					
-					for mov in Movs:
-						
-						if TempCont == len(Movs)-1: dibujarTexto(screen, str(mov), [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
-						else: dibujarTexto(screen, str(mov)+',', [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
-						
-						TempCont += 1
-						
-			#~ for Pos, Movs in SELECT:
-				
-				#~ if [LETRAS[i],j+1] == Pos: dibujarTexto(screen, str(Movs), [x+1, y], Fuentes['Droid 10'], COLOR['Rojo'])
-				
-			#===========================================================
 			
 			# Dibuja Los Numeros En Y
 			if i == 0:
@@ -279,7 +274,16 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 
 def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	
-	PosY = 120
+	PosY = 110
+	
+	dibujarTexto(screen, ' Informacion', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
+	dibujarTexto(screen, ' Informacion', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
+	
+	PosY += 30
+	dibujarTexto(screen, 'de Selección: ', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'de Selección: ', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
+	
+	PosY += 40
 	
 	dibujarTexto(screen, 'Posición: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Posición: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
@@ -302,8 +306,8 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	# Dibujar Movimientos
 	
 	PosY += 25
-	dibujarTexto(screen, 'Lista de Movimientos: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
-	dibujarTexto(screen, 'Lista de Movimientos: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
+	dibujarTexto(screen, 'Lista de Visitas: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'Lista de Visitas: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	Cont = 0
 	
 	PosY += 20
@@ -803,6 +807,7 @@ def main():
 			   'Wendy 30':pygame.font.Font("fuentes/Wendy.ttf", 30),
 			   'Wendy 25':pygame.font.Font("fuentes/Wendy.ttf", 25),
 			   'Droid 30':pygame.font.Font("fuentes/DroidSans.ttf", 30),
+			   'Droid 25':pygame.font.Font("fuentes/DroidSans.ttf", 25),
 			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
 			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
 			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10),
@@ -1383,8 +1388,8 @@ def main():
 			dibujarTexto(screen, 'Ninguno',		  	 [163, 126], Fuentes['Droid 20'], COLOR['Negro'])
 			
 		
-		dibujarTexto(screen, 'Punto Inicio: ', [14, 165], Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Punto Inicio: ', [15, 166], Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Estado Inicial: ', [14, 165], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Estado Inicial: ', [15, 166], Fuentes['Droid 20'], COLOR['Azul'])
 		
 		if PuntoInicio == None:		# Si Aun no hay nada en la Variable Global PuntoInicio, Dibuja 'Ninguno'.
 			
@@ -1397,8 +1402,8 @@ def main():
 			dibujarTexto(screen, str(PuntoInicio[0])+', '+str(PuntoInicio[1]), [163, 166], Fuentes['Droid 20'], COLOR['Negro'])
 		
 		
-		dibujarTexto(screen, 'Punto Destino: ', [14, 195], Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Punto Destino: ', [15, 196], Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Estado Final: ', [14, 195], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Estado Final: ', [15, 196], Fuentes['Droid 20'], COLOR['Azul'])
 		
 		if PuntoDestino == None:		# Si Aun no hay nada en la Variable Global PuntoDestino, Dibuja 'Ninguno'.
 			
@@ -1411,8 +1416,8 @@ def main():
 			dibujarTexto(screen, str(PuntoDestino[0])+', '+str(PuntoDestino[1]), [163, 196], Fuentes['Droid 20'], COLOR['Negro'])
 		
 		
-		dibujarTexto(screen, 'Movimientos: ', [14, 235], Fuentes['Droid 20'], COLOR['Negro'])
-		dibujarTexto(screen, 'Movimientos: ', [15, 236], Fuentes['Droid 20'], COLOR['Azul'])
+		dibujarTexto(screen, 'Total de Visitas: ', [14, 235], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Total de Visitas: ', [15, 236], Fuentes['Droid 20'], COLOR['Azul'])
 		
 		if PuntoDestino == None:		# Si Aun no hay nada en la Variable Global PuntoDestino, Dibuja 'Ninguno'.
 			
