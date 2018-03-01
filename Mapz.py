@@ -200,6 +200,17 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				bloque = Objetos['Nieve']
 				screen.blit(bloque.image, (x,y))
 			
+						
+			# Dibuja Temporalmente La Seleccion con el Clic en el Mapa.
+			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
+				
+				if Iniciar:
+					
+					DibujarInfo = True
+					InfoSelTemp = SelTemp
+			
 			
 			if PuntoInicio != None and Iniciar:		# Si se Inicio cargara el personaje en la posicion de la seleccion.
 				
@@ -247,16 +258,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 								PuntoDestino = None
 								
 						seleccion = SelTemp
-				
-			# Dibuja Temporalmente La Seleccion con el Clic en el Mapa.
-			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
-				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [x, y, dimension, dimension], 0)
-				
-				if Iniciar:
-					
-					DibujarInfo = True
-					InfoSelTemp = SelTemp
+			
 			
 			# Dibuja Los Numeros En Y
 			if i == 0:
@@ -796,7 +798,7 @@ def main():
 	tamanio_fuente = 30				# Constante, para hacer manipulacion del tamaño de algunas letras y en la matriz
 									# para tener un margen correcto y otras cosas más.
 	
-	#~ textinput = pygame_textinput.TextInput()
+	textinput = pygame_textinput.TextInput()
 	
 	#===================================================================
 	
@@ -896,6 +898,7 @@ def main():
 	# Booleanos Para Saber Si Los Botones Fueron Presionados:
 	Btn1Pressed = False
 	Btn2Pressed = False
+	Input = None
 	
 	#===================================================================
 	
@@ -909,11 +912,8 @@ def main():
 		#=====================================================================================================
 		
 		# Chequeo Constante de Eventos del Teclado:
-		for evento in pygame.event.get():
-			
-			#~ textinput.update(pygame.event.get())
-			
-			#~ print(evento)
+		events = pygame.event.get()
+		for evento in events:
 			
 			if evento.type == pygame.QUIT: game_over = True		# Si Se Presiona El Boton Cerrar, Cerrara El Juego.
 			
@@ -965,7 +965,7 @@ def main():
 				
 				if Cargar:		# Si se cargo el Mapa Permite Presionar los Botones de Flechas.
 					
-					X = 1006; Y = 193
+					X = 1006; Y = 188
 					
 					CadenaError = ''
 					CadenaError2 = ''
@@ -1114,6 +1114,8 @@ def main():
 		#======================================== Seccion Central ========================================
 		#=================================================================================================
 		
+		textinput.update(events) # Actualizamos el TextInput para capturar datos en pygame.
+		
 		pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension*XPOS, dimension*YPOS], 0)
 		
 		if Cargar: # Si Cargar es Igual a True entonces Dibujara El Mapa.
@@ -1124,6 +1126,7 @@ def main():
 			
 			#~ pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension, dimension], 0)
 		
+		#~ print(textinput.get_text())
 		#~ screen.blit(textinput.get_surface(), (700, 300))
 		
 		#=================================================================================================
@@ -1176,11 +1179,9 @@ def main():
 			botonPers1.resize(100,35)
 			botonPers2.resize(100,35)
 			
-			#~ if Btn2Pressed == False: screen.blit(botonPers1.image, (950,550))
 			if Btn2Pressed == False: screen.blit(botonPers1.image, (950,105))
 			else: screen.blit(botonPers2.image, (950,105))
 			
-			#~ dibujarTexto(screen, 'Comenzar', [960, 557], Fuentes['Wendy 25'], COLOR['Negro'])
 			dibujarTexto(screen, 'Comenzar', [960, 111], Fuentes['Wendy 25'], COLOR['Negro'])
 			dibujarTexto(screen, 'Comenzar', [961, 112], Fuentes['Wendy 25'], COLOR['Purpura'])
 			
@@ -1459,21 +1460,21 @@ def main():
 			if seleccionPers1:		# Si El Personaje 1 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  320, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
-				#~ CargarPers = False
+				
 				seleccionPers1 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 0						# Se Asigna a NP el Numero De Personaje.
 				
 			elif seleccionPers2:		# Si El Personaje 2 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [100, 320, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
-				#~ CargarPers = False
+				
 				seleccionPers2 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 1						# Se Asigna a NP el Numero De Personaje.
 				
 			elif seleccionPers3:		# Si El Personaje 3 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [170, 320, 51, 51], 0)		# Se Muestra el Recuadro de Seleccion (Color Amarillento) Temporalmente.
-				#~ CargarPers = False
+				
 				seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 2						# Se Asigna a NP el Numero De Personaje.
 		
