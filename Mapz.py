@@ -1,5 +1,5 @@
 
-# Version: 1.3.7
+# Version: 1.3.8
 
 import pygame
 import pygame_textinput
@@ -10,7 +10,7 @@ import sys, os
 COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 216, 216), 'Rojo':(255, 0,   0),
 		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
 		  'Fondo':(24,  25,  30),   'Naranja':(255,120,0),  'Seleccion':(220, 200, 0),    'Amarillo':(255,255, 0),
-		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0)
+		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0),  'Rojo Claro':(255, 50, 50)
 		 }	# Diccionario de Colores.
 
 DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
@@ -129,15 +129,6 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			DistX = xp - x		# Se Calcula La Distancia en Pixeles en X desde la Posicion Matriz[i][j] hasta Matriz[i+1][j]
 			DistY = yp - y		# Se Calcula La Distancia en Pixeles en Y desde la Posicion Matriz[i][j] hasta Matriz[i][j+1]
 			
-			#~ if Matriz[j][i] == '-1':	# Dibuja el Bloque Vacio.
-				
-				#~ # Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				#~ VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
-				
-				#~ Objetos['N/A'].resize(DistX, DistY)
-				#~ bloque = Objetos['N/A']
-				#~ screen.blit(bloque.image, (x,y))
-			
 			if Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
 				
 				# Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
@@ -209,16 +200,8 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				Objetos['Nieve'].resize(DistX, DistY)
 				bloque = Objetos['Nieve']
 				screen.blit(bloque.image, (x,y))
-				
-			#~ else:	# Dibuja el Bloque Vacio.
-				
-				#~ # Agrega los Valores del Bloque en la Posicion Matriz[j][i] a la Lista Global 'VALORES'.
-				#~ VALORES.append(([LETRAS[i],j+1], 'N/A', 'N/A'))
-				
-				#~ Objetos['N/A'].resize(DistX, DistY)
-				#~ bloque = Objetos['N/A']
-				#~ screen.blit(bloque.image, (x,y))
-				
+			
+			
 			if PuntoInicio != None and Iniciar:		# Si se Inicio cargara el personaje en la posicion de la seleccion.
 				
 				if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
@@ -227,9 +210,6 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					Objetos['Personaje'].resize(DistX, DistY)
 					personaje = Objetos['Personaje']
 					screen.blit(personaje.image, (x, y))
-					
-					# Si la coordenada no esta en la lista, se aniade al registro de Recorrido:
-					#~ if not seleccion in SELECT: SELECT.append(seleccion)
 					
 			else:	# Se Elige El Punto De Inicio Y El Punto Destino Para El Personaje en el Mapa.
 				
@@ -257,10 +237,31 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					DibujarInfo = True
 					InfoSelTemp = SelTemp
 				
-			# Imprimir El Recorrido:
+			# Imprimir El Recorrido: ===================================
+			
+			TempCont = 0
+			DT = dimension / 3
+			
+			if XPOS < 7 and YPOS < 7: F = 'Droid 10'
+			elif XPOS > 7 and XPOS < 12 and YPOS > 7 and YPOS < 12: F = 'Droid 8'
+			else: F = 'Droid 6'
+			
 			for Pos, Movs in SELECT:
+		
+				if [LETRAS[i],j+1] == Pos:
+					
+					for mov in Movs:
+						
+						if TempCont == len(Movs)-1: dibujarTexto(screen, str(mov), [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
+						else: dibujarTexto(screen, str(mov)+',', [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
+						
+						TempCont += 1
+						
+			#~ for Pos, Movs in SELECT:
 				
-				if [LETRAS[i],j+1] == Pos: dibujarTexto(screen, str(Movs), [x+1, y], Fuentes['Droid 10'], COLOR['Rojo'])
+				#~ if [LETRAS[i],j+1] == Pos: dibujarTexto(screen, str(Movs), [x+1, y], Fuentes['Droid 10'], COLOR['Rojo'])
+				
+			#===========================================================
 			
 			# Dibuja Los Numeros En Y
 			if i == 0:
@@ -278,9 +279,34 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 
 def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	
-	dibujarTexto(screen, 'Movimientos: ', [920, 130], Fuentes['Droid 15'], COLOR['Azul'])
+	PosY = 120
 	
+	dibujarTexto(screen, 'Posición: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'Posición: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
+	dibujarTexto(screen, str(InfoSelTemp[0])+', '+str(InfoSelTemp[1]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
+	dibujarTexto(screen, str(InfoSelTemp[0])+', '+str(InfoSelTemp[1]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
+	
+	PosY += 25
+	
+	for X in VALORES:
+		
+		if X[0] == InfoSelTemp:
+			
+			dibujarTexto(screen, 'Terreno: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
+			dibujarTexto(screen, 'Terreno: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
+			dibujarTexto(screen, str(X[2]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
+			dibujarTexto(screen, str(X[2]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
+			
+			break
+	
+	# Dibujar Movimientos
+	
+	PosY += 25
+	dibujarTexto(screen, 'Lista de Movimientos: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'Lista de Movimientos: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	Cont = 0
+	
+	PosY += 20
 	
 	for Pos, Movs in SELECT:
 		
@@ -288,12 +314,16 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 			
 			for mov in Movs:
 				
-				if Cont == len(Movs)-1: dibujarTexto(screen, str(mov), [920 + ((Cont%5)*30), 150 + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
-				else: dibujarTexto(screen, str(mov)+',', [920 + ((Cont%5)*30), 150 + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
+				if Cont == len(Movs)-1:
+					dibujarTexto(screen, str(mov), [919 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo Claro'])
+					dibujarTexto(screen, str(mov), [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
+				else:
+					dibujarTexto(screen, str(mov)+',', [919 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo Claro'])
+					dibujarTexto(screen, str(mov)+',', [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
 				
 				Cont += 1
-				
-	#~ dibujarTexto(screen, 'xD', [920, 150], Fuentes['Droid 15'], COLOR['Azul'])
+	
+
 
 #===================================================================================================
 
@@ -775,7 +805,10 @@ def main():
 			   'Droid 30':pygame.font.Font("fuentes/DroidSans.ttf", 30),
 			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
 			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
-			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10)
+			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10),
+			   'Droid 8':pygame.font.Font("fuentes/DroidSans.ttf", 8),
+			   'Droid 7':pygame.font.Font("fuentes/DroidSans.ttf", 7),
+			   'Droid 6':pygame.font.Font("fuentes/DroidSans.ttf", 6)
 			  }
 	
 	#===================================================================
@@ -922,7 +955,6 @@ def main():
 				if Cargar: 			# Solo Se Puede Presionar el Boton si se cargo ya el Mapa.
 					
 					if (xr >= 950) and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
-					#~ if (xr >= 950) and (xr <= 1050) and (yr >= 555) and (yr <= 580): Btn2Pressed = True
 				
 				# ================= Cooredenadas Boton Izquierda y Derecha =================
 				
@@ -1009,6 +1041,7 @@ def main():
 						
 						SELECT = []		# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
 						
+						DibujarInfo = False  # al Cargar Un Nuevo Mapa, Se Deja de Mostrar La Informacion de Seleccion.
 						Iniciar = False	# Aun no se permite Iniciar La Partida.
 						Cargar = True	# Se Dibuja El Mapa.
 						
