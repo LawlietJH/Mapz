@@ -213,22 +213,28 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				
 				# Imprimir El Recorrido: ===============================
 				
+				Pos = XPOS if XPOS > YPOS else YPOS 
 				TempCont = 0
 				DT = dimension / 3
+				DTY = dimension / 7
 				
-				if XPOS < 7 and YPOS < 7: F = 'Droid 10'
-				elif XPOS > 7 and XPOS < 12 and YPOS > 7 and YPOS < 12: F = 'Droid 8'
+				if   Pos >= 10 and Pos < 13: F = 'Droid 8'
+				elif Pos >= 7 and Pos < 10:  F = 'Droid 10'
+				elif Pos >= 5 and Pos < 7:  F = 'Droid 15'
+				elif Pos >= 2 and Pos < 5:  F = 'Droid 20'
 				else: F = 'Droid 6'
 				
 				for Pos, Movs in SELECT:
 			
-					#~ if [LETRAS[i],j+1] == :
+					if   [LETRAS[i],j+1] == PuntoInicio:  dibujarTexto(screen, 'I', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
+					elif [LETRAS[i],j+1] == PuntoDestino: dibujarTexto(screen, 'F', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
+						
 					if [LETRAS[i],j+1] == Pos:
 						
 						for mov in Movs:
 							
-							if TempCont == len(Movs)-1: dibujarTexto(screen, str(mov), [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
-							else: dibujarTexto(screen, str(mov)+',', [x + ((TempCont%3)*DT), y + ((TempCont//3)*10)], Fuentes[F], COLOR['Rojo'])
+							if TempCont == len(Movs)-1: dibujarTexto(screen, str(mov), [x + ((TempCont%3)*DT), y + ((TempCont//3)*DTY)], Fuentes[F], COLOR['Rojo'])
+							else: dibujarTexto(screen, str(mov)+',', [x + ((TempCont%3)*DT), y + ((TempCont//3)*DTY)], Fuentes[F], COLOR['Rojo'])
 							
 							TempCont += 1
 				
@@ -269,8 +275,8 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	
 	PosY = 110
 	
-	dibujarTexto(screen, ' Informacion', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
-	dibujarTexto(screen, ' Informacion', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
+	dibujarTexto(screen, 'Informacion', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'Informacion', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
 	
 	PosY += 30
 	dibujarTexto(screen, 'de Selección: ', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
@@ -296,18 +302,35 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 			
 			break
 	
-	# Dibujar Movimientos
+	# Dibujar Visitas:
+	
+	PosY += 25
+	dibujarTexto(screen, 'Estado: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'Estado: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
+	
+	if InfoSelTemp == PuntoInicio:
+		
+		dibujarTexto(screen, 'Inicial', [1049, PosY], Fuentes['Droid 15'], COLOR['Rojo Claro'])
+		dibujarTexto(screen, 'Inicial', [1050, PosY], Fuentes['Droid 15'], COLOR['Rojo'])
+		
+	elif InfoSelTemp == PuntoDestino:
+		
+		dibujarTexto(screen, 'Final', [1058, PosY], Fuentes['Droid 15'], COLOR['Rojo Claro'])
+		dibujarTexto(screen, 'Final', [1059, PosY], Fuentes['Droid 15'], COLOR['Rojo'])
 	
 	PosY += 25
 	dibujarTexto(screen, 'Lista de Visitas: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Lista de Visitas: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
-	Cont = 0
 	
+	Cont = 0
 	PosY += 20
+	Temp = False
 	
 	for Pos, Movs in SELECT:
 		
 		if InfoSelTemp == Pos:
+			
+			Temp = True
 			
 			for mov in Movs:
 				
@@ -319,7 +342,14 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 					dibujarTexto(screen, str(mov)+',', [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
 				
 				Cont += 1
+				
+			break
 	
+	if Temp: dibujarTexto(screen, 'Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])
+	else:
+		dibujarTexto(screen, 'No Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])	
+		dibujarTexto(screen, 'Sin Visitas', [920, PosY], Fuentes['Droid 15'], COLOR['Naranja'])	
+
 
 
 #===================================================================================================
