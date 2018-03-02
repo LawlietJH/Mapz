@@ -1,5 +1,5 @@
 
-# Versión: 1.3.9
+# Versión: 1.4.0
 # Python:  3.5.0
 
 import pygame
@@ -28,7 +28,7 @@ class Personaje(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para El Persona
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
 	
-	def flip(self, TX, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
+	def flip(self, TX=True, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
 		
 		self.image = pygame.transform.flip(self.image, TX, TY)
 	
@@ -72,7 +72,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
 	
-	def flip(self, TX, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
+	def flip(self, TX=True, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
 		
 		self.image = pygame.transform.flip(self.image, TX, TY)
 	
@@ -222,6 +222,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				
 				for Pos, Movs in SELECT:
 			
+					#~ if [LETRAS[i],j+1] == :
 					if [LETRAS[i],j+1] == Pos:
 						
 						for mov in Movs:
@@ -429,7 +430,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 		
 		if personaje.getDireccion() == 'R':
 			
-			personaje.flip(True)
+			personaje.flip()
 			personaje.setDireccion('L')
 			
 		if   Actual[0] == LETRAS[0]  and Actual[1] in [x for x in range(1,YPOS+1)]:	pass
@@ -462,7 +463,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 		
 		if personaje.getDireccion() == 'L':
 			
-			personaje.flip(True)
+			personaje.flip()
 			personaje.setDireccion('R')
 			
 		if   Actual[0] == LETRAS[XPOS-1]   and Actual[1] in [x for x in range(1,YPOS+1)]: pass
@@ -716,6 +717,7 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 		
 	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7, LisyPos8
 
+
 #===================================================================================================
 #===================================== Declaraciones Globales ======================================
 #===================================================================================================
@@ -866,27 +868,30 @@ def main():
 	botonPers2 = Boton("img/Botones/BotonAzul.png")
 	
 	# Botones Con Flechas Izquierda y Derecha Para Elección de Terrenos.
-	# La función flip() Invierte la Imagen en Espejo.
+	# flip() Invierte la Imágen en Espejo en el eje de las X.
+	# flip(False, True) Invierte la Imágen en Espejo en el eje de las Y.
+	# flip(True, True) Invierte la Imágen en Espejo en ambos ejes (X, Y).
+	
 	RutaBtn = "img/Botones/BotonIzq.png"				# Ruta del Botón a Cargar.
 	BtnIzq1 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Pared.
-	BtnDer1 = BotonDir(RutaBtn); BtnDer1.flip(True)		# Botón Derecha   Para Elección de Pared. ====
+	BtnDer1 = BotonDir(RutaBtn); BtnDer1.flip()		# Botón Derecha   Para Elección de Pared. ====
 	BtnIzq2 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Camino.
-	BtnDer2 = BotonDir(RutaBtn); BtnDer2.flip(True)		# Botón Derecha   Para Elección de Camino. ===
+	BtnDer2 = BotonDir(RutaBtn); BtnDer2.flip()		# Botón Derecha   Para Elección de Camino. ===
 	BtnIzq3 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Bosque. 
-	BtnDer3 = BotonDir(RutaBtn); BtnDer3.flip(True)		# Botón Derecha   Para Elección de Bosque. ===
+	BtnDer3 = BotonDir(RutaBtn); BtnDer3.flip()		# Botón Derecha   Para Elección de Bosque. ===
 	BtnIzq4 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Lava.
-	BtnDer4 = BotonDir(RutaBtn); BtnDer4.flip(True)		# Botón Derecha   Para Elección de Lava. =====
+	BtnDer4 = BotonDir(RutaBtn); BtnDer4.flip()		# Botón Derecha   Para Elección de Lava. =====
 	BtnIzq5 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Agua.
-	BtnDer5 = BotonDir(RutaBtn); BtnDer5.flip(True)		# Botón Derecha   Para Elección de Agua. =====
+	BtnDer5 = BotonDir(RutaBtn); BtnDer5.flip()		# Botón Derecha   Para Elección de Agua. =====
 	BtnIzq6 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Arena.
-	BtnDer6 = BotonDir(RutaBtn); BtnDer6.flip(True)		# Botón Derecha   Para Elección de Arena. ====
+	BtnDer6 = BotonDir(RutaBtn); BtnDer6.flip()		# Botón Derecha   Para Elección de Arena. ====
 	BtnIzq7 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Montaña.
-	BtnDer7 = BotonDir(RutaBtn); BtnDer7.flip(True)		# Botón Derecha   Para Elección de Montaña. ==
+	BtnDer7 = BotonDir(RutaBtn); BtnDer7.flip()		# Botón Derecha   Para Elección de Montaña. ==
 	BtnIzq8 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Nieve.
-	BtnDer8 = BotonDir(RutaBtn); BtnDer8.flip(True)		# Botón Derecha   Para Elección de Nieve. ====
+	BtnDer8 = BotonDir(RutaBtn); BtnDer8.flip()		# Botón Derecha   Para Elección de Nieve. ====
 	
 	BtnPagIzq = BotonDir(RutaBtn)							# Botón Derecho Para Cambiar de Página en la Selección de Terrenos.
-	BtnPagDer = BotonDir(RutaBtn); BtnPagDer.flip(True)		# Botón Izquierdo Para Cambiar de Página en la Selección de Terrenos.
+	BtnPagDer = BotonDir(RutaBtn); BtnPagDer.flip()		# Botón Izquierdo Para Cambiar de Página en la Selección de Terrenos.
 	
 	Cuadro1 = Personaje("img/Personajes/personaje.gif")		# Miniatura Para Personaje Hombre.
 	Cuadro2 = Personaje("img/Personajes/CatBug.png")		# Miniatura Para Personaje Gato.
