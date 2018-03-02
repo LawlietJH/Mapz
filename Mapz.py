@@ -1,5 +1,6 @@
 
-# Version: 1.3.9
+# Versión: 1.3.9
+# Python:  3.5.0
 
 import pygame
 import pygame_textinput
@@ -7,23 +8,11 @@ from pygame.locals import *
 import explorer
 import sys, os
 
-COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 216, 216), 'Rojo':(255, 0,   0),
-		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
-		  'Fondo':(24,  25,  30),   'Naranja':(255,120,0),  'Seleccion':(220, 200, 0),    'Amarillo':(255,255, 0),
-		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0),  'Rojo Claro':(255, 50, 50)
-		 }	# Diccionario de Colores.
-
-DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
-LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']	# Letras Para La Matriz.
-
-VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
-SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Numero de Visita.
-
 #===================================================================================================
 #===================================================================================================
 #===================================================================================================
 
-#Clases 
+# Clases:
  
 class Personaje(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para El Personaje Principal.
 	
@@ -728,21 +717,37 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 	return LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7, LisyPos8
 
 #===================================================================================================
+#===================================== Declaraciones Globales ======================================
+#===================================================================================================
 
+# Constantes Globales: =================================================
 
+COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 216, 216), 'Rojo':(255, 0,   0),
+		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
+		  'Fondo':(24,  25,  30),   'Naranja':(255,120,0),  'Seleccion':(220, 200, 0),    'Amarillo':(255,255, 0),
+		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0),  'Rojo Claro':(255, 50, 50)
+		 }	# Diccionario de Colores.
+
+DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
+LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']	# Letras Para La Matriz.
+
+VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
+SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Numero de Visita.
+
+# Variables Globales: ==================================================
 
 seleccion = None	# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
 PuntoInicio = None	# Posición de Inicio, ejemplo [ 'A', 1 ].
 PuntoDestino = None	# Posición de Destino, ejemplo [ 'O', 15 ].
 
-Error = False		
+Error = False		# Marca Errores En Carga de Archivos y Otros.
 Error2 = False		# Marca errores solamente en la sección de selección de bloques, si hay repetidos.
-CadenaError = ''
+CadenaError = ''	# Marca Errores En Carga de Archivos y Otros. 
 CadenaError2 = ''	# Marca errores solamente en la sección de selección de bloques, si hay repetidos.
 
-Pagina1 = True
-Iniciar = False
-DibujarInfo = False
+Pagina1 = True			# Indica si la Pagina de Selección de Terrenos Es Alctualmente la primera.
+Iniciar = False			# Indica si ya Inició el Juego.
+DibujarInfo = False		# Booleano que Indica si se debe o no Dibujar la Informacion en La Derecha con el Clic en un Terreno.
 InfoSelTemp = []		# Lista que almacenara la Selección Temporal para poder mostrar la Información Constante.
 Movimientos = 1
 
@@ -755,8 +760,8 @@ Arena   = 0
 Montaña = 0
 Nieve	= 0
 
-
-
+#===================================================================================================
+#============================================== Main ===============================================
 #===================================================================================================
 
 def main():
@@ -1021,7 +1026,7 @@ def main():
 						Error = True
 						CadenaError = 'Selecciona un Estado Final.'
 					  
-					else:			# Si Se Selecciono Un Personaje, Se Iniciara.
+					else:			# Si Se Selecciono Un Personaje, Se Iniciará.
 						
 						Iniciar = True	# Inicia El Juego.
 						seleccion = PuntoInicio
@@ -1074,11 +1079,11 @@ def main():
 						
 						# Se Pasan los valores Temporales a los Originales.
 						Matrixy = xMatrixy			
-						Lisy = ['-1']
-						Lisy = Lisy + xLisy
+						Lisy = ['-1']				# Se Reinicia la Lista con el Primer Elemento, el -1 para la Selección de Terrenos.
+						Lisy = Lisy + xLisy			# Se le añaden todos los Valores.
 						
-						# Se Reinician Las Variables Globales (Pared, Camino, Bosque, Lava, Agua, Arena, Montaña, Nieve) en 0
-						# Se Reinician Las Variables De Posición Para la Selección de Terrenos en 0
+						# Se Reinician Las Variables Globales (Pared, Camino, Bosque, Lava, Agua, Arena, Montaña, Nieve) en 0.
+						# Se Reinician Las Variables De Posición Para la Selección de Terrenos en 0.
 						Pared   = LisyPos1 = 0
 						Camino  = LisyPos2 = 0
 						Bosque  = LisyPos3 = 0
