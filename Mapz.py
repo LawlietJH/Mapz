@@ -1,5 +1,5 @@
 
-# Versión: 1.4.0
+# Versión: 1.4.1
 # Python:  3.5.0
 
 import pygame
@@ -273,21 +273,24 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 
 def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	
-	PosY = 110
+	# Dibuja Toda La Información Al Dar Clic En Un Terreno.
 	
-	dibujarTexto(screen, 'Informacion', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
-	dibujarTexto(screen, 'Informacion', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
+	PosY = 110
+	dibujarTexto(screen, 'Información', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
+	dibujarTexto(screen, 'Información', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
 	
 	PosY += 30
 	dibujarTexto(screen, 'de Selección: ', [919, PosY-1], Fuentes['Droid 25'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'de Selección: ', [920, PosY], Fuentes['Droid 25'], COLOR['Azul'])
 	
 	PosY += 40
-	
 	dibujarTexto(screen, 'Posición: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Posición: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	dibujarTexto(screen, str(InfoSelTemp[0])+', '+str(InfoSelTemp[1]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
 	dibujarTexto(screen, str(InfoSelTemp[0])+', '+str(InfoSelTemp[1]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
+	
+	# Dibuja El Tipo De Terreno, extraido de la Lista Global VALORES que contiene La Información de Cada Bloque,
+	# Los cuales son:  Posición en La Matriz,  Posicion en La Lista de Terrenos  y  Tipo de Terreno.
 	
 	PosY += 25
 	
@@ -302,7 +305,7 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 			
 			break
 	
-	# Dibujar Visitas:
+	# Dibuja Si Es Estado Inicial O Final, el Terreno Seleccionado:
 	
 	PosY += 25
 	dibujarTexto(screen, 'Estado: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
@@ -318,37 +321,41 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 		dibujarTexto(screen, 'Final', [1058, PosY], Fuentes['Droid 15'], COLOR['Rojo Claro'])
 		dibujarTexto(screen, 'Final', [1059, PosY], Fuentes['Droid 15'], COLOR['Rojo'])
 	
+	# Dibujar Visitas:
+	
 	PosY += 25
 	dibujarTexto(screen, 'Lista de Visitas: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Lista de Visitas: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	
 	Cont = 0
 	PosY += 20
-	Temp = False
+	Temp = False	# Si no hay Visitas se queda en False.
 	
-	for Pos, Movs in SELECT:
+	# Recorre la lista con los Datos de las Visitas (Posición y Su Lista de Visitas.
+	for Pos, Visits in SELECT:
 		
 		if InfoSelTemp == Pos:
 			
-			Temp = True
+			Temp = True		# Si hubo Visitas, entonces será True.
 			
-			for mov in Movs:
+			for vis in Visits:
 				
-				if Cont == len(Movs)-1:
-					dibujarTexto(screen, str(mov), [919 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo Claro'])
-					dibujarTexto(screen, str(mov), [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
+				if Cont == len(Visits)-1:
+					dibujarTexto(screen, str(vis), [919 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo Claro'])
+					dibujarTexto(screen, str(vis), [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
 				else:
-					dibujarTexto(screen, str(mov)+',', [919 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo Claro'])
-					dibujarTexto(screen, str(mov)+',', [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
+					dibujarTexto(screen, str(vis)+',', [919 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo Claro'])
+					dibujarTexto(screen, str(vis)+',', [920 + ((Cont%5)*35), PosY + ((Cont//5)*15)], Fuentes['Droid 15'], COLOR['Rojo'])
 				
 				Cont += 1
 				
 			break
 	
+	# Si hubo Visitas:
 	if Temp: dibujarTexto(screen, 'Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])
-	else:
+	else: # Si no...
 		dibujarTexto(screen, 'No Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])	
-		dibujarTexto(screen, 'Sin Visitas', [920, PosY], Fuentes['Droid 15'], COLOR['Naranja'])	
+		dibujarTexto(screen, 'Sin Visitas', [920, PosY],    Fuentes['Droid 15'], COLOR['Naranja'])	
 
 
 
@@ -779,6 +786,7 @@ CadenaError2 = ''	# Marca errores solamente en la sección de selección de bloq
 
 Pagina1 = True			# Indica si la Pagina de Selección de Terrenos Es Alctualmente la primera.
 Iniciar = False			# Indica si ya Inició el Juego.
+SelectEstados = False	# Permite Saber Si Ya Se Permite Seleccionar Estado Inicial Y Final.
 DibujarInfo = False		# Booleano que Indica si se debe o no Dibujar la Informacion en La Derecha con el Clic en un Terreno.
 InfoSelTemp = []		# Lista que almacenara la Selección Temporal para poder mostrar la Información Constante.
 Movimientos = 1
@@ -798,7 +806,7 @@ Nieve	= 0
 
 def main():
 	
-	global SELECT, Movimientos, DibujarInfo, Pagina1
+	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar
 	global Error, Error2, CadenaError, CadenaError2
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve
@@ -902,25 +910,25 @@ def main():
 	# flip(False, True) Invierte la Imágen en Espejo en el eje de las Y.
 	# flip(True, True) Invierte la Imágen en Espejo en ambos ejes (X, Y).
 	
-	RutaBtn = "img/Botones/BotonIzq.png"				# Ruta del Botón a Cargar.
-	BtnIzq1 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Pared.
+	RutaBtn = "img/Botones/BotonIzq.png"			# Ruta del Botón a Cargar.
+	BtnIzq1 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Pared.
 	BtnDer1 = BotonDir(RutaBtn); BtnDer1.flip()		# Botón Derecha   Para Elección de Pared. ====
-	BtnIzq2 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Camino.
+	BtnIzq2 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Camino.
 	BtnDer2 = BotonDir(RutaBtn); BtnDer2.flip()		# Botón Derecha   Para Elección de Camino. ===
-	BtnIzq3 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Bosque. 
+	BtnIzq3 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Bosque. 
 	BtnDer3 = BotonDir(RutaBtn); BtnDer3.flip()		# Botón Derecha   Para Elección de Bosque. ===
-	BtnIzq4 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Lava.
+	BtnIzq4 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Lava.
 	BtnDer4 = BotonDir(RutaBtn); BtnDer4.flip()		# Botón Derecha   Para Elección de Lava. =====
-	BtnIzq5 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Agua.
+	BtnIzq5 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Agua.
 	BtnDer5 = BotonDir(RutaBtn); BtnDer5.flip()		# Botón Derecha   Para Elección de Agua. =====
-	BtnIzq6 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Arena.
+	BtnIzq6 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Arena.
 	BtnDer6 = BotonDir(RutaBtn); BtnDer6.flip()		# Botón Derecha   Para Elección de Arena. ====
-	BtnIzq7 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Montaña.
+	BtnIzq7 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Montaña.
 	BtnDer7 = BotonDir(RutaBtn); BtnDer7.flip()		# Botón Derecha   Para Elección de Montaña. ==
-	BtnIzq8 = BotonDir(RutaBtn)							# Botón Izquierda Para Elección de Nieve.
+	BtnIzq8 = BotonDir(RutaBtn)						# Botón Izquierda Para Elección de Nieve.
 	BtnDer8 = BotonDir(RutaBtn); BtnDer8.flip()		# Botón Derecha   Para Elección de Nieve. ====
 	
-	BtnPagIzq = BotonDir(RutaBtn)							# Botón Derecho Para Cambiar de Página en la Selección de Terrenos.
+	BtnPagIzq = BotonDir(RutaBtn)						# Botón Derecho Para Cambiar de Página en la Selección de Terrenos.
 	BtnPagDer = BotonDir(RutaBtn); BtnPagDer.flip()		# Botón Izquierdo Para Cambiar de Página en la Selección de Terrenos.
 	
 	Cuadro1 = Personaje("img/Personajes/personaje.gif")		# Miniatura Para Personaje Hombre.
@@ -990,54 +998,61 @@ def main():
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
 			elif evento.type == pygame.MOUSEBUTTONDOWN: #============================== Al Mantener Presionado Cualquier Botón del Mouse. ==============================
 				
-				pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
-				pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
-				SelTemp = seleccion				# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
-				
-				SelTemp = obtenerPosicionClic(XPOS, YPOS, pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
-				
-				xr, yr = pos[0], pos[1]		# Posición X y Y del Mouse por separado, Coordenadas por Pixeles.
-				
-				# Cooredenadas Botón 1 (Cargar Mapa):
-				if (xr >= 927) and (xr <= 1077) and (yr >= 24) and (yr <= 56):
-					
-					Btn1Pressed = True
-					CargarMapa = True
-					Error2 = False
-					CadenaError2 = ''
-				
-				# Cooredenadas Botón 2 (Comenzar):
-				if Cargar: 			# Solo Se Puede Presionar el Botón si se cargo ya el Mapa.
-					
-					if (xr >= 950) and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
-					if (xr >= 1050) and (xr <= 1075) and (yr >= 450) and (yr <= 470):
-						
-						if Pagina1: Pagina1 = False
-						else: Pagina1 = True
-				
-					# ================= Cooredenadas Botón Izquierda y Derecha =================
-					
-					X = 1006; Y = 188
-					
-					CadenaError = ''
-					CadenaError2 = ''
-					
-					LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
-					
-					#=====================================================================================
-					
-					# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
-					
-					if   (xr >= 29)  and (xr <= 82)  and (yr >= 319) and (yr <= 372): seleccionPers1 = True
-					elif (xr >= 99)  and (xr <= 152) and (yr >= 319) and (yr <= 372): seleccionPers2 = True
-					elif (xr >= 169) and (xr <= 222) and (yr >= 319) and (yr <= 372): seleccionPers3 = True
-				
-					#=====================================================================================
 				
 				# Si se Presiono el Clic Derecho del Mouse (Botón 3) y La Variable Global 'DibujarInfo' esta en True entonces se cambia a false.
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
 				if evento.button == 3 and DibujarInfo: DibujarInfo = False
-				
+				else:
+					# Si se Presionó cualquier otro Botón del Mouse...
+					pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
+					
+					xr, yr = pos[0], pos[1]		# Posición X y Y del Mouse por separado, Coordenadas por Pixeles.
+					
+					# Cooredenadas Botón 1 (Cargar Mapa):
+					if (xr >= 927) and (xr <= 1077) and (yr >= 24) and (yr <= 56):
+						
+						Btn1Pressed = True
+						CargarMapa = True
+						Error2 = False
+						CadenaError2 = ''
+					
+					# Cooredenadas Botón 2 (Comenzar):
+					if Cargar: 			# Solo Se Puede Presionar el Botón si se cargo ya el Mapa.
+						
+						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
+						
+						if SelectEstados:
+							
+							SelTemp = seleccion				# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
+							SelTemp = obtenerPosicionClic(XPOS, YPOS, pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
+						
+						#===========================================================================
+						
+						if (xr >= 950) and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
+						if (xr >= 1050) and (xr <= 1075) and (yr >= 450) and (yr <= 470):
+							
+							if Pagina1: Pagina1 = False
+							else: Pagina1 = True
+					
+						# ================= Cooredenadas Botón Izquierda y Derecha =================
+						
+						X = 1006; Y = 188
+						
+						CadenaError = ''
+						CadenaError2 = ''
+						
+						LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
+						
+						#=====================================================================================
+						
+						# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
+						
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= 319) and (yr <= 372): seleccionPers1 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 319) and (yr <= 372): seleccionPers2 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 319) and (yr <= 372): seleccionPers3 = True
+					
+						#=====================================================================================
+					
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
 				
@@ -1095,12 +1110,12 @@ def main():
 					
 					else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
 						
-						SELECT = []			 # Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
-						
-						Pagina1 = True		 # Se Vuelve a Posicionar la Página 1 en la Seleccion de Terrenos para el Mapa.
-						DibujarInfo = False  # Al Cargar Un Nuevo Mapa, Se Deja de Mostrar La Información de Seleccion.
-						Iniciar = False		 # Aun no se permite Iniciar La Partida.
-						Cargar = True		 # Se Dibuja El Mapa.
+						SELECT = []			 	# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
+						SelectEstados = False	# Permite Saber Si se Permite Selecciona el Estado Inicial y Final.
+						Pagina1 = True		 	# Se Vuelve a Posicionar la Página 1 en la Seleccion de Terrenos para el Mapa.
+						DibujarInfo = False  	# Al Cargar Un Nuevo Mapa, Se Deja de Mostrar La Información de Seleccion.
+						Iniciar = False		 	# Aun no se permite Iniciar La Partida.
+						Cargar = True		 	# Se Dibuja El Mapa.
 						
 						# Se Crean Nuevos Objetos Bloque para el nuevo Mapa.
 						bloque1 = Bloque("img/Texturas/Pared.jpg")		# Objeto Pared.
@@ -1362,6 +1377,11 @@ def main():
 			# Marcando Errores:
 			if Er1 or Er2 or Er3 or Er4 or Er5 or Er6 or Er7:
 				
+				# Si Aun No se Han Elegido Todos Los Bloques se Pondran Punto Inicial y Final en None.
+				SelectEstados = False
+				PuntoInicio = None
+				PuntoDestino = None
+				
 				Error2 = True
 				CadenaError2 = 'Hay Bloques Repetidos.'
 			
@@ -1378,10 +1398,17 @@ def main():
 				if Montaña > 0 and Montaña < len(Lisy): ConTer += 1
 				if Nieve   > 0 and Nieve   < len(Lisy): ConTer += 1
 				
-				if ConTer == len(Lisy)-1: Error2 = False; CadenaError2 = ''
+				if ConTer == len(Lisy)-1:
+					
+					SelectEstados = True	# Permite Seleccionar Punto Inicio y Destino
+					
+					Error2 = False
+					CadenaError2 = ''
 				else:
-					if not Error2:  Error2 = True; CadenaError2 = ''
-			
+					if not Error2:
+						Error2 = True
+						CadenaError2 = ''
+						
 			
 			if Pagina1:		# Si Se esta Posicionado en la Página 1 de Selección de Terrenos, Dibujará los primeros 5 Terrenos.
 				
