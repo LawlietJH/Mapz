@@ -122,7 +122,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				#~ VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Pesos[Pared]))		# Pendiente!!! Agregar Lista de Pesos.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared'))							# Pendiente!!! Agregar Lista de Pesos.
+				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Costos[0]))							# Pendiente!!! Agregar Lista de Pesos.
 				
 				Objetos['Pared'].resize(DistX, DistY)
 				bloque = Objetos['Pared']
@@ -131,7 +131,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Camino]:	# Dibuja el Bloque de Camino.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Camino'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Camino', Costos[1]))
 				
 				Objetos['Camino'].resize(DistX, DistY)
 				bloque = Objetos['Camino']
@@ -140,7 +140,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Bosque]:	# Dibuja el Bloque de Bosque.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Bosque], 'Bosque'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Bosque], 'Bosque', Costos[2]))
 				
 				Objetos['Bosque'].resize(DistX, DistY)
 				bloque = Objetos['Bosque']
@@ -149,7 +149,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Lava]:	# Dibuja el Bloque de Lava.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Lava], 'Lava'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Lava], 'Lava', Costos[3]))
 				
 				Objetos['Lava'].resize(DistX, DistY)
 				bloque = Objetos['Lava']
@@ -158,7 +158,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Agua]:	# Dibuja el Bloque de Agua.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Agua], 'Agua'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Agua], 'Agua', Costos[4]))
 				
 				Objetos['Agua'].resize(DistX, DistY)
 				bloque = Objetos['Agua']
@@ -167,7 +167,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Arena]:	# Dibuja el Bloque de Arena.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Arena], 'Arena'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Arena], 'Arena', Costos[5]))
 				
 				Objetos['Arena'].resize(DistX, DistY)
 				bloque = Objetos['Arena']
@@ -176,7 +176,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Montaña]:	# Dibuja el Bloque de Montaña.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Montaña'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Montaña', Costos[6]))
 				
 				Objetos['Montaña'].resize(DistX, DistY)
 				bloque = Objetos['Montaña']
@@ -185,7 +185,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Nieve]:	# Dibuja el Bloque de Nieve.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Nieve'))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Nieve', Costos[7]))
 				
 				Objetos['Nieve'].resize(DistX, DistY)
 				bloque = Objetos['Nieve']
@@ -314,11 +314,21 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 			dibujarTexto(screen, str(X[2]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
 			dibujarTexto(screen, str(X[2]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
 			
+			dibujarTexto(screen, 'Costo: ', [919, PosY+24], Fuentes['Droid 15'], COLOR['Azul Claro'])
+			dibujarTexto(screen, 'Costo: ', [920, PosY+25], Fuentes['Droid 15'], COLOR['Azul'])
+			
+			if X[3] == '':
+				dibujarTexto(screen, 'N/A', [989, PosY+24], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'N/A', [990, PosY+25], Fuentes['Droid 15'], COLOR['Verde'])
+			else:
+				dibujarTexto(screen, str(X[3]), [989, PosY+24], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, str(X[3]), [990, PosY+25], Fuentes['Droid 15'], COLOR['Verde'])
+			
 			break
 	
 	# Dibuja Si Es Estado Inicial O Final, el Terreno Seleccionado:
 	
-	PosY += 25
+	PosY += 50
 	dibujarTexto(screen, 'Estado: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Estado: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	
@@ -777,14 +787,46 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 
 def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8):
 	
-	if C1: TI1 += Add
-	if C2: TI2 += Add
-	if C3: TI3 += Add
-	if C4: TI4 += Add
-	if C5: TI5 += Add
-	if C6: TI6 += Add
-	if C7: TI7 += Add
-	if C8: TI8 += Add
+	if C1:
+		if TI1.endswith('.0'): TI1 = TI1[:-1]
+		if Add != '0' and TI1 == '0': TI1 = ''
+		if Add == '0' and TI1 == '0': pass
+		else: TI1 += Add
+	elif C2:
+		if TI2.endswith('.0'): TI2 = TI2[:-1]
+		if Add != '0' and TI2 == '0': TI2 = ''
+		if Add == '0' and TI2 == '0': pass
+		else: TI2 += Add
+	elif C3:
+		if TI3.endswith('.0'): TI3 = TI3[:-1]
+		if Add != '0' and TI3 == '0': TI3 = ''
+		if Add == '0' and TI3 == '0': pass
+		else: TI3 += Add
+	elif C4:
+		if TI4.endswith('.0'): TI4 = TI4[:-1]
+		if Add != '0' and TI4 == '0': TI4 = ''
+		if Add == '0' and TI4 == '0': pass
+		else: TI4 += Add
+	elif C5:
+		if TI5.endswith('.0'): TI5 = TI5[:-1]
+		if Add != '0' and TI5 == '0': TI5 = ''
+		if Add == '0' and TI5 == '0': pass
+		else: TI5 += Add
+	elif C6:
+		if TI6.endswith('.0'): TI6 = TI6[:-1]
+		if Add != '0' and TI6 == '0': TI6 = ''
+		if Add == '0' and TI6 == '0': pass
+		else: TI6 += Add
+	elif C7:
+		if TI7.endswith('.0'): TI7 = TI7[:-1]
+		if Add != '0' and TI7 == '0': TI7 = ''
+		if Add == '0' and TI7 == '0': pass
+		else: TI7 += Add
+	elif C8:
+		if TI8.endswith('.0'): TI8 = TI8[:-1]
+		if Add != '0' and TI8 == '0': TI8 = ''
+		if Add == '0' and TI8 == '0': pass
+		else: TI8 += Add
 	
 	return TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8
 
@@ -894,6 +936,9 @@ def main():
 	TextInput7 = ''		# Input Para El Costo en Terreno 7 (Montaña).
 	TextInput8 = ''		# Input Para El Costo en Terreno 8 (Nieve).
 	
+	# Incializamos La Lista de Costos Por Terreno
+	Costos = [TextInput1, TextInput2, TextInput3, TextInput4, TextInput5, TextInput6, TextInput7, TextInput8]
+	
 	Costo1 = False		# Para El Costo en Terreno 1 (Pared).
 	Costo2 = False		# Para El Costo en Terreno 1 (Camino).
 	Costo3 = False		# Para El Costo en Terreno 1 (Bosque).
@@ -1002,6 +1047,14 @@ def main():
 	
 	Input = None
 	
+	Er1 = False
+	Er2 = False
+	Er3 = False
+	Er4 = False
+	Er5 = False
+	Er6 = False
+	Er7 = False
+	
 	#===================================================================
 	
 	# Booleanos Para Saber Si Los Botones Fueron Presionados:
@@ -1040,32 +1093,32 @@ def main():
 				if evento.key == pygame.K_BACKSPACE:
 					
 					if Costo1: TextInput1 = TextInput1[:-1]
-					if Costo2: TextInput2 = TextInput2[:-1]
-					if Costo3: TextInput3 = TextInput3[:-1]
-					if Costo4: TextInput4 = TextInput4[:-1]
-					if Costo5: TextInput5 = TextInput5[:-1]
-					if Costo6: TextInput6 = TextInput6[:-1]
-					if Costo7: TextInput7 = TextInput7[:-1]
-					if Costo8: TextInput8 = TextInput8[:-1]
+					elif Costo2: TextInput2 = TextInput2[:-1]
+					elif Costo3: TextInput3 = TextInput3[:-1]
+					elif Costo4: TextInput4 = TextInput4[:-1]
+					elif Costo5: TextInput5 = TextInput5[:-1]
+					elif Costo6: TextInput6 = TextInput6[:-1]
+					elif Costo7: TextInput7 = TextInput7[:-1]
+					elif Costo8: TextInput8 = TextInput8[:-1]
 					
 				elif evento.key == pygame.K_PERIOD:
 					
 					if Costo1:
-						if not '.' in TextInput1: TextInput1 += '.'
-					if Costo2:
-						if not '.' in TextInput2: TextInput2 += '.'
-					if Costo3:
-						if not '.' in TextInput3: TextInput3 += '.'
-					if Costo4:
-						if not '.' in TextInput4: TextInput4 += '.'
-					if Costo5:
-						if not '.' in TextInput5: TextInput5 += '.'
-					if Costo6:
-						if not '.' in TextInput6: TextInput6 += '.'
-					if Costo7:
-						if not '.' in TextInput7: TextInput7 += '.'
-					if Costo8:
-						if not '.' in TextInput8: TextInput8 += '.'
+						if not '.' in TextInput1: TextInput1 += '.0'
+					elif Costo2:
+						if not '.' in TextInput2: TextInput2 += '.0'
+					elif Costo3:
+						if not '.' in TextInput3: TextInput3 += '.0'
+					elif Costo4:
+						if not '.' in TextInput4: TextInput4 += '.0'
+					elif Costo5:
+						if not '.' in TextInput5: TextInput5 += '.0'
+					elif Costo6:
+						if not '.' in TextInput6: TextInput6 += '.0'
+					elif Costo7:
+						if not '.' in TextInput7: TextInput7 += '.0'
+					elif Costo8:
+						if not '.' in TextInput8: TextInput8 += '.0'
 				
 				#=============================================================================================================================================
 				# Reducimos el Nombre de las Variables Por Comodidad xD
@@ -1074,7 +1127,7 @@ def main():
 				C1, C2, C3, C4 = Costo1, Costo2, Costo3, Costo4 
 				C5, C6, C7, C8 = Costo5, Costo6, Costo7, Costo8 
 				
-				# Se Agrega a la Cadena Correspondiente de TextInput el Número Presionado.
+				# Se Agrega a la Cadena Correspondiente del TextInput Seleccionado, el Número Presionado.
 				if   evento.key == pygame.K_0: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('0', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
 				elif evento.key == pygame.K_1: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('1', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
 				elif evento.key == pygame.K_2: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('2', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
@@ -1089,6 +1142,26 @@ def main():
 				# Pasamos El Valor Correspondiente A Su Variable Oroginal 
 				TextInput1, TextInput2, TextInput3, TextInput4 = TI1, TI2, TI3, TI4
 				TextInput5, TextInput6, TextInput7, TextInput8 = TI5, TI6, TI7, TI8
+				
+				# Si la Cadena se Quedo Solo con el Punto al Final, Lo Eliminamos.
+				if TextInput1.endswith('.'): TextInput1 = TextInput1[:-1]
+				if TextInput2.endswith('.'): TextInput2 = TextInput2[:-1]
+				if TextInput3.endswith('.'): TextInput3 = TextInput3[:-1]
+				if TextInput4.endswith('.'): TextInput4 = TextInput4[:-1]
+				if TextInput5.endswith('.'): TextInput5 = TextInput5[:-1]
+				if TextInput6.endswith('.'): TextInput6 = TextInput6[:-1]
+				if TextInput7.endswith('.'): TextInput7 = TextInput7[:-1]
+				if TextInput8.endswith('.'): TextInput8 = TextInput8[:-1]
+				
+				# Actualizamos los Datos de los Costos.
+				Costos[0] = TextInput1
+				Costos[1] = TextInput2
+				Costos[2] = TextInput3
+				Costos[3] = TextInput4
+				Costos[4] = TextInput5
+				Costos[5] = TextInput6
+				Costos[6] = TextInput7
+				Costos[7] = TextInput8
 				
 				#=============================================================================================================================================
 				
@@ -1122,9 +1195,9 @@ def main():
 						Error2 = False
 						CadenaError2 = ''
 					
-					# Cooredenadas Botón 2 (Comenzar):
-					if Cargar: 			# Solo Se Puede Presionar el Botón si se cargo ya el Mapa.
+					if Cargar: 			# Si se cargo ya el Mapa.
 						
+						print(Costos)
 						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
 						
 						if Pagina1:
@@ -1398,14 +1471,6 @@ def main():
 			dibujarTexto(screen, 'Comenzar', [960, 111], Fuentes['Wendy 25'], COLOR['Negro'])
 			dibujarTexto(screen, 'Comenzar', [961, 112], Fuentes['Wendy 25'], COLOR['Purpura'])
 			
-			Er1 = False
-			Er2 = False
-			Er3 = False
-			Er4 = False
-			Er5 = False
-			Er6 = False
-			Er7 = False
-			
 			#==========================================================================================================================
 			
 			dibujarTexto(screen, 'Asignar Valores', [909, 139], Fuentes['Droid 20'], COLOR['Negro'])
@@ -1414,6 +1479,28 @@ def main():
 			#~ textinput.clear_text()
 			#~ TextInput1.update(events)					# Actualizamos el TextInput para capturar datos en pygame.
 			
+			if LisyPos2 in [LisyPos1] and LisyPos2 != 0: 
+				Er1 = True
+			else: Er1 = False
+			if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:
+				Er2 = True
+			else: Er2 = False
+			if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:
+				Er3 = True
+			else: Er3 = False
+			if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:
+				Er4 = True
+			else: Er4 = False
+			if LisyPos6 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5] and LisyPos6 != 0:
+				Er5 = True
+			else: Er5 = False
+			if LisyPos7 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6] and LisyPos7 != 0:
+				Er6 = True
+			else: Er6 = False
+			if LisyPos8 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7] and LisyPos8 != 0:
+				Er7 = True
+			else: Er7 = False
+
 			if Pagina1:
 				
 					# Bloque 1:	============================================
@@ -1427,8 +1514,7 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo2, TextInput2, Objetos10, BtnIzq2, BtnDer2, 910, 240, 'Camino', Lisy, LisyPos2, Fuentes, True)
-					Er1= True
-				
+					
 				else: DibujarMiniaturaTextura(screen, Costo2, TextInput2, Objetos10, BtnIzq2, BtnDer2, 910, 240, 'Camino', Lisy, LisyPos2, Fuentes)
 				
 					# Bloque 3:	============================================
@@ -1438,7 +1524,6 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo3, TextInput3, Objetos10, BtnIzq3, BtnDer3, 910, 310, 'Bosque', Lisy, LisyPos3, Fuentes, True)
-					Er2 = True
 				
 				else: DibujarMiniaturaTextura(screen, Costo3, TextInput3, Objetos10, BtnIzq3, BtnDer3, 910, 310, 'Bosque', Lisy, LisyPos3, Fuentes)
 				
@@ -1449,7 +1534,6 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo4, TextInput4, Objetos10, BtnIzq4, BtnDer4, 910, 380, 'Lava', Lisy, LisyPos4, Fuentes, True)
-					Er3 = True
 				
 				else: DibujarMiniaturaTextura(screen, Costo4, TextInput4, Objetos10, BtnIzq4, BtnDer4, 910, 380, 'Lava', Lisy, LisyPos4, Fuentes)
 				
@@ -1460,7 +1544,6 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo5, TextInput5, Objetos10, BtnIzq5, BtnDer5, 910, 450, 'Agua', Lisy, LisyPos5, Fuentes, True)
-					Er4 = True
 				
 				else: DibujarMiniaturaTextura(screen, Costo5, TextInput5, Objetos10, BtnIzq5, BtnDer5, 910, 450, 'Agua', Lisy, LisyPos5, Fuentes)
 				
@@ -1472,7 +1555,6 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo6, TextInput6, Objetos10, BtnIzq6, BtnDer6, 910, 170, 'Arena', Lisy, LisyPos6, Fuentes, True)
-					Er5 = True
 				
 				else: DibujarMiniaturaTextura(screen, Costo6, TextInput6, Objetos10, BtnIzq6, BtnDer6, 910, 170, 'Arena', Lisy, LisyPos6, Fuentes)
 				
@@ -1483,7 +1565,6 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo7, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, 240, 'Montaña', Lisy, LisyPos7, Fuentes, True)
-					Er6 = True
 				
 				else: DibujarMiniaturaTextura(screen, Costo7, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, 240, 'Montaña', Lisy, LisyPos7, Fuentes)
 				
@@ -1494,7 +1575,6 @@ def main():
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
 					DibujarMiniaturaTextura(screen, Costo8, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, 310, 'Nieve', Lisy, LisyPos8, Fuentes, True)
-					Er7 = True
 				
 				else: DibujarMiniaturaTextura(screen, Costo8, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, 310, 'Nieve', Lisy, LisyPos8, Fuentes)
 				
@@ -1541,6 +1621,9 @@ def main():
 					Error2 = False
 					CadenaError2 = ''
 				else:
+					
+					SelectEstados = False	# Permite Seleccionar Punto Inicio y Destino
+					
 					if not Error2:
 						Error2 = True
 						CadenaError2 = ''
