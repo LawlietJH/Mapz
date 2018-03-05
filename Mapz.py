@@ -1,5 +1,5 @@
 
-# Versión: 1.4.2
+# Versión: 1.4.3
 # Python:  3.5.0
 
 import pygame
@@ -85,7 +85,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 # Función Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
 def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
 	
-	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, DibujarInfo, InfoSelTemp
+	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, DibujarInfo, InfoSelTemp, Error, CadenaError
 	
 	'''
 	# Función que dibuja el tablero
@@ -202,6 +202,10 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					DibujarInfo = True
 					InfoSelTemp = SelTemp
 			
+			# Imprime Letra I en Estdo Inicial e Imprimir Letra F Para el Estado Final.
+			if   [LETRAS[i],j+1] == PuntoInicio:  dibujarTexto(screen, 'I', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
+			elif [LETRAS[i],j+1] == PuntoDestino: dibujarTexto(screen, 'F', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
+					
 			# Si se Inicio el Juego Cargará el personaje en la posición de la seleccion.
 			if PuntoInicio != None and Iniciar:
 				
@@ -226,10 +230,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				else: F = 'Droid 6'
 				
 				for Pos, Movs in SELECT:
-			
-					if   [LETRAS[i],j+1] == PuntoInicio:  dibujarTexto(screen, 'I', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
-					elif [LETRAS[i],j+1] == PuntoDestino: dibujarTexto(screen, 'F', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
-						
+					
 					if [LETRAS[i],j+1] == Pos:
 						
 						for mov in Movs:
@@ -258,15 +259,25 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 						seleccion = SelTemp
 			
 			# Si El Terreno Para Estado Inicial Elegido es igual a No Aplica, Manda Error Y No Selecciona ese Estado Inicial.
-			#~ for Valores in VALORES:
-				#~ if PuntoInicio == Valores[0]:
-					#~ if Valores[3] == 'N/A':	# Si El Peso es No Aplica, Entonces No Se Permitira Colocar ahi el Estado de Inicio.
+			for Valores in VALORES:
+				if PuntoInicio == Valores[0]:
+					if Valores[3] == '':	# Si El Peso es No Aplica, Entonces No Se Permitira Colocar ahi el Estado de Inicio.
 						
-						#~ PuntoInicio	= None
-						#~ PuntoDestino	= None
-						#~ Error		= True
-						#~ CadenaError	= 'No Se Puede Colocar Ahi'
-						#~ break
+						PuntoInicio	 = None
+						PuntoDestino = None
+						Error		 = True
+						CadenaError = 'Costo N/A Para Estado Inicial'
+						
+						break
+						
+				if PuntoDestino == Valores[0]:
+					if Valores[3] == '':	# Si El Peso es No Aplica, Entonces No Se Permitira Colocar ahi el Estado de Inicio.
+						
+						PuntoDestino = None
+						Error		 = True
+						CadenaError = 'Costo N/A Para Estado Final'
+						
+						break
 			
 			# Dibuja Los Numeros En Y
 			if i == 0:
@@ -283,6 +294,10 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 
 
 def DibujarInformacionClic(screen, Fuentes, SelTemp):
+	
+	Cont = 0
+	Temp = False	# Si no hay Visitas se queda en False.
+	NA = False	# Si no hay Visitas se queda en False.
 	
 	# Dibuja Toda La Información Al Dar Clic En Un Terreno.
 	
@@ -314,21 +329,23 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 			dibujarTexto(screen, str(X[2]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
 			dibujarTexto(screen, str(X[2]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
 			
-			dibujarTexto(screen, 'Costo: ', [919, PosY+24], Fuentes['Droid 15'], COLOR['Azul Claro'])
-			dibujarTexto(screen, 'Costo: ', [920, PosY+25], Fuentes['Droid 15'], COLOR['Azul'])
+			PosY += 25
+			dibujarTexto(screen, 'Costo: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
+			dibujarTexto(screen, 'Costo: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 			
 			if X[3] == '':
-				dibujarTexto(screen, 'N/A', [989, PosY+24], Fuentes['Droid 15'], COLOR['Verde Claro'])
-				dibujarTexto(screen, 'N/A', [990, PosY+25], Fuentes['Droid 15'], COLOR['Verde'])
+				NA = True
+				dibujarTexto(screen, 'N/A', [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'N/A', [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
 			else:
-				dibujarTexto(screen, str(X[3]), [989, PosY+24], Fuentes['Droid 15'], COLOR['Verde Claro'])
-				dibujarTexto(screen, str(X[3]), [990, PosY+25], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, str(X[3]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, str(X[3]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
 			
 			break
 	
 	# Dibuja Si Es Estado Inicial O Final, el Terreno Seleccionado:
 	
-	PosY += 50
+	PosY += 25
 	dibujarTexto(screen, 'Estado: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Estado: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	
@@ -348,9 +365,7 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	dibujarTexto(screen, 'Lista de Visitas: ', [919, PosY-1], Fuentes['Droid 15'], COLOR['Azul Claro'])
 	dibujarTexto(screen, 'Lista de Visitas: ', [920, PosY], Fuentes['Droid 15'], COLOR['Azul'])
 	
-	Cont = 0
 	PosY += 20
-	Temp = False	# Si no hay Visitas se queda en False.
 	
 	# Recorre la lista con los Datos de las Visitas (Posición y Su Lista de Visitas.
 	for Pos, Visits in SELECT:
@@ -375,8 +390,12 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 	# Si hubo Visitas:
 	if Temp: dibujarTexto(screen, 'Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])
 	else: # Si no...
-		dibujarTexto(screen, 'No Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])	
-		dibujarTexto(screen, 'Sin Visitas', [920, PosY],    Fuentes['Droid 15'], COLOR['Naranja'])	
+		if NA:
+			dibujarTexto(screen, 'N/A', [990, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])	
+			dibujarTexto(screen, 'N/A', [920, PosY],    Fuentes['Droid 15'], COLOR['Naranja'])	
+		else:
+			dibujarTexto(screen, 'No Visitado', [975, PosY-45], Fuentes['Droid 15'], COLOR['Naranja'])	
+			dibujarTexto(screen, 'Sin Visitas', [920, PosY],    Fuentes['Droid 15'], COLOR['Naranja'])	
 
 
 
@@ -424,7 +443,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 
 def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 	
-	global SELECT, Movimientos
+	global SELECT, Movimientos, CostoTotal
 	
 	PosLetra = LETRAS.index(Actual[0])
 	
@@ -436,8 +455,10 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			y -= 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
-					if z[2] == 'Pared': pass
+					if z[3] == '': pass
 					else:
+						
+						CostoTotal += float(z[3])
 						
 						Actual = [Actual[0],Actual[1]-1]
 						
@@ -463,8 +484,10 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			y += 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
-					if z[2] == 'Pared': pass
+					if z[3] == '': pass
 					else:
+						
+						CostoTotal += float(z[3])
 						
 						Actual = [Actual[0],Actual[1]+1]
 						
@@ -496,8 +519,10 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			x -= 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
-					if z[2] == 'Pared': pass
+					if z[3] == '': pass
 					else:
+						
+						CostoTotal += float(z[3])
 						
 						Actual = [LETRAS[PosLetra-1],Actual[1]]
 						
@@ -529,8 +554,10 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			x += 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
-					if z[2] == 'Pared': pass
+					if z[3] == '': pass
 					else:
+						
+						CostoTotal += float(z[3])
 						
 						Actual = [LETRAS[PosLetra+1],Actual[1]]
 						
@@ -788,45 +815,77 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8):
 	
 	if C1:
-		if TI1.endswith('.0'): TI1 = TI1[:-1]
-		if Add != '0' and TI1 == '0': TI1 = ''
-		if Add == '0' and TI1 == '0': pass
-		else: TI1 += Add
+		if len(TI1) <= 6:
+			if TI1.endswith('.0'): TI1 = TI1[:-1]
+			if Add != '0' and TI1 == '0': TI1 = ''
+			if Add == '0' and TI1 == '0': pass
+			else: TI1 += Add
+		elif TI1[-2] == '.':
+			TI1 = TI1[:-1]
+			TI1 += Add
 	elif C2:
-		if TI2.endswith('.0'): TI2 = TI2[:-1]
-		if Add != '0' and TI2 == '0': TI2 = ''
-		if Add == '0' and TI2 == '0': pass
-		else: TI2 += Add
+		if len(TI2) <= 6:
+			if TI2.endswith('.0'): TI2 = TI2[:-1]
+			if Add != '0' and TI2 == '0': TI2 = ''
+			if Add == '0' and TI2 == '0': pass
+			else: TI2 += Add
+		elif TI2[-2] == '.':
+			TI2 = TI2[:-1]
+			TI2 += Add
 	elif C3:
-		if TI3.endswith('.0'): TI3 = TI3[:-1]
-		if Add != '0' and TI3 == '0': TI3 = ''
-		if Add == '0' and TI3 == '0': pass
-		else: TI3 += Add
+		if len(TI3) <= 6:
+			if TI3.endswith('.0'): TI3 = TI3[:-1]
+			if Add != '0' and TI3 == '0': TI3 = ''
+			if Add == '0' and TI3 == '0': pass
+			else: TI3 += Add
+		elif TI3[-2] == '.':
+			TI3 = TI3[:-1]
+			TI3 += Add
 	elif C4:
-		if TI4.endswith('.0'): TI4 = TI4[:-1]
-		if Add != '0' and TI4 == '0': TI4 = ''
-		if Add == '0' and TI4 == '0': pass
-		else: TI4 += Add
+		if len(TI4) <= 6:
+			if TI4.endswith('.0'): TI4 = TI4[:-1]
+			if Add != '0' and TI4 == '0': TI4 = ''
+			if Add == '0' and TI4 == '0': pass
+			else: TI4 += Add
+		elif TI4[-2] == '.':
+			TI4 = TI4[:-1]
+			TI4 += Add
 	elif C5:
-		if TI5.endswith('.0'): TI5 = TI5[:-1]
-		if Add != '0' and TI5 == '0': TI5 = ''
-		if Add == '0' and TI5 == '0': pass
-		else: TI5 += Add
+		if len(TI5) <= 6:
+			if TI5.endswith('.0'): TI5 = TI5[:-1]
+			if Add != '0' and TI5 == '0': TI5 = ''
+			if Add == '0' and TI5 == '0': pass
+			else: TI5 += Add
+		elif TI5[-2] == '.':
+			TI5 = TI5[:-1]
+			TI5 += Add
 	elif C6:
-		if TI6.endswith('.0'): TI6 = TI6[:-1]
-		if Add != '0' and TI6 == '0': TI6 = ''
-		if Add == '0' and TI6 == '0': pass
-		else: TI6 += Add
+		if len(TI6) <= 6:
+			if TI6.endswith('.0'): TI6 = TI6[:-1]
+			if Add != '0' and TI6 == '0': TI6 = ''
+			if Add == '0' and TI6 == '0': pass
+			else: TI6 += Add
+		elif TI6[-2] == '.':
+			TI6 = TI6[:-1]
+			TI6 += Add
 	elif C7:
-		if TI7.endswith('.0'): TI7 = TI7[:-1]
-		if Add != '0' and TI7 == '0': TI7 = ''
-		if Add == '0' and TI7 == '0': pass
-		else: TI7 += Add
+		if len(TI7) <= 6:
+			if TI7.endswith('.0'): TI7 = TI7[:-1]
+			if Add != '0' and TI7 == '0': TI7 = ''
+			if Add == '0' and TI7 == '0': pass
+			else: TI7 += Add
+		elif TI7[-2] == '.':
+			TI7 = TI7[:-1]
+			TI7 += Add
 	elif C8:
-		if TI8.endswith('.0'): TI8 = TI8[:-1]
-		if Add != '0' and TI8 == '0': TI8 = ''
-		if Add == '0' and TI8 == '0': pass
-		else: TI8 += Add
+		if len(TI8) <= 6:
+			if TI8.endswith('.0'): TI8 = TI8[:-1]
+			if Add != '0' and TI8 == '0': TI8 = ''
+			if Add == '0' and TI8 == '0': pass
+			else: TI8 += Add
+		elif TI8[-2] == '.':
+			TI8 = TI8[:-1]
+			TI8 += Add
 	
 	return TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8
 
@@ -846,7 +905,7 @@ DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
 LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']	# Letras Para La Matriz.
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
-SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Numero de Visita.
+SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Número de Visita.
 
 # Variables Globales: ==================================================
 
@@ -865,8 +924,11 @@ SelectEstados = False	# Permite Saber Si Ya Se Permite Seleccionar Estado Inicia
 DibujarInfo = False		# Booleano que Indica si se debe o no Dibujar la Informacion en La Derecha con el Clic en un Terreno.
 InfoSelTemp = []		# Lista que almacenara la Selección Temporal para poder mostrar la Información Constante.
 Costos = []				# Lista de los Costos de Cada Tipo de Terreno.
+CostoTotal = 0			# Suma Costos en cada Movimiento.
 Movimientos = 1
 
+# Posiciones en La Lista (Lisy) con Los Números Ordenados Para Cada Tipo de Terreno.
+# La Posición 0 equivale al valor -1 que Simboliza A Los Terrenos No Seleccionados Para El Mapa. 
 Pared   = 0
 Camino  = 0
 Bosque  = 0
@@ -883,7 +945,7 @@ Nieve	= 0
 def main():
 	
 	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados
-	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos
+	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve
 	
@@ -1197,7 +1259,6 @@ def main():
 					
 					if Cargar: 			# Si se cargo ya el Mapa.
 						
-						print(Costos)
 						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
 						
 						if Pagina1:
@@ -1253,9 +1314,9 @@ def main():
 						
 						# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
 						
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= 319) and (yr <= 372): seleccionPers1 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= 319) and (yr <= 372): seleccionPers2 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= 319) and (yr <= 372): seleccionPers3 = True
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= 349) and (yr <= 402): seleccionPers1 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 349) and (yr <= 402): seleccionPers2 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 349) and (yr <= 402): seleccionPers3 = True
 					
 						#=====================================================================================
 					
@@ -1294,6 +1355,9 @@ def main():
 						
 						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
 						
+						for val in VALORES:
+							if val[0] == PuntoInicio: CostoTotal += float(val[3])
+								
 						Movimientos += 1
 						SELECT.append((seleccion, [Movimientos]))
 						
@@ -1362,6 +1426,7 @@ def main():
 								   'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8,  'Nieve':bloque9}
 						
 						Movimientos  = 0
+						CostoTotal	 = 0
 						PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
 						PuntoDestino = None		# Se Inicializa la Variable Global PuntoDestino en None.
 						NP			 = None		# Se Inicializa la Variable personaje en None.
@@ -1663,7 +1728,6 @@ def main():
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,   240, 540],  0)
 		pygame.draw.rect(screen, COLOR['Gris'],   [10, 40,   240, 540],  3)
 		pygame.draw.line(screen, COLOR['Negro'],  [9,  40], [250,  40],  3)
-		pygame.draw.line(screen, COLOR['Negro'],  [9, 275], [250,  275], 3)
 		
 		dibujarTexto(screen, 'Informacion', [69, 11],  Fuentes['Wendy 30'], COLOR['Verde'])
 		dibujarTexto(screen, 'Informacion', [70, 12],  Fuentes['Wendy 30'], COLOR['Verde Claro'])
@@ -1763,55 +1827,69 @@ def main():
 			dibujarTexto(screen, str(Movimientos), [162, 235], Fuentes['Droid 20'], COLOR['Rojo'])
 			dibujarTexto(screen, str(Movimientos), [163, 236], Fuentes['Droid 20'], COLOR['Negro'])
 		
+		dibujarTexto(screen, 'Costo Total: ', [14, 265], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen, 'Costo Total: ', [15, 266], Fuentes['Droid 20'], COLOR['Azul'])
+		
+		dibujarTexto(screen,  str(round(CostoTotal,4)), [162, 265], Fuentes['Droid 20'], COLOR['Rojo'])
+		dibujarTexto(screen,  str(round(CostoTotal,4)), [163, 266], Fuentes['Droid 20'], COLOR['Negro'])
+		
+		Y = 305
+		
+		pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [260,  Y], 3)
+		
 					#===============================================================
 		
 					# Dibuja La Sección 'Selección de Personaje':
 		
 		if Cargar and not Iniciar:
 			
-			dibujarTexto(screen, 'Seleccionar Personaje', [27, 289], Fuentes['Droid 20'], COLOR['Negro'])
-			dibujarTexto(screen, 'Seleccionar Personaje', [28, 290], Fuentes['Droid 20'], COLOR['Morado'])
+			Y += 15
+			
+			dibujarTexto(screen, 'Seleccionar Personaje', [27, Y-1], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen, 'Seleccionar Personaje', [28, Y], Fuentes['Droid 20'], COLOR['Morado'])
 			
 			# Cambia el Tamaño de Las Miniaturas de los personajes en 50x50 pixeles.
 			Cuadro1.resize(50,50)
 			Cuadro2.resize(50,50)
 			Cuadro3.resize(50,50)
 			
+			Y += 30
 			# Dibuja recuadros Blancos con Margen Negro en donde iran las Miniaturas.
-			pygame.draw.rect(screen, COLOR['Blanco'], [28,  318, 54, 54], 0)
-			pygame.draw.rect(screen, COLOR['Negro'],  [28,  318, 54, 54], 2)
-			pygame.draw.rect(screen, COLOR['Blanco'], [98,  318, 54, 54], 0)
-			pygame.draw.rect(screen, COLOR['Negro'],  [98,  318, 54, 54], 2)
-			pygame.draw.rect(screen, COLOR['Blanco'], [168, 318, 54, 54], 0)
-			pygame.draw.rect(screen, COLOR['Negro'],  [168, 318, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [28,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [98,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [98,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [168, Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [168, Y-2, 54, 54], 2)
 			
 			# Se Colocan Las Miniaturas.
-			screen.blit(Cuadro1.image, (30,  320))
-			screen.blit(Cuadro2.image, (100, 320))
-			screen.blit(Cuadro3.image, (170, 320))
+			screen.blit(Cuadro1.image, (30,  Y))
+			screen.blit(Cuadro2.image, (100, Y))
+			screen.blit(Cuadro3.image, (170, Y))
 			
 			if seleccionPers1:		# Si El Personaje 1 Fue Seleccionado
 				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  320, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers1 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 0						# Se Asigna a NP el Numero De Personaje.
 				
 			elif seleccionPers2:		# Si El Personaje 2 Fue Seleccionado
 				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [100, 320, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers2 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 1						# Se Asigna a NP el Numero De Personaje.
 				
 			elif seleccionPers3:		# Si El Personaje 3 Fue Seleccionado
 				
-				pygame.draw.rect(screen, COLOR['Seleccion'], [170, 320, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 2						# Se Asigna a NP el Numero De Personaje.
-		
-			pygame.draw.line(screen, COLOR['Negro'],  [9, 390], [250,  390], 3)
+			
+			Y += 70
+			pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [250,  Y], 3)
 			
 		#===================================================================================================
 		
