@@ -1,9 +1,8 @@
 
-# Versión: 1.4.3
+# Versión: 1.4.4
 # Python:  3.5.0
 
 import pygame
-import pygame_textinput
 from pygame.locals import *
 import explorer
 import sys, os
@@ -1128,21 +1127,21 @@ def main():
 	# Inicio Del Juego:
 	while game_over is False:
 		
-		#~ MousePos = pygame.mouse.get_pos()
-		
 		#=====================================================================================================
 		#=====================================================================================================
 		#=====================================================================================================
 		
 		# Chequeo Constante de Eventos del Teclado:
 		events = pygame.event.get()
+		
 		for evento in events:
 			
 			if evento.type == pygame.QUIT: game_over = True		# Si Se Presiona El Botón Cerrar, Cerrara El Juego.
 			
 			elif evento.type == pygame.KEYDOWN:		# Manipulación del Teclado.
 				
-				if Cargar and Iniciar:		# Si Ya Fue Cargado El Tablero y Se Presiono Iniciar.
+				# Si Ya Fue Cargado El Tablero, Se Presionó El Botón 'Comenzar' y El Estado Inicial y Final Son Distintos, Podra Moverse El Personaje.
+				if Cargar and Iniciar and seleccion != PuntoDestino:
 					
 					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)	# Tecla Izquierda. Mueve Personaje.
 					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)	# Tecla Derecha. Mueve Personaje.
@@ -1239,7 +1238,6 @@ def main():
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
 			elif evento.type == pygame.MOUSEBUTTONDOWN: #============================== Al Mantener Presionado Cualquier Botón del Mouse. ==============================
 				
-				
 				# Si se Presiono el Clic Derecho del Mouse (Botón 3) y La Variable Global 'DibujarInfo' esta en True entonces se cambia a false.
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
 				if evento.button == 3 and DibujarInfo: DibujarInfo = False
@@ -1319,11 +1317,8 @@ def main():
 						elif (xr >= 169) and (xr <= 222) and (yr >= 349) and (yr <= 402): seleccionPers3 = True
 					
 						#=====================================================================================
-					
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
-				
-				#=======================================================
 				
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
 					
@@ -1433,8 +1428,6 @@ def main():
 						CargarMapa	 = False	# Indíca que El Botón Cargar Mapa Dejo de ser Apretado.
 						Error		 = False	# Indíca Que No Hay Error.
 				
-				#=======================================================
-				
 				Btn1Pressed = False			# Indica Que El Botón 'Cargar Mapa' Ya No esta Siendo Presionado. 
 				Btn2Pressed = False			# Indica Que El Botón 'Comenzar' Ya No esta Siendo Presionado. 
 				
@@ -1449,9 +1442,7 @@ def main():
 		#=====================================================================================================================================================
 		
 		
-		
 		screen.blit(BGimg, (0, 0))	# Se Carga La Imagen De Fondo.
-		
 		
 		
 		#===============================================================================================================================
@@ -1462,16 +1453,8 @@ def main():
 		
 		pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension*XPOS, dimension*YPOS], 0)
 		
-		if Cargar: # Si Cargar es Igual a True entonces Dibujara El Mapa.
-			
-			dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
-			
-		#~ else: # Si no, Dibujara solo un rectangulo en trasfondo para representar que ahi se dibujara el Mapa.
-			
-			#~ pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension, dimension], 0)
-		
-		#~ print(textinput.get_text())
-		#~ screen.blit(textinput.get_surface(), (700, 300))
+		# Si Cargar es Igual a True entonces Dibujara El Mapa.
+		if Cargar: dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
 		
 		
 		
@@ -1890,6 +1873,12 @@ def main():
 			
 			Y += 70
 			pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [250,  Y], 3)
+			
+		if seleccion == PuntoDestino and Iniciar:
+			
+			Y += 50
+			dibujarTexto(screen, 'Mapa Finalizado!', [16, Y-1], Fuentes['Droid 30'], COLOR['Negro'])
+			dibujarTexto(screen, 'Mapa Finalizado!', [17, Y],   Fuentes['Droid 30'], COLOR['Rojo'])
 			
 		#===================================================================================================
 		
