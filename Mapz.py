@@ -1,5 +1,5 @@
 
-# Versión: 1.4.4
+# Versión: 1.4.5
 # Python:  3.5.0
 
 import pygame
@@ -970,12 +970,7 @@ def main():
 	NP = None					# Numero de Personaje, Posicionamineto en la Lista.
 	seleccion = None			# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
 	PuntoInicio = None			# Posición de Inicio, ejemplo [ 'A', 1 ].
-	seleccionPers1 = None		# Para Saber Si El Personaje 1 Fue Seleccionado.
-	seleccionPers2 = None		# Para Saber Si El Personaje 2 Fue Seleccionado.
-	seleccionPers3 = None		# Para Saber Si El Personaje 3 Fue Seleccionado.
 	SelTemp = ['P',16]			# Selección Temporal.
-	
-	NombrePersonaje = ['Hombre','Gato','Fantasma']	# Lista de Personajes.
 	
 	pygame.init()				# Inicia El Juego.
 	
@@ -1087,15 +1082,55 @@ def main():
 	BtnPagIzq = BotonDir(RutaBtn)						# Botón Derecho Para Cambiar de Página en la Selección de Terrenos.
 	BtnPagDer = BotonDir(RutaBtn); BtnPagDer.flip()		# Botón Izquierdo Para Cambiar de Página en la Selección de Terrenos.
 	
-	Cuadro1 = Personaje("img/Personajes/personaje.gif")		# Miniatura Para Personaje Hombre.
-	Cuadro2 = Personaje("img/Personajes/CatBug.png")		# Miniatura Para Personaje Gato.
-	Cuadro3 = Personaje("img/Personajes/SinRostro.png")		# Miniatura Para Personaje Fantasma.
+	seleccionPers1 = None		# Para Saber Si El Personaje 1 Fue Seleccionado.
+	seleccionPers2 = None		# Para Saber Si El Personaje 2 Fue Seleccionado.
+	seleccionPers3 = None		# Para Saber Si El Personaje 3 Fue Seleccionado.
+	seleccionPers4 = None		# Para Saber Si El Personaje 4 Fue Seleccionado.
+	seleccionPers5 = None		# Para Saber Si El Personaje 5 Fue Seleccionado.
+	seleccionPers6 = None		# Para Saber Si El Personaje 6 Fue Seleccionado.
+	seleccionPers7 = None		# Para Saber Si El Personaje 7 Fue Seleccionado.
+	seleccionPers8 = None		# Para Saber Si El Personaje 8 Fue Seleccionado.
+	seleccionPers9 = None		# Para Saber Si El Personaje 9 Fue Seleccionado.
+	seleccionPers10 = None		# Para Saber Si El Personaje 10 Fue Seleccionado.
+	seleccionPers11 = None		# Para Saber Si El Personaje 11 Fue Seleccionado.
+	seleccionPers12 = None		# Para Saber Si El Personaje 12 Fue Seleccionado.
+	
+	Cuadro1  = Personaje("img/Personajes/Hombre.png")		# Miniatura Para Personaje Hombre.
+	Cuadro2  = Personaje("img/Personajes/Gato.png")			# Miniatura Para Personaje Gato.
+	Cuadro3  = Personaje("img/Personajes/Lobo.png")			# Miniatura Para Personaje Lobo.
+	Cuadro4  = Personaje("img/Personajes/CatBug.png")		# Miniatura Para Personaje CatBug.
+	Cuadro5  = Personaje("img/Personajes/Pez.png")			# Miniatura Para Personaje Pez.
+	Cuadro6  = Personaje("img/Personajes/Caricatura.png")	# Miniatura Para Personaje Caricatura.
+	Cuadro7  = Personaje("img/Personajes/Mujer.png")		# Miniatura Para Personaje Mujer.
+	Cuadro8  = Personaje("img/Personajes/Pizza.png")		# Miniatura Para Personaje Pizza.
+	Cuadro9  = Personaje("img/Personajes/Mono.jpg")			# Miniatura Para Personaje Mono.
+	Cuadro10 = Personaje("img/Personajes/Pulpo.png")		# Miniatura Para Personaje Pulpo.
+	Cuadro11 = Personaje("img/Personajes/Fantasma.png")		# Miniatura Para Personaje Fantasma.
+	Cuadro12 = Personaje("img/Personajes/Peleador.gif")		# Miniatura Para Personaje Peleador.
+	
+	Cuadro5.flip()		# Acomodamos Al Personaje Mirando a Derecha.
+	Cuadro5.setDireccion('R')
+	Cuadro9.flip()		# Acomodamos Al Personaje Mirando a Derecha.
+	Cuadro9.setDireccion('R')
+	Cuadro12.flip()		# Acomodamos Al Personaje Mirando a Derecha.
+	Cuadro12.setDireccion('R')
+	
+	NombrePersonaje = ['Hombre','Gato','Lobo','CatBug','Pez','Caricatura','Mujer','Pizza','Mono','Pulpo','Fantasma','Peleador']	# Lista de Personajes.
 	
 	# Rutas de Imagenes de los Personajes:
 	RutaPersonaje = {
-					'Hombre':"img/Personajes/personaje.gif",
-					'Gato':"img/Personajes/CatBug.png",
-					'Fantasma':"img/Personajes/SinRostro.png"
+					'Hombre':"img/Personajes/Hombre3.png",
+					'Gato':"img/Personajes/Gato.png",
+					'Lobo':"img/Personajes/Lobo.png",
+					'CatBug':"img/Personajes/CatBug.png",
+					'Pez':"img/Personajes/Pez.png",
+					'Caricatura':"img/Personajes/Caricatura.png",
+					'Mujer':"img/Personajes/Mujer.png",
+					'Pizza':"img/Personajes/Pizza.png",
+					'Mono':"img/Personajes/Mono.jpg",
+					'Pulpo':"img/Personajes/Pulpo.png",
+					'Fantasma':"img/Personajes/Fantasma.png",
+					'Peleador':"img/Personajes/Peleador.gif"
 					}
 	
 	# Diccionario Con Objetos Para Mapa:
@@ -1315,6 +1350,15 @@ def main():
 						if   (xr >= 29)  and (xr <= 82)  and (yr >= 349) and (yr <= 402): seleccionPers1 = True
 						elif (xr >= 99)  and (xr <= 152) and (yr >= 349) and (yr <= 402): seleccionPers2 = True
 						elif (xr >= 169) and (xr <= 222) and (yr >= 349) and (yr <= 402): seleccionPers3 = True
+						elif (xr >= 29)  and (xr <= 82)  and (yr >= 409) and (yr <= 462): seleccionPers4 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 409) and (yr <= 462): seleccionPers5 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 409) and (yr <= 462): seleccionPers6 = True
+						elif (xr >= 29)  and (xr <= 82)  and (yr >= 469) and (yr <= 522): seleccionPers7 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 469) and (yr <= 522): seleccionPers8 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 469) and (yr <= 522): seleccionPers9 = True
+						elif (xr >= 29)  and (xr <= 82)  and (yr >= 529) and (yr <= 582): seleccionPers10 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 529) and (yr <= 582): seleccionPers11 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 529) and (yr <= 582): seleccionPers12 = True
 					
 						#=====================================================================================
 				
@@ -1348,6 +1392,11 @@ def main():
 																				  # Que corresponda al Nombre de Personaje de la lista (NombrePersonaje)
 																				  # Que este en la posición del Numero de Personaje Elegido (NP)
 						
+						if NP == 4 or NP == 8 or NP == 11:	
+							
+							personaje.flip()				# Acomodamos Al Personaje Mirando a Derecha.
+							personaje.setDireccion('R')
+							
 						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
 						
 						for val in VALORES:
@@ -1835,6 +1884,15 @@ def main():
 			Cuadro1.resize(50,50)
 			Cuadro2.resize(50,50)
 			Cuadro3.resize(50,50)
+			Cuadro4.resize(50,50)
+			Cuadro5.resize(50,50)
+			Cuadro6.resize(50,50)
+			Cuadro7.resize(50,50)
+			Cuadro8.resize(50,50)
+			Cuadro9.resize(50,50)
+			Cuadro10.resize(50,50)
+			Cuadro11.resize(50,50)
+			Cuadro12.resize(50,50)
 			
 			Y += 30
 			# Dibuja recuadros Blancos con Margen Negro en donde iran las Miniaturas.
@@ -1871,12 +1929,114 @@ def main():
 				seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
 				NP = 2						# Se Asigna a NP el Numero De Personaje.
 			
+			Y += 60
+			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [28,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [98,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [98,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [168, Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [168, Y-2, 54, 54], 2)
+			
+			# Se Colocan Las Miniaturas.
+			screen.blit(Cuadro4.image, (30,  Y))
+			screen.blit(Cuadro5.image, (100, Y))
+			screen.blit(Cuadro6.image, (170, Y))
+			
+			if seleccionPers4:		# Si El Personaje 1 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers4 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 3						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers5:		# Si El Personaje 2 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers5 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 4						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers6:		# Si El Personaje 3 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers6 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 5					# Se Asigna a NP el Numero De Personaje.
+			
+			Y += 60
+			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [28,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [98,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [98,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [168, Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [168, Y-2, 54, 54], 2)
+			
+			# Se Colocan Las Miniaturas.
+			screen.blit(Cuadro7.image, (30,  Y))
+			screen.blit(Cuadro8.image, (100, Y))
+			screen.blit(Cuadro9.image, (170, Y))
+			
+			if seleccionPers7:		# Si El Personaje 1 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers7 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 6						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers8:		# Si El Personaje 2 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers8 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 7						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers9:		# Si El Personaje 3 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers9 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 8					# Se Asigna a NP el Numero De Personaje.
+			
+			Y += 60
+			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [28,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [98,  Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [98,  Y-2, 54, 54], 2)
+			pygame.draw.rect(screen, COLOR['Blanco'], [168, Y-2, 54, 54], 0)
+			pygame.draw.rect(screen, COLOR['Negro'],  [168, Y-2, 54, 54], 2)
+			
+			# Se Colocan Las Miniaturas.
+			screen.blit(Cuadro10.image, (30,  Y))
+			screen.blit(Cuadro11.image, (100, Y))
+			screen.blit(Cuadro12.image, (170, Y))
+			
+			if seleccionPers10:		# Si El Personaje 1 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers10 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 9						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers11:		# Si El Personaje 2 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers11 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 10						# Se Asigna a NP el Numero De Personaje.
+				
+			elif seleccionPers12:		# Si El Personaje 3 Fue Seleccionado
+				
+				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
+				
+				seleccionPers12 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
+				NP = 11					# Se Asigna a NP el Numero De Personaje.
+			
 			Y += 70
 			pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [250,  Y], 3)
 			
 		if seleccion == PuntoDestino and Iniciar:
 			
-			Y += 50
+			Y += 100
 			dibujarTexto(screen, 'Mapa Finalizado!', [16, Y-1], Fuentes['Droid 30'], COLOR['Negro'])
 			dibujarTexto(screen, 'Mapa Finalizado!', [17, Y],   Fuentes['Droid 30'], COLOR['Rojo'])
 			
