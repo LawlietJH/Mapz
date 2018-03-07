@@ -1,5 +1,5 @@
 
-# Versión: 1.4.6
+# Versión: 1.4.7
 # Python:  3.5.0
 
 import pygame
@@ -1082,8 +1082,16 @@ def main():
 	boton2 = Boton("img/Botones/BotonNaranja.png")
 	
 	# Botón Comezar:
-	botonPers1 = Boton("img/Botones/BotonPurpura.png")
-	botonPers2 = Boton("img/Botones/BotonAzul.png")
+	botonPers1 = Boton("img/Botones/BotonAzul.png")
+	botonPers2 = Boton("img/Botones/BotonPurpura.png")
+	
+	# Botón Reiniciar:
+	btnReiniciar1 = Boton("img/Botones/BotonAzul.png")
+	btnReiniciar2 = Boton("img/Botones/BotonPurpura.png")
+	
+	# Botón Seleccionar Personaje:
+	btnSelect1 = Boton("img/Botones/BotonAzul.png")
+	btnSelect2 = Boton("img/Botones/BotonPurpura.png")
 	
 	# Botones Con Flechas Izquierda y Derecha Para Elección de Terrenos.
 	# flip() Invierte la Imágen en Espejo en el eje de las X.
@@ -1185,6 +1193,8 @@ def main():
 	# Booleanos Para Saber Si Los Botones Fueron Presionados:
 	Btn1Pressed = False
 	Btn2Pressed = False
+	Btn3Pressed = False
+	Btn4Pressed = False
 	
 	#===================================================================
 	
@@ -1371,7 +1381,10 @@ def main():
 						
 						#===========================================================================
 						
-						if (xr >= 950) and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
+						if (xr >= 80)   and (xr <= 180)  and (yr >= 325) and (yr <= 360) and Iniciar: Btn3Pressed = True
+						if (xr >= 70)   and (xr <= 190)  and (yr >= 355) and (yr <= 410) and Iniciar: Btn4Pressed = True
+						
+						if (xr >= 950)  and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
 						if (xr >= 1050) and (xr <= 1075) and (yr >= 550) and (yr <= 570):
 							
 							if Pagina1: Pagina1 = False
@@ -1417,6 +1430,21 @@ def main():
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
 				
+				if Btn3Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
+					
+					Error = False
+					CadenaError = ''
+					
+					Movimientos = 1
+					CostoTotal = 0
+					
+					seleccion = PuntoInicio
+					SELECT = []
+					SELECT.append((seleccion, [Movimientos]))
+					
+					for val in VALORES:
+							if val[0] == PuntoInicio: CostoTotal += float(val[3])
+					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
 					
 					if NP == None:		# Si el Botón 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
@@ -1532,6 +1560,8 @@ def main():
 				
 				Btn1Pressed = False			# Indica Que El Botón 'Cargar Mapa' Ya No esta Siendo Presionado. 
 				Btn2Pressed = False			# Indica Que El Botón 'Comenzar' Ya No esta Siendo Presionado. 
+				Btn3Pressed = False			# Indica Que El Botón 'Reiniciar' Ya No esta Siendo Presionado. 
+				Btn4Pressed = False			# Indica Que El Botón 'Seleccionar Personaje' Ya No esta Siendo Presionado. 
 				
 				pygame.mouse.set_visible(True)	# Se Hace de Nuevo Visible El Cursor Del Mouse.
 				SelTemp = ['P',16]				# La Selección Temporal se manda a un valor jamas cargado en el mapa. (16, 16)
@@ -2102,12 +2132,32 @@ def main():
 			
 			Y += 70
 			pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [250,  Y], 3)
+		
+		if Iniciar:
 			
-		if seleccion == PuntoDestino and Iniciar:
+			btnReiniciar1.resize(100,35)
+			btnReiniciar2.resize(100,35)
+			btnSelect1.resize(120,55)
+			btnSelect2.resize(120,55)
 			
-			Y += 100
-			dibujarTexto(screen, 'Mapa Finalizado!', [16, Y-1], Fuentes['Droid 30'], COLOR['Negro'])
-			dibujarTexto(screen, 'Mapa Finalizado!', [17, Y],   Fuentes['Droid 30'], COLOR['Rojo'])
+			if Btn3Pressed == False: screen.blit(btnReiniciar1.image, (80, 325))
+			else: screen.blit(btnReiniciar2.image, (80, 325))
+			
+			if Btn4Pressed == False: screen.blit(btnSelect1.image, (70, 355))
+			else: screen.blit(btnSelect2.image, (70, 355))
+			
+			dibujarTexto(screen, 'Reiniciar', [94, 331], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Reiniciar', [95, 332], Fuentes['Wendy 25'], COLOR['Morado'])
+			
+			dibujarTexto(screen, 'Seleccionar', [78, 364], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, 'Seleccionar', [79, 365], Fuentes['Wendy 25'], COLOR['Morado'])
+			dibujarTexto(screen, ' Personaje',  [78, 379], Fuentes['Wendy 25'], COLOR['Negro'])
+			dibujarTexto(screen, ' Personaje',  [79, 380], Fuentes['Wendy 25'], COLOR['Morado'])
+			
+			if seleccion == PuntoDestino:
+				
+				dibujarTexto(screen, 'Mapa Finalizado!', [16, 449], Fuentes['Droid 30'], COLOR['Negro'])
+				dibujarTexto(screen, 'Mapa Finalizado!', [17, 450], Fuentes['Droid 30'], COLOR['Rojo'])
 			
 		#===================================================================================================
 		
