@@ -2,7 +2,15 @@
 
 ## En Python: 3.5.0
 ## Versión Actual: 1.4.6
-## Dependencias: pygame.
+## Dependencias: Pygame.
+
+- - -
+
+### Instalando Pygame con Pip (Administrador de Paquetes de Python):
+
+__Comando desde Consola: _python -m pip install pygame___
+
+- - -
 
 ## Fechas:
 
@@ -18,6 +26,8 @@
     * __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aun Antes De Comenzar El Juego. _(Corrección Pendiente)___
 * __Parte 2: _Pendiente.___
 * __Parte 3: _Pendiente.___
+
+- - -
 
 ### Proyecto Parte 1: Finalizada.
  * __Versión 1.0:__
