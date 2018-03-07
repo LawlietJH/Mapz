@@ -1,5 +1,5 @@
 
-# Versión: 1.4.7
+# Versión: 1.4.8
 # Python:  3.5.0
 
 import pygame
@@ -1152,6 +1152,7 @@ def main():
 	Cuadro12.flip()		# Acomodamos Al Personaje Mirando a Derecha.
 	Cuadro12.setDireccion('R')
 	
+	SelectPerson = False
 	NombrePersonaje = ['Hombre','Gato','Lobo','CatBug','Pez','Caricatura','Mujer','Pizza','Mono','Pulpo','Fantasma','Peleador']	# Lista de Personajes.
 	
 	# Rutas de Imagenes de los Personajes:
@@ -1406,30 +1407,47 @@ def main():
 						#=====================================================================================
 						
 						# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
-						Y = 339
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True; Error = False
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True; Error = False
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True; Error = False
-						
-						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True; Error = False
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True; Error = False
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True; Error = False
-						
-						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True; Error = False
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True; Error = False
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True; Error = False
-						
-						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True; Error = False
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True; Error = False
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True; Error = False
+						if SelectPerson == True:
+							
+							Y = 339
+							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True; Error = False
+							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True; Error = False
+							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True; Error = False
+							
+							Y += 60
+							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True; Error = False
+							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True; Error = False
+							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True; Error = False
+							
+							Y += 60
+							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True; Error = False
+							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True; Error = False
+							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True; Error = False
+							
+							Y += 60
+							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True; Error = False
+							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True; Error = False
+							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True; Error = False
 					
 						#=====================================================================================
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
 				
+				if Btn4Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
+					
+					Error = False
+					CadenaError = ''
+					
+					Movimientos = 0
+					CostoTotal = 0
+					
+					SELECT = []
+					
+					DibujarInfo = False
+					SelectPerson = True
+					Iniciar = False
+					Cargar = True
+					
 				if Btn3Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
 					
 					Error = False
@@ -1443,7 +1461,7 @@ def main():
 					SELECT.append((seleccion, [Movimientos]))
 					
 					for val in VALORES:
-							if val[0] == PuntoInicio: CostoTotal += float(val[3])
+						if val[0] == PuntoInicio: CostoTotal += float(val[3])
 					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
 					
@@ -1479,6 +1497,7 @@ def main():
 							personaje.setDireccion('R')
 							
 						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
+						SelectPerson = False					# Ya No Permite Seleccionar otro Personaje hasta Presionar el Botón 4 (Seleccionar Personaje)
 						
 						for val in VALORES:
 							if val[0] == PuntoInicio: CostoTotal += float(val[3])
@@ -1512,6 +1531,7 @@ def main():
 						DibujarInfo = False  	# Al Cargar Un Nuevo Mapa, Se Deja de Mostrar La Información de Seleccion.
 						Iniciar = False		 	# Aun no se permite Iniciar La Partida.
 						Cargar = True		 	# Se Dibuja El Mapa.
+						SelectPerson = True		# Permite Seleccionar Algun Personaje.
 						
 						# Se Crean Nuevos Objetos Bloque para el nuevo Mapa.
 						bloque1 = Bloque("img/Texturas/Pared.jpg")		# Objeto Pared.
@@ -1973,7 +1993,7 @@ def main():
 					#===============================================================
 					# Dibuja La Sección 'Selección de Personaje':
 		
-		if Cargar and not Iniciar:
+		if SelectPerson:
 			
 			Y += 5
 			dibujarTexto(screen, 'Seleccionar Personaje', [27, Y-1], Fuentes['Droid 20'], COLOR['Negro'])
@@ -2133,7 +2153,7 @@ def main():
 			Y += 70
 			pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [250,  Y], 3)
 		
-		if Iniciar:
+		if Iniciar and SelectPerson == False:
 			
 			btnReiniciar1.resize(100,35)
 			btnReiniciar2.resize(100,35)
