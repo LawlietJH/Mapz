@@ -337,8 +337,8 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 				dibujarTexto(screen, 'N/A', [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
 				dibujarTexto(screen, 'N/A', [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
 			else:
-				dibujarTexto(screen, str(X[3]), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
-				dibujarTexto(screen, str(X[3]), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, str(round(float(X[3]),2)), [989, PosY-1], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, str(round(float(X[3]),2)), [990, PosY], Fuentes['Droid 15'], COLOR['Verde'])
 			
 			break
 	
@@ -732,7 +732,9 @@ def DibujarMiniaturaTextura(screen, Costo, TextInput, Objetos, BtnIzq, BtnDer, X
 	if Costo: pygame.draw.rect(screen, COLOR['Blanco'], [X+98, Y+17, 80, 20], 0)
 	else: pygame.draw.rect(screen, COLOR['Gris Claro'], [X+98, Y+17, 80, 20], 0)
 	if TextInput == '': dibujarTexto(screen, 'N/A', [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
-	else: dibujarTexto(screen, TextInput, [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
+	else:
+		if '.' in TextInput: dibujarTexto(screen, str(round(float(TextInput),2)), [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
+		else: dibujarTexto(screen, TextInput, [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	
 	dibujarTexto(screen, 'Valor: ', [X+40, Y+35], Fuentes['Droid 20'], COLOR['Negro'])
 	
@@ -815,80 +817,80 @@ def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, 
 	
 	if C1:
 		if '.' in TI1:
-			if len(TI1.split('.')[1]) == 2: pass
-			else: TI1 += Add
+			if len(TI1.split('.')[1]) == 2: TI1 = TI1[:-1]
+			TI1 += Add
 		else:
-			if len(TI1.split('.')[0]) == 4: pass
+			if len(TI1.split('.')[0]) == 4: TI1 = TI1[:-1] + Add
 			else:
 				if Add != '0' and TI1 == '0': TI1 = TI1[:-1]
 				if Add == '0' and TI1 == '0': pass
 				else: TI1 += Add
 	elif C2:
 		if '.' in TI2:
-			if len(TI2.split('.')[1]) == 2: pass
-			else: TI2 += Add
+			if len(TI2.split('.')[1]) == 2:  TI2 = TI2[:-1]
+			TI2 += Add
 		else:
-			if len(TI2.split('.')[0]) == 4: pass
+			if len(TI2.split('.')[0]) == 4:  TI2 = TI2[:-1] + Add
 			else:
 				if Add != '0' and TI2 == '0': TI2 = TI2[:-1]
 				if Add == '0' and TI2 == '0': pass
 				else: TI2 += Add
 	elif C3:
 		if '.' in TI3:
-			if len(TI3.split('.')[1]) == 2: pass
-			else: TI3 += Add
+			if len(TI3.split('.')[1]) == 2: TI3 = TI3[:-1]
+			TI3 += Add
 		else:
-			if len(TI3.split('.')[0]) == 4: pass
+			if len(TI3.split('.')[0]) == 4:  TI3 = TI3[:-1] + Add
 			else:
 				if Add != '0' and TI3 == '0': TI3 = TI3[:-1]
 				if Add == '0' and TI3 == '0': pass
 				else: TI3 += Add
 	elif C4:
 		if '.' in TI4:
-			if len(TI4.split('.')[1]) == 2: pass
-			else: TI4 += Add
+			if len(TI4.split('.')[1]) == 2: TI4 = TI4[:-1]
+			TI4 += Add
 		else:
-			if len(TI4.split('.')[0]) == 4: pass
+			if len(TI4.split('.')[0]) == 4: TI4 = TI4[:-1] + Add
 			else:
 				if Add != '0' and TI4 == '0': TI4 = TI4[:-1]
 				if Add == '0' and TI4 == '0': pass
 				else: TI4 += Add
 	elif C5:
 		if '.' in TI5:
-			if len(TI5.split('.')[1]) == 2: pass
-			else: TI5 += Add
+			if len(TI5.split('.')[1]) == 2: TI5 = TI5[:-1]
+			TI5 += Add
 		else:
-			if len(TI5.split('.')[0]) == 4: pass
+			if len(TI5.split('.')[0]) == 4: TI5 = TI5[:-1] + Add
 			else:
 				if Add != '0' and TI5 == '0': TI5 = TI5[:-1]
 				if Add == '0' and TI5 == '0': pass
 				else: TI5 += Add
 	elif C6:
 		if '.' in TI6:
-			if len(TI6.split('.')[1]) == 2: pass
-			else: TI6 += Add
+			if len(TI6.split('.')[1]) == 2: TI6 = TI6[:-1]
+			TI6 += Add
 		else:
-			if len(TI6.split('.')[0]) == 4: pass
+			if len(TI6.split('.')[0]) == 4: TI6 = TI6[:-1] + Add
 			else:
 				if Add != '0' and TI6 == '0': TI6 = TI6[:-1]
 				if Add == '0' and TI6 == '0': pass
 				else: TI6 += Add
 	elif C7:
 		if '.' in TI7:
-			if len(TI7.split('.')[1]) == 2: pass
-			else: TI7 += Add
+			if len(TI7.split('.')[1]) == 2: TI7 = TI7[:-1]
+			TI7 += Add
 		else:
-			if len(TI7.split('.')[0]) == 4: pass
+			if len(TI7.split('.')[0]) == 4: TI7 = TI7[:-1] + Add
 			else:
 				if Add != '0' and TI7 == '0': TI7 = TI7[:-1]
 				if Add == '0' and TI7 == '0': pass
 				else: TI7 += Add
 	elif C8:
 		if '.' in TI8:
-			if len(TI8.split('.')[1]) == 2: pass
-			else: TI8 += Add
+			if len(TI8.split('.')[1]) == 2: TI8 = TI8[:-1]
+			TI8 += Add
 		else:
-			if len(TI8.split('.')[0]) == 4: pass
+			if len(TI8.split('.')[0]) == 4: TI8 = TI8[:-1] + Add
 			else:
 				if Add != '0' and TI8 == '0': TI8 = TI8[:-1]
 				if Add == '0' and TI8 == '0': pass
