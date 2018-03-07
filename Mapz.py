@@ -1172,7 +1172,7 @@ def main():
 				#======================================================
 				if evento.key == pygame.K_BACKSPACE:
 					
-					if Costo1: TextInput1 = TextInput1[:-1]
+					if   Costo1: TextInput1 = TextInput1[:-1]
 					elif Costo2: TextInput2 = TextInput2[:-1]
 					elif Costo3: TextInput3 = TextInput3[:-1]
 					elif Costo4: TextInput4 = TextInput4[:-1]
@@ -1184,23 +1184,21 @@ def main():
 				elif evento.key == pygame.K_PERIOD:
 					
 					if Costo1:
-						if not '.' in TextInput1:
-							print(True)
-							TextInput1 += '.'
+						if not '.' in TextInput1: TextInput1 += '.'
 					elif Costo2:
-						if not '.' in TextInput2: TextInput2 += '.0'
+						if not '.' in TextInput2: TextInput2 += '.'
 					elif Costo3:
-						if not '.' in TextInput3: TextInput3 += '.0'
+						if not '.' in TextInput3: TextInput3 += '.'
 					elif Costo4:
-						if not '.' in TextInput4: TextInput4 += '.0'
+						if not '.' in TextInput4: TextInput4 += '.'
 					elif Costo5:
-						if not '.' in TextInput5: TextInput5 += '.0'
+						if not '.' in TextInput5: TextInput5 += '.'
 					elif Costo6:
-						if not '.' in TextInput6: TextInput6 += '.0'
+						if not '.' in TextInput6: TextInput6 += '.'
 					elif Costo7:
-						if not '.' in TextInput7: TextInput7 += '.0'
+						if not '.' in TextInput7: TextInput7 += '.'
 					elif Costo8:
-						if not '.' in TextInput8: TextInput8 += '.0'
+						if not '.' in TextInput8: TextInput8 += '.'
 				
 				#=============================================================================================================================================
 				# Reducimos el Nombre de las Variables Por Comodidad xD
