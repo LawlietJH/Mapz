@@ -8,8 +8,11 @@
 
 ### Instalando Pygame con Pip (Administrador de Paquetes de Python):
 
-__Comando desde Consola: _python -m pip install pygame___
+__Comando desde Consola:__
 
+```bat
+python -m pip install pygame
+```
 - - -
 
 ## Fechas:
