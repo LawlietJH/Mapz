@@ -819,56 +819,80 @@ def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, 
 			else: TI1 += Add
 		else:
 			if len(TI1.split('.')[0]) == 4: pass
-			else: TI1 += Add
+			else:
+				if Add != '0' and TI1 == '0': TI1 = TI1[:-1]
+				if Add == '0' and TI1 == '0': pass
+				else: TI1 += Add
 	elif C2:
 		if '.' in TI2:
 			if len(TI2.split('.')[1]) == 2: pass
 			else: TI2 += Add
 		else:
 			if len(TI2.split('.')[0]) == 4: pass
-			else: TI2 += Add
+			else:
+				if Add != '0' and TI2 == '0': TI2 = TI2[:-1]
+				if Add == '0' and TI2 == '0': pass
+				else: TI2 += Add
 	elif C3:
 		if '.' in TI3:
 			if len(TI3.split('.')[1]) == 2: pass
 			else: TI3 += Add
 		else:
 			if len(TI3.split('.')[0]) == 4: pass
-			else: TI3 += Add
+			else:
+				if Add != '0' and TI3 == '0': TI3 = TI3[:-1]
+				if Add == '0' and TI3 == '0': pass
+				else: TI3 += Add
 	elif C4:
 		if '.' in TI4:
 			if len(TI4.split('.')[1]) == 2: pass
 			else: TI4 += Add
 		else:
 			if len(TI4.split('.')[0]) == 4: pass
-			else: TI4 += Add
+			else:
+				if Add != '0' and TI4 == '0': TI4 = TI4[:-1]
+				if Add == '0' and TI4 == '0': pass
+				else: TI4 += Add
 	elif C5:
 		if '.' in TI5:
 			if len(TI5.split('.')[1]) == 2: pass
 			else: TI5 += Add
 		else:
 			if len(TI5.split('.')[0]) == 4: pass
-			else: TI5 += Add
+			else:
+				if Add != '0' and TI5 == '0': TI5 = TI5[:-1]
+				if Add == '0' and TI5 == '0': pass
+				else: TI5 += Add
 	elif C6:
 		if '.' in TI6:
 			if len(TI6.split('.')[1]) == 2: pass
 			else: TI6 += Add
 		else:
 			if len(TI6.split('.')[0]) == 4: pass
-			else: TI6 += Add
+			else:
+				if Add != '0' and TI6 == '0': TI6 = TI6[:-1]
+				if Add == '0' and TI6 == '0': pass
+				else: TI6 += Add
 	elif C7:
 		if '.' in TI7:
 			if len(TI7.split('.')[1]) == 2: pass
 			else: TI7 += Add
 		else:
 			if len(TI7.split('.')[0]) == 4: pass
-			else: TI7 += Add
+			else:
+				if Add != '0' and TI7 == '0': TI7 = TI7[:-1]
+				if Add == '0' and TI7 == '0': pass
+				else: TI7 += Add
 	elif C8:
 		if '.' in TI8:
 			if len(TI8.split('.')[1]) == 2: pass
 			else: TI8 += Add
 		else:
 			if len(TI8.split('.')[0]) == 4: pass
-			else: TI8 += Add
+			else:
+				if Add != '0' and TI8 == '0': TI8 = TI8[:-1]
+				if Add == '0' and TI8 == '0': pass
+				else: TI8 += Add
 	
 	return TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8
 
