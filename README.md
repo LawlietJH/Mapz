@@ -8,15 +8,16 @@
 
  * Revisiónes de Proyecto: (Las Penalizaciones y Observaciones se Deben Corregir Aun Despues de las Entregas.)
  
-   1. Parte 1: 05/03/2018.
-	 * Penalizaciones:
-	   1. No Se Debe Tener Que Cargar De Nuevo El Mapa Para Seleccionar Otro Personaje.	(Pendiente)
-	 * Observaciones:
-	   1. En El Terreno Pared Debe Poder Modificar su Costo. (Corregido el 05/03/2018 en v1.4.5)
-	   2. Costos Con Máximo 2 Decimales. (Corregido el 06/03/2018 en v1.4.6)
-	   3. Mostrar Información de Terrenos al Clic derecho de Forma Constante Aun Antes De Comenzar El Juego. (Pendiente)
-   2. Parte 2: Pendiente.
-   3. Parte 3: Pendiente.
+   1. __Parte 1: _05/03/2018.___
+   	 * ___Calificación:_ 95/100.__
+	 * ___Penalizaciones:___
+	   1. __No Se Debe Tener Que Cargar De Nuevo El Mapa Para Seleccionar Otro Personaje. -5 Puntos. _(Corrección Pendiente)___
+	 * ___Observaciones:___
+	   1. __En El Terreno Pared Debe Poder Modificar su Costo. _(Corregido el 05/03/2018 en v1.4.5)___
+	   2. __Costos Con Máximo 2 Decimales. _(Corregido el 06/03/2018 en v1.4.6)___
+	   3. __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aun Antes De Comenzar El Juego. _(Corrección Pendiente)___
+   2. __Parte 2: _Pendiente.___
+   3. __Parte 3: _Pendiente.___
 
 ### Proyecto Parte 1: Finalizada.
  * __Versión 1.0:__
