@@ -220,13 +220,13 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 				Pos = XPOS if XPOS > YPOS else YPOS		# Se obtiene el mayor de X y Y.
 				TempCont = 0
 				DT = dimension / 3
-				DTY = dimension / 6
+				DTY = dimension / 7
 				
 				if   Pos >= 10 and Pos < 13: F = 'Droid 8'
 				elif Pos >= 7 and Pos < 10:  F = 'Droid 10'
 				elif Pos >= 5 and Pos < 7:  F = 'Droid 15'
 				elif Pos >= 2 and Pos < 5:  F = 'Droid 20'
-				else: F = 'Droid 7'
+				else: F = 'Droid 6'
 				
 				for Pos, Movs in SELECT:
 					
@@ -814,61 +814,77 @@ def BotonesFlechas(X, Y, xr, yr, Lisy, LisyPos1, LisyPos2, LisyPos3, LisyPos4, L
 def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8):
 	
 	if C1:
-		if '.' in TI1:
-			if len(TI1.split('.')[1]) == 2: pass
+		if len(TI1) <= 6:
+			if TI1.endswith('.0'): TI1 = TI1[:-1]
+			if Add != '0' and TI1 == '0': TI1 = ''
+			if Add == '0' and TI1 == '0': pass
 			else: TI1 += Add
-		else:
-			if len(TI1.split('.')[0]) == 4: pass
-			else: TI1 += Add
+		elif TI1[-2] == '.':
+			TI1 = TI1[:-1]
+			TI1 += Add
 	elif C2:
-		if '.' in TI2:
-			if len(TI2.split('.')[1]) == 2: pass
+		if len(TI2) <= 6:
+			if TI2.endswith('.0'): TI2 = TI2[:-1]
+			if Add != '0' and TI2 == '0': TI2 = ''
+			if Add == '0' and TI2 == '0': pass
 			else: TI2 += Add
-		else:
-			if len(TI2.split('.')[0]) == 4: pass
-			else: TI2 += Add
+		elif TI2[-2] == '.':
+			TI2 = TI2[:-1]
+			TI2 += Add
 	elif C3:
-		if '.' in TI3:
-			if len(TI3.split('.')[1]) == 2: pass
+		if len(TI3) <= 6:
+			if TI3.endswith('.0'): TI3 = TI3[:-1]
+			if Add != '0' and TI3 == '0': TI3 = ''
+			if Add == '0' and TI3 == '0': pass
 			else: TI3 += Add
-		else:
-			if len(TI3.split('.')[0]) == 4: pass
-			else: TI3 += Add
+		elif TI3[-2] == '.':
+			TI3 = TI3[:-1]
+			TI3 += Add
 	elif C4:
-		if '.' in TI4:
-			if len(TI4.split('.')[1]) == 2: pass
+		if len(TI4) <= 6:
+			if TI4.endswith('.0'): TI4 = TI4[:-1]
+			if Add != '0' and TI4 == '0': TI4 = ''
+			if Add == '0' and TI4 == '0': pass
 			else: TI4 += Add
-		else:
-			if len(TI4.split('.')[0]) == 4: pass
-			else: TI4 += Add
+		elif TI4[-2] == '.':
+			TI4 = TI4[:-1]
+			TI4 += Add
 	elif C5:
-		if '.' in TI5:
-			if len(TI5.split('.')[1]) == 2: pass
+		if len(TI5) <= 6:
+			if TI5.endswith('.0'): TI5 = TI5[:-1]
+			if Add != '0' and TI5 == '0': TI5 = ''
+			if Add == '0' and TI5 == '0': pass
 			else: TI5 += Add
-		else:
-			if len(TI5.split('.')[0]) == 4: pass
-			else: TI5 += Add
+		elif TI5[-2] == '.':
+			TI5 = TI5[:-1]
+			TI5 += Add
 	elif C6:
-		if '.' in TI6:
-			if len(TI6.split('.')[1]) == 2: pass
+		if len(TI6) <= 6:
+			if TI6.endswith('.0'): TI6 = TI6[:-1]
+			if Add != '0' and TI6 == '0': TI6 = ''
+			if Add == '0' and TI6 == '0': pass
 			else: TI6 += Add
-		else:
-			if len(TI6.split('.')[0]) == 4: pass
-			else: TI6 += Add
+		elif TI6[-2] == '.':
+			TI6 = TI6[:-1]
+			TI6 += Add
 	elif C7:
-		if '.' in TI7:
-			if len(TI7.split('.')[1]) == 2: pass
+		if len(TI7) <= 6:
+			if TI7.endswith('.0'): TI7 = TI7[:-1]
+			if Add != '0' and TI7 == '0': TI7 = ''
+			if Add == '0' and TI7 == '0': pass
 			else: TI7 += Add
-		else:
-			if len(TI7.split('.')[0]) == 4: pass
-			else: TI7 += Add
+		elif TI7[-2] == '.':
+			TI7 = TI7[:-1]
+			TI7 += Add
 	elif C8:
-		if '.' in TI8:
-			if len(TI8.split('.')[1]) == 2: pass
+		if len(TI8) <= 6:
+			if TI8.endswith('.0'): TI8 = TI8[:-1]
+			if Add != '0' and TI8 == '0': TI8 = ''
+			if Add == '0' and TI8 == '0': pass
 			else: TI8 += Add
-		else:
-			if len(TI8.split('.')[0]) == 4: pass
-			else: TI8 += Add
+		elif TI8[-2] == '.':
+			TI8 = TI8[:-1]
+			TI8 += Add
 	
 	return TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8
 
@@ -1103,7 +1119,7 @@ def main():
 	
 	# Rutas de Imagenes de los Personajes:
 	RutaPersonaje = {
-					'Hombre':"img/Personajes/Hombre.png",
+					'Hombre':"img/Personajes/Hombre3.png",
 					'Gato':"img/Personajes/Gato.png",
 					'Lobo':"img/Personajes/Lobo.png",
 					'CatBug':"img/Personajes/CatBug.png",
@@ -1184,9 +1200,7 @@ def main():
 				elif evento.key == pygame.K_PERIOD:
 					
 					if Costo1:
-						if not '.' in TextInput1:
-							print(True)
-							TextInput1 += '.'
+						if not '.' in TextInput1: TextInput1 += '.0'
 					elif Costo2:
 						if not '.' in TextInput2: TextInput2 += '.0'
 					elif Costo3:
@@ -1224,6 +1238,16 @@ def main():
 				# Pasamos El Valor Correspondiente A Su Variable Oroginal 
 				TextInput1, TextInput2, TextInput3, TextInput4 = TI1, TI2, TI3, TI4
 				TextInput5, TextInput6, TextInput7, TextInput8 = TI5, TI6, TI7, TI8
+				
+				# Si la Cadena se Quedo Solo con el Punto al Final, Lo Eliminamos.
+				if TextInput1.endswith('.'): TextInput1 = TextInput1[:-1]
+				if TextInput2.endswith('.'): TextInput2 = TextInput2[:-1]
+				if TextInput3.endswith('.'): TextInput3 = TextInput3[:-1]
+				if TextInput4.endswith('.'): TextInput4 = TextInput4[:-1]
+				if TextInput5.endswith('.'): TextInput5 = TextInput5[:-1]
+				if TextInput6.endswith('.'): TextInput6 = TextInput6[:-1]
+				if TextInput7.endswith('.'): TextInput7 = TextInput7[:-1]
+				if TextInput8.endswith('.'): TextInput8 = TextInput8[:-1]
 				
 				# Actualizamos los Datos de los Costos.
 				Costos[0] = TextInput1
@@ -1271,7 +1295,7 @@ def main():
 						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
 						
 						if Pagina1:
-							Y = 205
+							Y = 185
 							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20): Costo1 = True
 							else: Costo1 = False
 							Y += 70
@@ -1287,7 +1311,7 @@ def main():
 							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20): Costo5 = True
 							else: Costo5 = False
 						else:
-							Y = 205
+							Y = 185
 							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20): Costo6 = True
 							else: Costo6 = False
 							Y += 70
@@ -1312,7 +1336,7 @@ def main():
 					
 						# ================= Cooredenadas Botón Izquierda y Derecha =================
 						
-						X = 1006; Y = 228
+						X = 1006; Y = 208
 						
 						CadenaError = ''
 						CadenaError2 = ''
@@ -1322,25 +1346,19 @@ def main():
 						#=====================================================================================
 						
 						# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
-						Y = 339
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True
 						
-						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True
-						
-						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True
-						
-						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= 349) and (yr <= 402): seleccionPers1 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 349) and (yr <= 402): seleccionPers2 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 349) and (yr <= 402): seleccionPers3 = True
+						elif (xr >= 29)  and (xr <= 82)  and (yr >= 409) and (yr <= 462): seleccionPers4 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 409) and (yr <= 462): seleccionPers5 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 409) and (yr <= 462): seleccionPers6 = True
+						elif (xr >= 29)  and (xr <= 82)  and (yr >= 469) and (yr <= 522): seleccionPers7 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 469) and (yr <= 522): seleccionPers8 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 469) and (yr <= 522): seleccionPers9 = True
+						elif (xr >= 29)  and (xr <= 82)  and (yr >= 529) and (yr <= 582): seleccionPers10 = True
+						elif (xr >= 99)  and (xr <= 152) and (yr >= 529) and (yr <= 582): seleccionPers11 = True
+						elif (xr >= 169) and (xr <= 222) and (yr >= 529) and (yr <= 582): seleccionPers12 = True
 					
 						#=====================================================================================
 				
@@ -1555,19 +1573,8 @@ def main():
 			dibujarTexto(screen, 'Asignar Valores', [909, 139], Fuentes['Droid 20'], COLOR['Negro'])
 			dibujarTexto(screen, 'Asignar Valores', [910, 140], Fuentes['Droid 20'], COLOR['Morado'])
 			
-			dibujarTexto(screen, 'Personaje: ', [909, 159], Fuentes['Droid 20'], COLOR['Negro'])
-			dibujarTexto(screen, 'Personaje:', [910, 160], Fuentes['Droid 20'], COLOR['Morado'])
-			
-			if NP == None:	# Si Aun No Se Ha Seleccionado Un Personaje.
-				
-				dibujarTexto(screen, 'Ninguno', [1009, 159], Fuentes['Droid 20'], COLOR['Azul'])
-				dibujarTexto(screen, 'Ninguno', [1010, 160], Fuentes['Droid 20'], COLOR['Negro'])
-				
-			else:			# Si ya fue Seleccionado.
-				
-				dibujarTexto(screen, NombrePersonaje[NP], [1009, 159], Fuentes['Droid 20'], COLOR['Azul'])
-				dibujarTexto(screen, NombrePersonaje[NP], [1010, 160], Fuentes['Droid 20'], COLOR['Negro'])
-			
+			#~ textinput.clear_text()
+			#~ TextInput1.update(events)					# Actualizamos el TextInput para capturar datos en pygame.
 			
 			if LisyPos2 in [LisyPos1] and LisyPos2 != 0: 
 				Er1 = True
@@ -1595,94 +1602,78 @@ def main():
 				
 					# Bloque 1:	============================================
 				
-				Y = 190
-				
-				DibujarMiniaturaTextura(screen, Costo1, TextInput1, Objetos10, BtnIzq1, BtnDer1, 910, Y, 'Pared', Lisy, LisyPos1, Fuentes)
+				DibujarMiniaturaTextura(screen, Costo1, TextInput1, Objetos10, BtnIzq1, BtnDer1, 910, 170, 'Pared', Lisy, LisyPos1, Fuentes)
 				
 					# Bloque 2:	============================================
-				
-				Y += 70
 				
 				if LisyPos2 in [LisyPos1] and LisyPos2 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo2, TextInput2, Objetos10, BtnIzq2, BtnDer2, 910, Y, 'Camino', Lisy, LisyPos2, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo2, TextInput2, Objetos10, BtnIzq2, BtnDer2, 910, 240, 'Camino', Lisy, LisyPos2, Fuentes, True)
 					
-				else: DibujarMiniaturaTextura(screen, Costo2, TextInput2, Objetos10, BtnIzq2, BtnDer2, 910, Y, 'Camino', Lisy, LisyPos2, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo2, TextInput2, Objetos10, BtnIzq2, BtnDer2, 910, 240, 'Camino', Lisy, LisyPos2, Fuentes)
 				
 					# Bloque 3:	============================================
-				
-				Y += 70
 				
 				if LisyPos3 in [LisyPos1, LisyPos2] and LisyPos3 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo3, TextInput3, Objetos10, BtnIzq3, BtnDer3, 910, Y, 'Bosque', Lisy, LisyPos3, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo3, TextInput3, Objetos10, BtnIzq3, BtnDer3, 910, 310, 'Bosque', Lisy, LisyPos3, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, Costo3, TextInput3, Objetos10, BtnIzq3, BtnDer3, 910, Y, 'Bosque', Lisy, LisyPos3, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo3, TextInput3, Objetos10, BtnIzq3, BtnDer3, 910, 310, 'Bosque', Lisy, LisyPos3, Fuentes)
 				
 					# Bloque 4:	============================================
-				
-				Y += 70
 				
 				if LisyPos4 in [LisyPos1, LisyPos2, LisyPos3] and LisyPos4 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo4, TextInput4, Objetos10, BtnIzq4, BtnDer4, 910, Y, 'Lava', Lisy, LisyPos4, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo4, TextInput4, Objetos10, BtnIzq4, BtnDer4, 910, 380, 'Lava', Lisy, LisyPos4, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, Costo4, TextInput4, Objetos10, BtnIzq4, BtnDer4, 910, Y, 'Lava', Lisy, LisyPos4, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo4, TextInput4, Objetos10, BtnIzq4, BtnDer4, 910, 380, 'Lava', Lisy, LisyPos4, Fuentes)
 				
 					# Bloque 5:	============================================
-				
-				Y += 70
 				
 				if LisyPos5 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4] and LisyPos5 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo5, TextInput5, Objetos10, BtnIzq5, BtnDer5, 910, Y, 'Agua', Lisy, LisyPos5, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo5, TextInput5, Objetos10, BtnIzq5, BtnDer5, 910, 450, 'Agua', Lisy, LisyPos5, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, Costo5, TextInput5, Objetos10, BtnIzq5, BtnDer5, 910, Y, 'Agua', Lisy, LisyPos5, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo5, TextInput5, Objetos10, BtnIzq5, BtnDer5, 910, 450, 'Agua', Lisy, LisyPos5, Fuentes)
 				
 			else:
 					# Bloque 6:	============================================
-				
-				Y = 190
 				
 				if LisyPos6 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5] and LisyPos6 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo6, TextInput6, Objetos10, BtnIzq6, BtnDer6, 910, Y, 'Arena', Lisy, LisyPos6, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo6, TextInput6, Objetos10, BtnIzq6, BtnDer6, 910, 170, 'Arena', Lisy, LisyPos6, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, Costo6, TextInput6, Objetos10, BtnIzq6, BtnDer6, 910, Y, 'Arena', Lisy, LisyPos6, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo6, TextInput6, Objetos10, BtnIzq6, BtnDer6, 910, 170, 'Arena', Lisy, LisyPos6, Fuentes)
 				
 					# Bloque 7:	============================================
-				
-				Y += 70
 				
 				if LisyPos7 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6] and LisyPos7 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo7, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, Y, 'Montaña', Lisy, LisyPos7, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo7, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, 240, 'Montaña', Lisy, LisyPos7, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, Costo7, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, Y, 'Montaña', Lisy, LisyPos7, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo7, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, 240, 'Montaña', Lisy, LisyPos7, Fuentes)
 				
 					# Bloque 8:	============================================
-				
-				Y += 70
 				
 				if LisyPos8 in [LisyPos1, LisyPos2, LisyPos3, LisyPos4, LisyPos5, LisyPos6, LisyPos7] and LisyPos8 != 0:
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena, Montaña)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, Costo8, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, Y, 'Nieve', Lisy, LisyPos8, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo8, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, 310, 'Nieve', Lisy, LisyPos8, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, Costo8, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, Y, 'Nieve', Lisy, LisyPos8, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo8, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, 310, 'Nieve', Lisy, LisyPos8, Fuentes)
 				
 			#==========================================================================================================================
 			
@@ -1871,8 +1862,8 @@ def main():
 		dibujarTexto(screen, 'Costo Total: ', [14, 265], Fuentes['Droid 20'], COLOR['Negro'])
 		dibujarTexto(screen, 'Costo Total: ', [15, 266], Fuentes['Droid 20'], COLOR['Azul'])
 		
-		dibujarTexto(screen,  str(round(CostoTotal,2)), [162, 265], Fuentes['Droid 20'], COLOR['Rojo'])
-		dibujarTexto(screen,  str(round(CostoTotal,2)), [163, 266], Fuentes['Droid 20'], COLOR['Negro'])
+		dibujarTexto(screen,  str(round(CostoTotal,4)), [162, 265], Fuentes['Droid 20'], COLOR['Rojo'])
+		dibujarTexto(screen,  str(round(CostoTotal,4)), [163, 266], Fuentes['Droid 20'], COLOR['Negro'])
 		
 		Y = 305
 		
@@ -1884,7 +1875,7 @@ def main():
 		
 		if Cargar and not Iniciar:
 			
-			Y += 5
+			Y += 15
 			
 			dibujarTexto(screen, 'Seleccionar Personaje', [27, Y-1], Fuentes['Droid 20'], COLOR['Negro'])
 			dibujarTexto(screen, 'Seleccionar Personaje', [28, Y], Fuentes['Droid 20'], COLOR['Morado'])
