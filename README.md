@@ -1,7 +1,7 @@
 # Mapz
 
 ## En Python: 3.5.0
-## Versión Actual: 1.4.5
+## Versión Actual: 1.4.6
 ## Dependencias: pygame.
 
 ## Fechas:
@@ -16,12 +16,12 @@
      1. __En El Terreno Pared Debe Poder Modificar su Costo. _(Corregido el 05/03/2018 en v1.4.5)___
      2. __Costos Con Máximo 2 Decimales. _(Corregido el 06/03/2018 en v1.4.6)___
      3. __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aun Antes De Comenzar El Juego. _(Corrección Pendiente)___
-2. __Parte 2: _Pendiente.___
-3. __Parte 3: _Pendiente.___
+ 2. __Parte 2: _Pendiente.___
+ 3. __Parte 3: _Pendiente.___
 
 ### Proyecto Parte 1: Finalizada.
  * __Versión 1.0:__
-   * __v1.0.2: _16/02/2018___, __v1.0.4: _16/02/2018___, __v1.0.6: _16/02/2018___, __v1.0.8: _17/02/2018___, __v1.1.0: _17/02/2018___
+   * __v1.0.2: _16/02/2018_, v1.0.4: _16/02/2018_, v1.0.6: _16/02/2018_, v1.0.8: _17/02/2018_, v1.1.0: _17/02/2018___
 
  * __Versión 1.1:__
    * __v1.1.2: _18/02/2018___, __v1.1.4: _19/02/2018___, __v1.1.6: _19/02/2018___, __v1.1.8: _19/02/2018___, __v1.2.0: _20/02/2018___
