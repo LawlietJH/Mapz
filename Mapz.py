@@ -1210,20 +1210,28 @@ def main():
 				elif evento.key == pygame.K_PERIOD:
 					
 					if Costo1:
+						if TextInput1 == '': TextInput1 += '0'
 						if not '.' in TextInput1: TextInput1 += '.'
 					elif Costo2:
+						if TextInput2 == '': TextInput2 += '0'
 						if not '.' in TextInput2: TextInput2 += '.'
 					elif Costo3:
+						if TextInput3 == '': TextInput3 += '0'
 						if not '.' in TextInput3: TextInput3 += '.'
 					elif Costo4:
+						if TextInput4 == '': TextInput4 += '0'
 						if not '.' in TextInput4: TextInput4 += '.'
 					elif Costo5:
+						if TextInput5 == '': TextInput5 += '0'
 						if not '.' in TextInput5: TextInput5 += '.'
 					elif Costo6:
+						if TextInput6 == '': TextInput6 += '0'
 						if not '.' in TextInput6: TextInput6 += '.'
 					elif Costo7:
+						if TextInput7 == '': TextInput7 += '0'
 						if not '.' in TextInput7: TextInput7 += '.'
 					elif Costo8:
+						if TextInput8 == '': TextInput8 += '0'
 						if not '.' in TextInput8: TextInput8 += '.'
 				
 				#=============================================================================================================================================
