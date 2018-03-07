@@ -737,7 +737,7 @@ def DibujarMiniaturaTextura(screen, Costo, TextInput, Objetos, BtnIzq, BtnDer, X
 		else:
 			if '.' in Costos[NombrePersonaje[NP]][TextInput]: dibujarTexto(screen, str(round(float(Costos[NombrePersonaje[NP]][TextInput]),2)), [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 			else: dibujarTexto(screen, Costos[NombrePersonaje[NP]][TextInput], [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
-	else: dibujarTexto(screen, 'Selecciona Personaje', [X+100, Y+15], Fuentes['Droid 10'], COLOR['Negro'])
+	else: dibujarTexto(screen, 'N/A', [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	
 	
 	dibujarTexto(screen, 'Valor: ', [X+40, Y+35], Fuentes['Droid 20'], COLOR['Negro'])
@@ -1333,32 +1333,36 @@ def main():
 						
 						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
 						
-						if Pagina1:
-							Y = 205
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo1 = True
-							else: Costo1 = False
-							Y += 70
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo2 = True
-							else: Costo2 = False
-							Y += 70
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo3 = True
-							else: Costo3 = False
-							Y += 70
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo4 = True
-							else: Costo4 = False
-							Y += 70
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo5 = True
-							else: Costo5 = False
+						if NP != None:
+							if Pagina1:
+								Y = 205
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo1 = True
+								else: Costo1 = False
+								Y += 70
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo2 = True
+								else: Costo2 = False
+								Y += 70
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo3 = True
+								else: Costo3 = False
+								Y += 70
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo4 = True
+								else: Costo4 = False
+								Y += 70
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo5 = True
+								else: Costo5 = False
+							else:
+								Y = 205
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo6 = True
+								else: Costo6 = False
+								Y += 70
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo7 = True
+								else: Costo7 = False
+								Y += 70
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo8 = True
+								else: Costo8 = False
 						else:
-							Y = 205
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo6 = True
-							else: Costo6 = False
-							Y += 70
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo7 = True
-							else: Costo7 = False
-							Y += 70
-							if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo8 = True
-							else: Costo8 = False
+							Error = True
+							CadenaError = 'Selecciona Un Personaje.'
 						
 						if SelectEstados:
 							
@@ -1377,33 +1381,37 @@ def main():
 						
 						X = 1006; Y = 228
 						
-						CadenaError = ''
-						CadenaError2 = ''
-						
-						LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
-						
+						if NP != None:
+							
+							CadenaError = ''
+							CadenaError2 = ''
+							
+							LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
+						else:
+							Error = True
+							CadenaError = 'Selecciona Un Personaje'
 						#=====================================================================================
 						
 						# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
 						Y = 339
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True; Error = False
+						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True; Error = False
+						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True; Error = False
 						
 						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True; Error = False
+						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True; Error = False
+						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True; Error = False
 						
 						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True; Error = False
+						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True; Error = False
+						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True; Error = False
 						
 						Y += 60
-						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True
-						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True
-						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True
+						if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True; Error = False
+						elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True; Error = False
+						elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True; Error = False
 					
 						#=====================================================================================
 				
@@ -1724,9 +1732,9 @@ def main():
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, 6, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, Y, 'Montaña', Lisy, LisyPos7, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo7, 6, Objetos10, BtnIzq7, BtnDer7, 910, Y, 'Montaña', Lisy, LisyPos7, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, 6, TextInput7, Objetos10, BtnIzq7, BtnDer7, 910, Y, 'Montaña', Lisy, LisyPos7, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo7, 6, Objetos10, BtnIzq7, BtnDer7, 910, Y, 'Montaña', Lisy, LisyPos7, Fuentes)
 				
 					# Bloque 8:	============================================
 				
@@ -1735,9 +1743,9 @@ def main():
 					# Si El Valor Esta Repetido Con Sus Antecesores (Pared, Camino, Bosque, Lava, Agua, Arena, Montaña)
 					
 					# Dibuja La Asignación En Rojo Por Estar Repetido El Valor.
-					DibujarMiniaturaTextura(screen, 7, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, Y, 'Nieve', Lisy, LisyPos8, Fuentes, True)
+					DibujarMiniaturaTextura(screen, Costo8, 7, Objetos10, BtnIzq8, BtnDer8, 910, Y, 'Nieve', Lisy, LisyPos8, Fuentes, True)
 				
-				else: DibujarMiniaturaTextura(screen, 7, TextInput8, Objetos10, BtnIzq8, BtnDer8, 910, Y, 'Nieve', Lisy, LisyPos8, Fuentes)
+				else: DibujarMiniaturaTextura(screen, Costo8, 7, Objetos10, BtnIzq8, BtnDer8, 910, Y, 'Nieve', Lisy, LisyPos8, Fuentes)
 				
 			#==========================================================================================================================
 			
