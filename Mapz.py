@@ -1,5 +1,5 @@
 
-# Versión: 1.4.8
+# Versión: 1.4.9
 # Python:  3.5.0
 
 import pygame
@@ -84,7 +84,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 # Función Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
 def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
 	
-	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, DibujarInfo, InfoSelTemp, Error, CadenaError
+	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, DibujarInfo, InfoSelTemp, Error, CadenaError, DibujarInfoXY
 	
 	'''
 	# Función que dibuja el tablero
@@ -243,7 +243,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			
 			else:	# Se Elige El Punto De Inicio Y El Punto Destino Para El Personaje en el Mapa.
 				
-				if not Iniciar and SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
+				if not DibujarInfoXY and not Iniciar and SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
 					
 					if seleccion != SelTemp:
 						
@@ -940,6 +940,7 @@ Costos = {}				# Diccionario de los Costos de Cada Tipo de Terreno.
 CostoTotal = 0			# Suma Costos en cada Movimiento.
 Movimientos = 1
 NombrePersonaje = []
+DibujarInfoXY = False
 NP = None
 
 # Posiciones en La Lista (Lisy) con Los Números Ordenados Para Cada Tipo de Terreno.
@@ -959,7 +960,7 @@ Nieve	= 0
 
 def main():
 	
-	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados
+	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados, DibujarInfoXY
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NP
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve
@@ -967,6 +968,12 @@ def main():
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
 	POS  = (XPOS if XPOS > YPOS else YPOS)		# Obtenemos Cual de los 2 es Mayor, para Manipular mejor la Matriz más adelante.
+	
+	xD = 0
+	DibujarInfoXY = False
+	DibujarInfoX = 0
+	DibujarInfoY = 0
+	SelInfoTemp  = []
 	
 	Lisy = ['-1']		# Lista de Terrenos, -1 igual al Terreno Vacio
 	LisyPos1 = 0		# Para Terreno Tipo Pared
@@ -1225,9 +1232,10 @@ def main():
 				
 				if evento.key == pygame.K_ESCAPE: game_over = True		# Tecla ESC Cierra el Juego.
 				
-				#======================================================
+				#=======================================================
 				
 				if NP != None:
+					
 					TextInput1 = Costos[NombrePersonaje[NP]][0]
 					TextInput2 = Costos[NombrePersonaje[NP]][1]
 					TextInput3 = Costos[NombrePersonaje[NP]][2]
@@ -1321,11 +1329,29 @@ def main():
 						#~ FULL = False
 			
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
+			
 			elif evento.type == pygame.MOUSEBUTTONDOWN: #============================== Al Mantener Presionado Cualquier Botón del Mouse. ==============================
 				
 				# Si se Presiono el Clic Derecho del Mouse (Botón 3) y La Variable Global 'DibujarInfo' esta en True entonces se cambia a false.
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
-				if evento.button == 3 and DibujarInfo: DibujarInfo = False
+				if evento.button == 3:
+					
+					if Cargar and Iniciar:
+						if DibujarInfo: DibujarInfo = False
+					
+					if Cargar and not Iniciar and SelectEstados:
+						
+						xD = 0
+						
+						DibujarInfoXY = True
+						Pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
+						DibujarInfoX, DibujarInfoY = Pos[0], Pos[1]		# Posición X y Y del Mouse por separado, Coordenadas por Pixeles.
+						
+						SelInfoTemp = obtenerPosicionClic(XPOS, YPOS, Pos, dimension, puntoInicio, seleccion)		# Función Que crea una selección Temporal
+						
+						SelTemp = seleccion				# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
+						SelTemp = obtenerPosicionClic(XPOS, YPOS, Pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
+						
 				else:
 					# Si se Presionó cualquier otro Botón del Mouse...
 					pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
@@ -1608,6 +1634,35 @@ def main():
 		# Si Cargar es Igual a True entonces Dibujara El Mapa.
 		if Cargar: dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
 		
+		if Cargar and not Iniciar and DibujarInfoXY and SelectEstados and SelInfoTemp != ['P',16]:
+			
+			xD += 1
+			pygame.draw.rect(screen, COLOR['Gris Claro'], [DibujarInfoX, DibujarInfoY, 62, 35], 0)
+			
+			dibujarTexto(screen, 'Posición: ' + str(SelInfoTemp[0]) + ', ' + str(SelInfoTemp[1]), [DibujarInfoX+2, DibujarInfoY+1], Fuentes['Droid 10'], COLOR['Azul Claro'])
+			dibujarTexto(screen, 'Posición: ' + str(SelInfoTemp[0]) + ', ' + str(SelInfoTemp[1]), [DibujarInfoX+3, DibujarInfoY+2], Fuentes['Droid 10'], COLOR['Azul'])
+			
+			for val in VALORES:
+				if val[0] == SelInfoTemp:
+					
+					dibujarTexto(screen, 'Tipo: ' + str(val[2]), [DibujarInfoX+2, DibujarInfoY+11], Fuentes['Droid 10'], COLOR['Azul Claro'])
+					dibujarTexto(screen, 'Tipo: ' + str(val[2]), [DibujarInfoX+3, DibujarInfoY+12], Fuentes['Droid 10'], COLOR['Azul'])
+					
+					if val[3] == '':
+						dibujarTexto(screen, 'Costo: N/A', [DibujarInfoX+2, DibujarInfoY+21], Fuentes['Droid 10'], COLOR['Azul Claro'])
+						dibujarTexto(screen, 'Costo: N/A', [DibujarInfoX+3, DibujarInfoY+22], Fuentes['Droid 10'], COLOR['Azul'])
+					else:
+						dibujarTexto(screen, 'Costo: ' + str(val[3]), [DibujarInfoX+2, DibujarInfoY+21], Fuentes['Droid 10'], COLOR['Azul Claro'])
+						dibujarTexto(screen, 'Costo: ' + str(val[3]), [DibujarInfoX+3, DibujarInfoY+22], Fuentes['Droid 10'], COLOR['Azul'])
+					
+					break
+			
+			if xD == 30:	# Si ya Pasaron .5 Segundos (30 Frames) entonces dejara de mostrarse la información.
+				
+				DibujarInfoXY = False
+				xD = 0
+			
+		else: xD = 0
 		
 		
 		#===============================================================================================================================
