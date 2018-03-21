@@ -26,7 +26,7 @@ python -m pip install pygame
   * ___Observaciones:___
     * __En El Terreno Pared Debe Poder Modificar su Costo. _(Corregido el 05/03/2018 en v1.4.5)___
     * __Costos Con Máximo 2 Decimales. _(Corregido el 06/03/2018 en v1.4.6)___
-    * __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aún Antes De Comenzar El Juego. _(Corregido el 05/03/2018 en v1.4.9)___
+    * __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aún Antes De Comenzar El Juego. _(Corregido el 21/03/2018 en v1.4.9)___
 * __Parte 2: _23/04/2018 y 25/04/2018_.__
 * __Parte 3: _16/05/2018 y 21/05/2018_.__
 
