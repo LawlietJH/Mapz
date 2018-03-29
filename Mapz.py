@@ -1,5 +1,5 @@
 
-# Versión: 1.5.0
+# Versión: 1.5.1
 # Python:  3.5.0
 
 import pygame
@@ -1113,6 +1113,7 @@ def main():
 	SelTemp = ['P',16]			# Selección Temporal.
 	
 	pygame.init()				# Inicia El Juego.
+	pygame.mixer.init()			# Inicializa el Mesclador.
 	
 	screen = pygame.display.set_mode(DIMENCIONES)	# Objeto Que Crea La Ventana.
 	BGimg = load_image('img/fondo-negro.jpg')		# Carga el Fondo de la Ventana.
@@ -1216,6 +1217,10 @@ def main():
 	# Botón Seleccionar Personaje:
 	btnSelect1 = Boton("img/Botones/BotonAzul.png")
 	btnSelect2 = Boton("img/Botones/BotonPurpura.png")
+	
+	# Botón de Enmascaramiento True/False, On/Off:
+	# ~ btnON  = Boton("img/Botones/BtnOn.png")
+	# ~ btnOFF = Boton("img/Botones/BtnOff.png")
 	
 	# Botones Con Flechas Izquierda y Derecha Para Elección de Terrenos.
 	# flip() Invierte la Imágen en Espejo en el eje de las X.
@@ -1321,6 +1326,18 @@ def main():
 	Btn3Pressed = False
 	Btn4Pressed = False
 	
+	#===================================================================
+	
+	# Sonidos:
+	
+	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
+	Clic1 = pygame.mixer.Sound("Sonidos\Kwahmah-Click.wav")
+	# ~ Clic2 = pygame.mixer.Sound("Sonidos\Btn25.wav")
+	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
+	Fondo2 = pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav")
+	
+	Fondo1.play(-1)
+	# ~ pygame.mixer.music.play(-1)
 	#===================================================================
 	
 	# Inicio Del Juego:
@@ -1448,6 +1465,8 @@ def main():
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
 			
 			elif evento.type == pygame.MOUSEBUTTONDOWN: #============================== Al Mantener Presionado Cualquier Botón del Mouse. ==============================
+				
+				Clic1.play()
 				
 				# Si se Presiono el Clic Derecho del Mouse (Botón 3) y La Variable Global 'DibujarInfo' esta en True entonces se cambia a false.
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
@@ -1578,6 +1597,10 @@ def main():
 				
 				if Btn4Pressed: # Si Se Presionó el Botón 3 (Seleccionar Personaje).
 					
+					Fondo1.stop()
+					Fondo1.play(-1)
+					Fondo2.stop()
+					
 					Error = False
 					CadenaError = ''
 					
@@ -1630,6 +1653,11 @@ def main():
 					else:			# Si Se Selecciono Un Personaje, Se Iniciará.
 						
 						Iniciar = True	# Inicia El Juego.
+						
+						Fondo2.stop()
+						Fondo1.stop()
+						Fondo2.play(-1)
+						
 						seleccion = PuntoInicio
 						
 						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
@@ -1670,6 +1698,10 @@ def main():
 						CargarMapa = False				# Se Cancela el Cargar el Mapa.
 					
 					else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
+						
+						Fondo1.stop()
+						Fondo1.play(-1)
+						Fondo2.stop()
 						
 						SELECT = []			 	# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
 						SelectEstados = False	# Permite Saber Si se Permite Selecciona el Estado Inicial y Final.
