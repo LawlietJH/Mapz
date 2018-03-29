@@ -32,8 +32,8 @@ python -m pip install pygame
 
 - - -
 
-### Proyecto Parte 1: Finalizada.
- * __Versión 1.0:__
+### <span style="color:green;">Proyecto Parte 1: Finalizada.</span>
+ * <span style="color:blue;">__Versión 1.0:__</span>
    * __v1.0.0: _16/02/2018_, v1.0.2: _16/02/2018_, v1.0.4: _16/02/2018_, v1.0.6: _16/02/2018_, v1.0.8: _17/02/2018___
 
  * __Versión 1.1:__
@@ -54,4 +54,6 @@ python -m pip install pygame
 ### Proyecto Parte 2: Comenzada.
 
  * __Versión 1.5:__
+   
    * __v1.5.0: _28/03/2018_.__
+   
