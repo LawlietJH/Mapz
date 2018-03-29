@@ -1332,9 +1332,13 @@ def main():
 	
 	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
 	Clic1 = pygame.mixer.Sound("Sonidos\Kwahmah-Click.wav")
-	# ~ Clic2 = pygame.mixer.Sound("Sonidos\Btn25.wav")
+	ClicSet = pygame.mixer.Sound("Sonidos\Clic3.wav")
+	ClicUndo = pygame.mixer.Sound("Sonidos\Clic14.wav")
+	# ~ Victory = pygame.mixer.Sound("Sonidos\Gabrielaraujo Powerup Success.wav")
+	
 	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
 	Fondo2 = pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav")
+	Fondo3 = pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav")
 	
 	Fondo1.play(-1)
 	# ~ pygame.mixer.music.play(-1)
@@ -1381,6 +1385,8 @@ def main():
 				
 				if evento.key == pygame.K_BACKSPACE:
 					
+					ClicUndo.play()
+					
 					if   Costo1: TextInput1 = TextInput1[:-1]
 					elif Costo2: TextInput2 = TextInput2[:-1]
 					elif Costo3: TextInput3 = TextInput3[:-1]
@@ -1391,6 +1397,8 @@ def main():
 					elif Costo8: TextInput8 = TextInput8[:-1]
 					
 				elif evento.key == pygame.K_PERIOD:
+					
+					ClicSet.play()
 					
 					if Costo1:
 						if TextInput1 == '': TextInput1 += '0'
@@ -1425,16 +1433,16 @@ def main():
 				C5, C6, C7, C8 = Costo5, Costo6, Costo7, Costo8 
 				
 				# Se Agrega a la Cadena Correspondiente del TextInput Seleccionado, el Número Presionado.
-				if   evento.key == pygame.K_0: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('0', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_1: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('1', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_2: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('2', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_3: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('3', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_4: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('4', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_5: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('5', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_6: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('6', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_7: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('7', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_8: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('8', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
-				elif evento.key == pygame.K_9: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('9', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8)
+				if   evento.key == pygame.K_0: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('0', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_1: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('1', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_2: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('2', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_3: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('3', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_4: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('4', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_5: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('5', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_6: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('6', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_7: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('7', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_8: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('8', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_9: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('9', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
 				
 				# Pasamos El Valor Correspondiente A Su Variable Oroginal 
 				TextInput1, TextInput2, TextInput3, TextInput4 = TI1, TI2, TI3, TI4
@@ -2387,6 +2395,8 @@ def main():
 				
 				dibujarTexto(screen, 'Mapa Finalizado!', [16, 449], Fuentes['Droid 30'], COLOR['Negro'])
 				dibujarTexto(screen, 'Mapa Finalizado!', [17, 450], Fuentes['Droid 30'], COLOR['Rojo'])
+				
+				# ~ Victory.play()
 			
 		#===================================================================================================
 		
