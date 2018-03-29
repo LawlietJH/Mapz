@@ -1,5 +1,5 @@
 
-# Versión: 1.4.9
+# Versión: 1.5.0
 # Python:  3.5.0
 
 import pygame
@@ -74,7 +74,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 	def flip(self, TX=True, TY=False):	# TX, Gira La Imagen De Izquierda a Derecha o viceversa, en espejo. TY Giraria de Arriba a Abajo o viceversa.
 		
 		self.image = pygame.transform.flip(self.image, TX, TY)
-	
+
 
 #===================================================================================================
 #===================================================================================================
@@ -84,7 +84,8 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 # Función Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
 def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
 	
-	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, DibujarInfo, InfoSelTemp, Error, CadenaError, DibujarInfoXY
+	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, Mask
+	global DibujarInfo, InfoSelTemp, Error, CadenaError, DibujarInfoXY
 	
 	'''
 	# Función que dibuja el tablero
@@ -120,77 +121,141 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			if Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				#~ VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Pesos[Pared]))		# Pendiente!!! Agregar Lista de Pesos.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Costos[NombrePersonaje[NP]][0]))							# Pendiente!!! Agregar Lista de Pesos.
+				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Costos[NombrePersonaje[NP]][0]))
 				
-				Objetos['Pared'].resize(DistX, DistY)
-				bloque = Objetos['Pared']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+					
+					Objetos['Pared'].resize(DistX, DistY)
+					bloque = Objetos['Pared']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Pared'].resize(DistX, DistY)
+					bloque = Objetos['Pared']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Camino]:	# Dibuja el Bloque de Camino.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Camino', Costos[NombrePersonaje[NP]][1]))
 				
-				Objetos['Camino'].resize(DistX, DistY)
-				bloque = Objetos['Camino']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+					
+					Objetos['Camino'].resize(DistX, DistY)
+					bloque = Objetos['Camino']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Camino'].resize(DistX, DistY)
+					bloque = Objetos['Camino']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Bosque]:	# Dibuja el Bloque de Bosque.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Bosque], 'Bosque', Costos[NombrePersonaje[NP]][2]))
 				
-				Objetos['Bosque'].resize(DistX, DistY)
-				bloque = Objetos['Bosque']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+					
+					Objetos['Bosque'].resize(DistX, DistY)
+					bloque = Objetos['Bosque']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Bosque'].resize(DistX, DistY)
+					bloque = Objetos['Bosque']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Lava]:	# Dibuja el Bloque de Lava.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Lava], 'Lava', Costos[NombrePersonaje[NP]][3]))
 				
-				Objetos['Lava'].resize(DistX, DistY)
-				bloque = Objetos['Lava']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+					
+					Objetos['Lava'].resize(DistX, DistY)
+					bloque = Objetos['Lava']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Lava'].resize(DistX, DistY)
+					bloque = Objetos['Lava']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Agua]:	# Dibuja el Bloque de Agua.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Agua], 'Agua', Costos[NombrePersonaje[NP]][4]))
 				
-				Objetos['Agua'].resize(DistX, DistY)
-				bloque = Objetos['Agua']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+						
+					Objetos['Agua'].resize(DistX, DistY)
+					bloque = Objetos['Agua']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Agua'].resize(DistX, DistY)
+					bloque = Objetos['Agua']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Arena]:	# Dibuja el Bloque de Arena.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Arena], 'Arena', Costos[NombrePersonaje[NP]][5]))
 				
-				Objetos['Arena'].resize(DistX, DistY)
-				bloque = Objetos['Arena']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+						
+					Objetos['Arena'].resize(DistX, DistY)
+					bloque = Objetos['Arena']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Arena'].resize(DistX, DistY)
+					bloque = Objetos['Arena']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Montaña]:	# Dibuja el Bloque de Montaña.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Montaña', Costos[NombrePersonaje[NP]][6]))
 				
-				Objetos['Montaña'].resize(DistX, DistY)
-				bloque = Objetos['Montaña']
-				screen.blit(bloque.image, (x,y))
-				
+				if not Iniciar:
+					
+					Objetos['Montaña'].resize(DistX, DistY)
+					bloque = Objetos['Montaña']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Montaña'].resize(DistX, DistY)
+					bloque = Objetos['Montaña']
+					screen.blit(bloque.image, (x,y))
+					
 			elif Matriz[j][i] == Lisy[Nieve]:	# Dibuja el Bloque de Nieve.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
 				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Nieve', Costos[NombrePersonaje[NP]][7]))
 				
-				Objetos['Nieve'].resize(DistX, DistY)
-				bloque = Objetos['Nieve']
-				screen.blit(bloque.image, (x,y))
+				if not Iniciar:
+					
+					Objetos['Nieve'].resize(DistX, DistY)
+					bloque = Objetos['Nieve']
+					screen.blit(bloque.image, (x,y))
+					
+				elif Mask[j][i] == True:
+					
+					Objetos['Nieve'].resize(DistX, DistY)
+					bloque = Objetos['Nieve']
+					screen.blit(bloque.image, (x,y))
 			
-						
+			#===========================================================
+			
 			# Dibuja Temporalmente La Selección con el Clic en el Mapa.
 			if SelTemp[0] == LETRAS[i] and j == SelTemp[1] - 1:
 				
@@ -200,11 +265,23 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					
 					DibujarInfo = True
 					InfoSelTemp = SelTemp
+					
+			#===========================================================
 			
 			# Imprime Letra I en Estdo Inicial e Imprimir Letra F Para el Estado Final.
-			if   [LETRAS[i],j+1] == PuntoInicio:  dibujarTexto(screen, 'I', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
-			elif [LETRAS[i],j+1] == PuntoDestino: dibujarTexto(screen, 'F', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
-					
+			if [LETRAS[i],j+1] == PuntoInicio:
+				
+				dibujarTexto(screen, 'I', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
+				
+				MaskTrue(i, j, YPOS, XPOS)
+				
+			elif [LETRAS[i],j+1] == PuntoDestino:
+				
+				dibujarTexto(screen, 'F', [x + (DistX-20), y + (DistY-30)], Fuentes['Droid 30'], COLOR['Rojo'])
+				Mask[j][i] = True
+				
+			#===========================================================
+			
 			# Si se Inicio el Juego Cargará el personaje en la posición de la seleccion.
 			if PuntoInicio != None and Iniciar:
 				
@@ -254,8 +331,12 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 							if PuntoInicio != None and PuntoDestino != None:
 								PuntoInicio = SelTemp
 								PuntoDestino = None
-								
+						
+						Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia la Matriz de Enmascaramiento del Mapa.
+						
 						seleccion = SelTemp
+			
+			#===========================================================
 			
 			# Si El Terreno Para Estado Inicial Elegido es igual a No Aplica, Manda Error Y No Selecciona ese Estado Inicial.
 			for Valores in VALORES:
@@ -277,6 +358,8 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 						CadenaError = 'Costo N/A Para Estado Final'
 						
 						break
+			
+			#===========================================================
 			
 			# Dibuja Los Numeros En Y
 			if i == 0:
@@ -449,13 +532,17 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 	x, y = PosLetra, Actual[1]
 	
 	if Dir == 'U':
+		
 		if   Actual[0] in LETRAS and Actual[1] == 1: pass
 		elif Actual[0] in LETRAS and Actual[1] in [x for x in range(2,YPOS+1)]:
+			
 			y -= 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[3] == '': pass
 					else:
+						
+						MaskTrue(x, y-1, YPOS, XPOS)
 						
 						CostoTotal += float(z[3])
 						
@@ -478,13 +565,17 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 						break
 		
 	elif Dir == 'D':
+		
 		if   Actual[0] in LETRAS and Actual[1] == YPOS: pass
 		elif Actual[0] in LETRAS and Actual[1] in [x for x in range(1,YPOS)]:
+			
 			y += 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[3] == '': pass
 					else:
+						
+						MaskTrue(x, y-1, YPOS, XPOS)
 						
 						CostoTotal += float(z[3])
 						
@@ -515,11 +606,14 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			
 		if   Actual[0] == LETRAS[0]  and Actual[1] in [x for x in range(1,YPOS+1)]:	pass
 		elif Actual[0] in LETRAS[1:] and Actual[1] in [x for x in range(1,YPOS+1)]:
+			
 			x -= 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[3] == '': pass
 					else:
+						
+						MaskTrue(x, y-1, YPOS, XPOS)
 						
 						CostoTotal += float(z[3])
 						
@@ -550,11 +644,14 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 			
 		if   Actual[0] == LETRAS[XPOS-1]   and Actual[1] in [x for x in range(1,YPOS+1)]: pass
 		elif Actual[0] in LETRAS[0:XPOS-1] and Actual[1] in [x for x in range(1,YPOS+1)]:
+			
 			x += 1
 			for z in VALORES:
 				if z[0] == [LETRAS[x],y]:
 					if z[3] == '': pass
 					else:
+						
+						MaskTrue(x, y-1, YPOS, XPOS)
 						
 						CostoTotal += float(z[3])
 						
@@ -577,6 +674,20 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 						break
 		
 	return Actual
+
+
+
+def MaskTrue(X, Y, YPOS, XPOS):
+	
+	global Mask
+	
+	Mask[Y][X] = True
+	if Y > 0:		Mask[Y-1][X] = True
+	if Y < YPOS-1:	Mask[Y+1][X] = True
+	if X > 0:		Mask[Y][X-1] = True
+	if X < XPOS-1:	Mask[Y][X+1] = True
+
+
 
 #===================================================================================================
 
@@ -908,10 +1019,14 @@ def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, 
 
 # Constantes Globales: =================================================
 
-COLOR  = {'Blanco':(255, 255, 255), 'Negro':(0,   0,   0),  'Gris Claro':(216, 216, 216), 'Rojo':(255, 0,   0),
-		  'Verde':(4,   180, 4),    'Azul':(20,  80,  240), 'Azul Claro':(40,  210, 250), 'Gris':(189, 189, 189),
-		  'Fondo':(24,  25,  30),   'Naranja':(255,120,0),  'Seleccion':(220, 200, 0),    'Amarillo':(255,255, 0),
-		  'Morado':(76, 11, 95),    'Purpura':(56, 11, 97), 'Verde Claro':(0,   255, 0),  'Rojo Claro':(255, 50, 50)
+COLOR  = {'Blanco':		(255, 255, 255),		'Negro':		(0,     0,   0),
+		  'Gris':		(189, 189, 189),		'Gris Claro':	(216, 216, 216),
+		  'Rojo':		(255,   0,   0),		'Rojo Claro':	(255,  50,  50),
+		  'Verde':		(  4, 180,   4),		'Verde Claro':	(  0, 255,   0),
+		  'Azul':		( 20,  80, 240),		'Azul Claro':	( 40, 210, 250),
+		  'Amarillo':	(255, 255,   0),		'Naranja':		(255, 120,   0),
+		  'Morado':		( 76,  11,  95),		'Purpura':		( 56,  11,  97),
+		  'Fondo':		( 24,  25,  30),		'Seleccion':	(220, 200,   0)
 		 }	# Diccionario de Colores.
 
 DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
@@ -954,6 +1069,8 @@ Arena   = 0
 Montaña = 0
 Nieve	= 0
 
+Mask = []
+
 #===================================================================================================
 #============================================== Main ===============================================
 #===================================================================================================
@@ -963,7 +1080,7 @@ def main():
 	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados, DibujarInfoXY
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NP
-	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve
+	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -1459,7 +1576,7 @@ def main():
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
 				
-				if Btn4Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
+				if Btn4Pressed: # Si Se Presionó el Botón 3 (Seleccionar Personaje).
 					
 					Error = False
 					CadenaError = ''
@@ -1468,6 +1585,7 @@ def main():
 					CostoTotal = 0
 					
 					SELECT = []
+					Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia el Enmascaramiento del Mapa.
 					
 					DibujarInfo = False
 					SelectPerson = True
@@ -1485,6 +1603,8 @@ def main():
 					seleccion = PuntoInicio
 					SELECT = []
 					SELECT.append((seleccion, [Movimientos]))
+					
+					Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia el Enmascaramiento del Mapa.
 					
 					for val in VALORES:
 						if val[0] == PuntoInicio: CostoTotal += float(val[3])
@@ -1570,7 +1690,7 @@ def main():
 						bloque9 = Bloque("img/Texturas/Nieve.jpg")		# Objeto Nieve.
 						
 						# Se Pasan los valores Temporales a los Originales.
-						Matrixy = xMatrixy			
+						Matrixy = xMatrixy
 						Lisy = ['-1']				# Se Reinicia la Lista con el Primer Elemento, el -1 para la Selección de Terrenos.
 						Lisy = Lisy + xLisy			# Se le añaden todos los Valores.
 						
@@ -1590,11 +1710,13 @@ def main():
 						YPOS = xYPOS		# Valor de las Numeros.
 						POS = xPOS			# Obtenemos Cual es el Mas grande de Los 2.
 						
+						Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia el Enmascaramiento del Mapa.
+						
 						puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)	# Se Indica El Punto de Inicio Para Dibujar La Matriz.
 						
 						# Se Reinicia el Diccionario Objetos con los Nuevos Objetos Generados.
-						Objetos = {'Pared':bloque1, 'Camino':bloque3, 'Bosque':bloque4, 'Lava':bloque5, 
-								   'Agua':bloque6, 'Arena':bloque7, 'Montaña':bloque8,  'Nieve':bloque9}
+						Objetos = {'Pared':bloque1,	'Camino':bloque3,	'Bosque': bloque4,	'Lava': bloque5,
+								   'Agua': bloque6,	'Arena': bloque7,	'Montaña':bloque8,	'Nieve':bloque9}
 						
 						Movimientos  = 0
 						CostoTotal	 = 0
