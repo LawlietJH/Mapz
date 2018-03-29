@@ -1,7 +1,7 @@
 # Mapz
 
 ## En Python: 3.5.0
-## Versión Actual: 1.4.9
+## Versión Actual: 1.5.0
 ## Dependencias: Pygame.
 
 - - -
@@ -51,4 +51,8 @@ python -m pip install pygame
    * __v1.4.1: _03/03/2018_, v1.4.2: _04/03/2018_, v1.4.3: _04/03/2018_, v1.4.4: _04/03/2018_, v1.4.5: _05/03/2018___
    * __v1.4.6: _06/03/2018_, v1.4.7: _07/03/2018_, v1.4.8: _07/03/2018_, v1.4.9: _21/03/2018_.__
 
-### Proyecto Parte 2: No Comenzada.
+### Proyecto Parte 2: Comenzada.
+
+ * __Versión 1.5:__
+   * __v1.5.0: _28/03/2018_.__
+   
