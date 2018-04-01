@@ -5,6 +5,7 @@
 import pygame
 from pygame.locals import *
 import explorer
+import random
 import sys, os
 
 #===================================================================================================
@@ -1328,17 +1329,27 @@ def main():
 	
 	#===================================================================
 	
+	Victory = False
 	# Sonidos:
 	
 	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
 	Clic1 = pygame.mixer.Sound("Sonidos\Kwahmah-Click.wav")
+	Clic2 = pygame.mixer.Sound("Sonidos\Clic15.wav")
 	ClicSet = pygame.mixer.Sound("Sonidos\Clic3.wav")
 	ClicUndo = pygame.mixer.Sound("Sonidos\Clic14.wav")
-	# ~ Victory = pygame.mixer.Sound("Sonidos\Gabrielaraujo Powerup Success.wav")
+	
+	Sucess = pygame.mixer.Sound("Sonidos\Level Up.wav")
+	Victoria = pygame.mixer.Sound("Sonidos\Victoria.wav")
+	
+	Sucess.set_volume(.5)
+	Victoria.set_volume(.5)
+	
+	Fondos = [pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
+			  pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav"),
+			  pygame.mixer.Sound("Sonidos\Errinerung - Debussy.wav")]
 	
 	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
-	Fondo2 = pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav")
-	Fondo3 = pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav")
+	Fondo2 = Fondos[random.randint(0,2)]
 	
 	Fondo1.play(-1)
 	# ~ pygame.mixer.music.play(-1)
@@ -1474,11 +1485,11 @@ def main():
 			
 			elif evento.type == pygame.MOUSEBUTTONDOWN: #============================== Al Mantener Presionado Cualquier Botón del Mouse. ==============================
 				
-				Clic1.play()
-				
 				# Si se Presiono el Clic Derecho del Mouse (Botón 3) y La Variable Global 'DibujarInfo' esta en True entonces se cambia a false.
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
 				if evento.button == 3:
+					
+					Clic2.play()		# Reproduce Sonido Del Clic Derecho.
 					
 					if Cargar and Iniciar:
 						if DibujarInfo: DibujarInfo = False
@@ -1497,6 +1508,9 @@ def main():
 						SelTemp = obtenerPosicionClic(XPOS, YPOS, Pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
 						
 				else:
+					
+					Clic1.play()		# Reproduce Sonido Del Clic Izquierdo.
+					
 					# Si se Presionó cualquier otro Botón del Mouse...
 					pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
 					
@@ -1625,6 +1639,11 @@ def main():
 					
 				if Btn3Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
 					
+					Fondo2.stop()
+					Fondo2 = Fondos[random.randint(0,2)]
+					Fondo2.play(-1)
+					
+					Victory = True
 					Error = False
 					CadenaError = ''
 					
@@ -1661,8 +1680,10 @@ def main():
 					else:			# Si Se Selecciono Un Personaje, Se Iniciará.
 						
 						Iniciar = True	# Inicia El Juego.
+						Victory = True
 						
 						Fondo2.stop()
+						Fondo2 = Fondos[random.randint(0,2)]
 						Fondo1.stop()
 						Fondo2.play(-1)
 						
@@ -1691,7 +1712,7 @@ def main():
 					
 					CadenaError2 = 'Bloques Aún No Asignados.'
 					
-				elif CargarMapa:	# Si el Botón 1 Fue Seleccionado y Hay Personaje Seleccionado.
+				elif CargarMapa:	# Si el Botón 1 Fue Seleccionado.
 					
 					xMatrixy, xLisy, xXPOS, xYPOS, xPOS = TODOArchivo()		# Obtenemos Valores desde la Función Temporalmente.
 					
@@ -1706,6 +1727,8 @@ def main():
 						CargarMapa = False				# Se Cancela el Cargar el Mapa.
 					
 					else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
+						
+						Sucess.play()
 						
 						Fondo1.stop()
 						Fondo1.play(-1)
@@ -2396,7 +2419,10 @@ def main():
 				dibujarTexto(screen, 'Mapa Finalizado!', [16, 449], Fuentes['Droid 30'], COLOR['Negro'])
 				dibujarTexto(screen, 'Mapa Finalizado!', [17, 450], Fuentes['Droid 30'], COLOR['Rojo'])
 				
-				# ~ Victory.play()
+				if Victory:
+					
+					Victoria.play()
+					Victory = False
 			
 		#===================================================================================================
 		
