@@ -1,7 +1,8 @@
 
-# Versión: 1.5.1
+# Versión: 1.5.2
 # Python:  3.5.0
 
+import Arbol
 import pygame
 from pygame.locals import *
 import explorer
@@ -524,7 +525,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 
 #===================================================================================================
 
-def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
+def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 	
 	global SELECT, Movimientos, CostoTotal
 	
@@ -548,6 +549,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 						CostoTotal += float(z[3])
 						
 						Actual = [Actual[0],Actual[1]-1]
+						
+						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
 						
 						Add = False
 						Movimientos += 1
@@ -581,6 +584,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 						CostoTotal += float(z[3])
 						
 						Actual = [Actual[0],Actual[1]+1]
+						
+						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
 						
 						Add = False
 						Movimientos += 1
@@ -620,6 +625,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 						
 						Actual = [LETRAS[PosLetra-1],Actual[1]]
 						
+						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
+						
 						Add = False
 						Movimientos += 1
 						
@@ -658,6 +665,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje):
 						
 						Actual = [LETRAS[PosLetra+1],Actual[1]]
 						
+						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
+						
 						Add = False
 						Movimientos += 1
 						
@@ -683,10 +692,21 @@ def MaskTrue(X, Y, YPOS, XPOS):
 	global Mask
 	
 	Mask[Y][X] = True
-	if Y > 0:		Mask[Y-1][X] = True
+	if Y > 0:		Mask[Y-1][X] = True	
 	if Y < YPOS-1:	Mask[Y+1][X] = True
 	if X > 0:		Mask[Y][X-1] = True
 	if X < XPOS-1:	Mask[Y][X+1] = True
+
+
+
+def ArbolTrue(ArbolRaiz, Actual, X, Y, YPOS, XPOS):
+	
+	# ~ print(str([LETRAS[X], Y-1]), str(Actual))
+	
+	if Y > 1:		Arbol.Agregar(ArbolRaiz, str([LETRAS[X], Y-1]), str(Actual))
+	if X < XPOS-1:	Arbol.Agregar(ArbolRaiz, str([LETRAS[X+1], Y]), str(Actual))
+	if Y < YPOS:	Arbol.Agregar(ArbolRaiz, str([LETRAS[X], Y+1]), str(Actual))
+	if X > 0:		Arbol.Agregar(ArbolRaiz, str([LETRAS[X-1], Y]), str(Actual))
 
 
 
@@ -1329,6 +1349,8 @@ def main():
 	
 	#===================================================================
 	
+	ArbolRaiz = None
+	
 	Victory = False
 	# Sonidos:
 	
@@ -1351,7 +1373,7 @@ def main():
 	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
 	Fondo2 = Fondos[random.randint(0,2)]
 	
-	Fondo1.play(-1)
+	# ~ Fondo1.play(-1)
 	# ~ pygame.mixer.music.play(-1)
 	#===================================================================
 	
@@ -1374,11 +1396,13 @@ def main():
 				# Si Ya Fue Cargado El Tablero, Se Presionó El Botón 'Comenzar' y El Estado Inicial y Final Son Distintos, Podra Moverse El Personaje.
 				if Cargar and Iniciar and seleccion != PuntoDestino:
 					
-					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje)	# Tecla Izquierda. Mueve Personaje.
-					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje)	# Tecla Derecha. Mueve Personaje.
-					elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje)	# Tecla Arriba. Mueve Personaje.
-					elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje)	# Tecla Abajo. Mueve Personaje.
-				
+					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje, ArbolRaiz)	# Tecla Izquierda. Mueve Personaje.
+					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje, ArbolRaiz)	# Tecla Derecha. Mueve Personaje.
+					elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje, ArbolRaiz)	# Tecla Arriba. Mueve Personaje.
+					elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
+					
+					Arbol.ImprimirArbol(ArbolRaiz)
+					
 				if evento.key == pygame.K_ESCAPE: game_over = True		# Tecla ESC Cierra el Juego.
 				
 				#=======================================================
@@ -1396,7 +1420,7 @@ def main():
 				
 				if evento.key == pygame.K_BACKSPACE:
 					
-					ClicUndo.play()
+					# ~ ClicUndo.play()
 					
 					if   Costo1: TextInput1 = TextInput1[:-1]
 					elif Costo2: TextInput2 = TextInput2[:-1]
@@ -1409,7 +1433,7 @@ def main():
 					
 				elif evento.key == pygame.K_PERIOD:
 					
-					ClicSet.play()
+					# ~ ClicSet.play()
 					
 					if Costo1:
 						if TextInput1 == '': TextInput1 += '0'
@@ -1489,7 +1513,7 @@ def main():
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
 				if evento.button == 3:
 					
-					Clic2.play()		# Reproduce Sonido Del Clic Derecho.
+					# ~ Clic2.play()		# Reproduce Sonido Del Clic Derecho.
 					
 					if Cargar and Iniciar:
 						if DibujarInfo: DibujarInfo = False
@@ -1509,7 +1533,7 @@ def main():
 						
 				else:
 					
-					Clic1.play()		# Reproduce Sonido Del Clic Izquierdo.
+					# ~ Clic1.play()		# Reproduce Sonido Del Clic Izquierdo.
 					
 					# Si se Presionó cualquier otro Botón del Mouse...
 					pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
@@ -1620,7 +1644,7 @@ def main():
 				if Btn4Pressed: # Si Se Presionó el Botón 3 (Seleccionar Personaje).
 					
 					Fondo1.stop()
-					Fondo1.play(-1)
+					# ~ Fondo1.play(-1)
 					Fondo2.stop()
 					
 					Error = False
@@ -1641,7 +1665,7 @@ def main():
 					
 					Fondo2.stop()
 					Fondo2 = Fondos[random.randint(0,2)]
-					Fondo2.play(-1)
+					# ~ Fondo2.play(-1)
 					
 					Victory = True
 					Error = False
@@ -1651,6 +1675,13 @@ def main():
 					CostoTotal = 0
 					
 					seleccion = PuntoInicio
+					
+					ArbolRaiz = Arbol.Raiz(str(seleccion))
+					PosLetra = LETRAS.index(seleccion[0])
+					x, y = PosLetra, seleccion[1]
+					ArbolTrue(ArbolRaiz, seleccion, x, y, YPOS, XPOS)
+					Arbol.ImprimirArbol(ArbolRaiz)
+					
 					SELECT = []
 					SELECT.append((seleccion, [Movimientos]))
 					
@@ -1685,9 +1716,15 @@ def main():
 						Fondo2.stop()
 						Fondo2 = Fondos[random.randint(0,2)]
 						Fondo1.stop()
-						Fondo2.play(-1)
+						# ~ Fondo2.play(-1)
 						
 						seleccion = PuntoInicio
+						
+						ArbolRaiz = Arbol.Raiz(str(seleccion))
+						PosLetra = LETRAS.index(seleccion[0])
+						x, y = PosLetra, seleccion[1]
+						ArbolTrue(ArbolRaiz, seleccion, x, y, YPOS, XPOS)
+						Arbol.ImprimirArbol(ArbolRaiz)
 						
 						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
 																				  # Pasandole La Ruta de la Imagen Que se encuentra en el Diccionario (RutaPersonaje),
@@ -1728,10 +1765,10 @@ def main():
 					
 					else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
 						
-						Sucess.play()
+						# ~ Sucess.play()
 						
 						Fondo1.stop()
-						Fondo1.play(-1)
+						# ~ Fondo1.play(-1)
 						Fondo2.stop()
 						
 						SELECT = []			 	# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
@@ -2421,7 +2458,7 @@ def main():
 				
 				if Victory:
 					
-					Victoria.play()
+					# ~ Victoria.play()
 					Victory = False
 			
 		#===================================================================================================
