@@ -1375,9 +1375,13 @@ def main():
 	Sucess.set_volume(.3)
 	Victoria.set_volume(.3)
 	
-	Fondos = [pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
+	Fondos = [
+			  pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
 			  pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav"),
-			  pygame.mixer.Sound("Sonidos\Errinerung - Debussy.wav")]
+			  pygame.mixer.Sound("Sonidos\Errinerung - Debussy.wav"),
+			  # ~ pygame.mixer.Sound("Sonidos\Tim-Kahn - Cedellia.wav"),
+			  pygame.mixer.Sound("Sonidos\Tim-Kahn - Sigj.wav")
+			 ]
 	
 	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
 	Fondo2 = Fondos[random.randint(0,2)]
@@ -1698,7 +1702,7 @@ def main():
 				if Btn3Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
 					
 					Fondo2.stop()
-					Fondo2 = Fondos[random.randint(0,2)]
+					Fondo2 = Fondos[random.randint(0,len(Fondos)-1)]
 					Fondo2.play(-1)
 					
 					Victory = True
@@ -1748,7 +1752,7 @@ def main():
 						Victory = True
 						
 						Fondo2.stop()
-						Fondo2 = Fondos[random.randint(0,2)]
+						Fondo2 = Fondos[random.randint(0,len(Fondos)-1)]
 						Fondo1.stop()
 						Fondo2.play(-1)
 						
