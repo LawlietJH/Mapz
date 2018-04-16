@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.5.4
+# Versión: 1.5.5
 
 import Arbol
 import pygame
@@ -702,14 +702,22 @@ def MaskTrue(X, Y, YPOS, XPOS):
 
 
 
-def ArbolTrue(ArbolRaiz, Actual, X, Y, YPOS, XPOS):
+def ArbolTrue(ArbolRaiz, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda. 
 	
-	# ~ print(str([LETRAS[X], Y-1]), str(Actual))
+	NoRepetir = True	# Sin Repetir Los Nodos.
+	AlFinal = True		# Si Se Repiten Nodos, Agrega Hasta El Padre Más Alejado Correspondiente, Si es False, Agrega al Padre Más Próximo Correspondiente.
 	
-	if Y > 1:		Arbol.Agregar(ArbolRaiz, str([LETRAS[X], Y-1]), str(Actual))
-	if X < XPOS-1:	Arbol.Agregar(ArbolRaiz, str([LETRAS[X+1], Y]), str(Actual))
-	if Y < YPOS:	Arbol.Agregar(ArbolRaiz, str([LETRAS[X], Y+1]), str(Actual))
-	if X > 0:		Arbol.Agregar(ArbolRaiz, str([LETRAS[X-1], Y]), str(Actual))
+	Up    = [LETRAS[X], Y-1]
+	Right = [LETRAS[X+1], Y]
+	Down  = [LETRAS[X], Y+1]
+	Left  = [LETRAS[X-1], Y]
+	
+	Lista = [Up, Right, Down, Left]
+	
+	if Y > 1:		Arbol.Agregar(ArbolRaiz, str(Lista[Orden[0]]), str(Actual), NoRepetir, AlFinal)
+	if X < XPOS-1:	Arbol.Agregar(ArbolRaiz, str(Lista[Orden[1]]), str(Actual), NoRepetir, AlFinal)
+	if Y < YPOS:	Arbol.Agregar(ArbolRaiz, str(Lista[Orden[2]]), str(Actual), NoRepetir, AlFinal)
+	if X > 0:		Arbol.Agregar(ArbolRaiz, str(Lista[Orden[3]]), str(Actual), NoRepetir, AlFinal)
 
 
 
