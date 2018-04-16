@@ -1,5 +1,5 @@
 
-# Versión: 1.5.2
+# Versión: 1.5.3
 # Python:  3.5.0
 
 import Arbol
@@ -1050,7 +1050,7 @@ COLOR  = {'Blanco':		(255, 255, 255),		'Negro':		(0,     0,   0),
 		  'Fondo':		( 24,  25,  30),		'Seleccion':	(220, 200,   0)
 		 }	# Diccionario de Colores.
 
-DIMENCIONES = (1120, 600)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
+DIMENCIONES = (1120, 605)		# Tamaño de La Ventana, Ancho (1120) y Alto (600).
 LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']	# Letras Para La Matriz.
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
@@ -1189,6 +1189,7 @@ def main():
 			   'Droid 30':pygame.font.Font("fuentes/DroidSans.ttf", 30),
 			   'Droid 25':pygame.font.Font("fuentes/DroidSans.ttf", 25),
 			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
+			   'Droid 18':pygame.font.Font("fuentes/DroidSans.ttf", 18),
 			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
 			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10),
 			   'Droid 8': pygame.font.Font("fuentes/DroidSans.ttf", 8),
@@ -1349,9 +1350,6 @@ def main():
 	
 	#===================================================================
 	
-	ArbolRaiz = None
-	
-	Victory = False
 	# Sonidos:
 	
 	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
@@ -1363,8 +1361,8 @@ def main():
 	Sucess = pygame.mixer.Sound("Sonidos\Level Up.wav")
 	Victoria = pygame.mixer.Sound("Sonidos\Victoria.wav")
 	
-	Sucess.set_volume(.5)
-	Victoria.set_volume(.5)
+	Sucess.set_volume(.3)
+	Victoria.set_volume(.3)
 	
 	Fondos = [pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
 			  pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav"),
@@ -1373,8 +1371,20 @@ def main():
 	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
 	Fondo2 = Fondos[random.randint(0,2)]
 	
-	# ~ Fondo1.play(-1)
+	#===================================================================
+	
+	Victory = False
+	ArbolRaiz = None
+	
+	BtnMutePressed = False
+	
+	btnON  = Boton("img/Botones/BtnOn.png")
+	btnOFF = Boton("img/Botones/BtnOff.png")
+	
+	Fondo1.play(-1)
+	
 	# ~ pygame.mixer.music.play(-1)
+	
 	#===================================================================
 	
 	# Inicio Del Juego:
@@ -1420,7 +1430,7 @@ def main():
 				
 				if evento.key == pygame.K_BACKSPACE:
 					
-					# ~ ClicUndo.play()
+					ClicUndo.play()
 					
 					if   Costo1: TextInput1 = TextInput1[:-1]
 					elif Costo2: TextInput2 = TextInput2[:-1]
@@ -1433,7 +1443,7 @@ def main():
 					
 				elif evento.key == pygame.K_PERIOD:
 					
-					# ~ ClicSet.play()
+					ClicSet.play()
 					
 					if Costo1:
 						if TextInput1 == '': TextInput1 += '0'
@@ -1513,7 +1523,7 @@ def main():
 				# Dejara de mostrar la Información del Bloque Seleccionado con el Mouse.
 				if evento.button == 3:
 					
-					# ~ Clic2.play()		# Reproduce Sonido Del Clic Derecho.
+					Clic2.play()		# Reproduce Sonido Del Clic Derecho.
 					
 					if Cargar and Iniciar:
 						if DibujarInfo: DibujarInfo = False
@@ -1533,7 +1543,7 @@ def main():
 						
 				else:
 					
-					# ~ Clic1.play()		# Reproduce Sonido Del Clic Izquierdo.
+					Clic1.play()		# Reproduce Sonido Del Clic Izquierdo.
 					
 					# Si se Presionó cualquier otro Botón del Mouse...
 					pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
@@ -1638,13 +1648,20 @@ def main():
 							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True; Error = False
 					
 						#=====================================================================================
+					
+					if BtnMutePressed:
+						if (xr >= 65) and (xr <= 105) and (yr >= 582) and (yr <= 602): BtnMutePressed = False
+					else:
+						if (xr >= 60) and (xr <= 110) and (yr >= 582) and (yr <= 602): BtnMutePressed = True
+					
+						#=====================================================================================
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
 				
 				if Btn4Pressed: # Si Se Presionó el Botón 3 (Seleccionar Personaje).
 					
 					Fondo1.stop()
-					# ~ Fondo1.play(-1)
+					Fondo1.play(-1)
 					Fondo2.stop()
 					
 					Error = False
@@ -1665,7 +1682,7 @@ def main():
 					
 					Fondo2.stop()
 					Fondo2 = Fondos[random.randint(0,2)]
-					# ~ Fondo2.play(-1)
+					Fondo2.play(-1)
 					
 					Victory = True
 					Error = False
@@ -1716,7 +1733,7 @@ def main():
 						Fondo2.stop()
 						Fondo2 = Fondos[random.randint(0,2)]
 						Fondo1.stop()
-						# ~ Fondo2.play(-1)
+						Fondo2.play(-1)
 						
 						seleccion = PuntoInicio
 						
@@ -1765,10 +1782,10 @@ def main():
 					
 					else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
 						
-						# ~ Sucess.play()
+						Sucess.play()
 						
 						Fondo1.stop()
-						# ~ Fondo1.play(-1)
+						Fondo1.play(-1)
 						Fondo2.stop()
 						
 						SELECT = []			 	# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
@@ -1885,6 +1902,7 @@ def main():
 				xD = 0
 			
 		else: xD = 0
+		
 		
 		
 		#===============================================================================================================================
@@ -2458,9 +2476,41 @@ def main():
 				
 				if Victory:
 					
-					# ~ Victoria.play()
+					Victoria.play()
 					Victory = False
+		
+		
+		
+		#===================================================================================================
+		#======================================== Sección Baja =============================================
+		#===================================================================================================
+		
+		
+		
+		if True:
 			
+			dibujarTexto(screen, 'Mute', [9, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+			dibujarTexto(screen, 'Mute', [10, 583], Fuentes['Droid 18'], COLOR['Verde'])
+			
+			btnON.resize(40,20)
+			btnOFF.resize(50,20)
+			
+			if BtnMutePressed:
+				
+				screen.blit(btnON.image, (65, 582))
+				Fondo1.set_volume(0)
+				Fondo2.set_volume(0)
+				
+			else:
+				
+				screen.blit(btnOFF.image, (60, 582))
+				Fondo1.set_volume(1)
+				Fondo2.set_volume(1)
+		
+		
+		
+		#===================================================================================================
+		#===================================================================================================
 		#===================================================================================================
 		
 		pygame.display.flip()		# Actualiza Los Datos En La Interfaz.
