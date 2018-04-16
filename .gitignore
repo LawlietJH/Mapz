@@ -3,6 +3,19 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Otros:
+
+_*.py
+Sonidos/Mp3s/*
+Sonidos/Nuevos 2/*
+Sonidos/Nuevas/*
+Sonidos/Su*.wav
+Mapas/Nueva Carpeta/*
+Mapas/N*
+img/Botones/* 2.*
+img/Botones/*OnOff.*
+Requisitos/*.zip
+
 # C extensions
 *.so
 
