@@ -1,6 +1,9 @@
 
-# Versión: 1.5.3
+# -*- coding: utf-8 -*-
+
 # Python:  3.5.0
+# Script:  Mapz
+# Versión: 1.5.4
 
 import Arbol
 import pygame
@@ -1863,49 +1866,6 @@ def main():
 		
 		
 		#===============================================================================================================================
-		#======================================== Sección Central ======================================================================
-		#===============================================================================================================================
-		
-		
-		
-		pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension*XPOS, dimension*YPOS], 0)
-		
-		# Si Cargar es Igual a True entonces Dibujara El Mapa.
-		if Cargar: dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
-		
-		if Cargar and not Iniciar and DibujarInfoXY and SelectEstados and SelInfoTemp != ['P',16]:
-			
-			xD += 1
-			pygame.draw.rect(screen, COLOR['Gris Claro'], [DibujarInfoX, DibujarInfoY, 62, 35], 0)
-			
-			dibujarTexto(screen, 'Posición: ' + str(SelInfoTemp[0]) + ', ' + str(SelInfoTemp[1]), [DibujarInfoX+2, DibujarInfoY+1], Fuentes['Droid 10'], COLOR['Azul Claro'])
-			dibujarTexto(screen, 'Posición: ' + str(SelInfoTemp[0]) + ', ' + str(SelInfoTemp[1]), [DibujarInfoX+3, DibujarInfoY+2], Fuentes['Droid 10'], COLOR['Azul'])
-			
-			for val in VALORES:
-				if val[0] == SelInfoTemp:
-					
-					dibujarTexto(screen, 'Tipo: ' + str(val[2]), [DibujarInfoX+2, DibujarInfoY+11], Fuentes['Droid 10'], COLOR['Azul Claro'])
-					dibujarTexto(screen, 'Tipo: ' + str(val[2]), [DibujarInfoX+3, DibujarInfoY+12], Fuentes['Droid 10'], COLOR['Azul'])
-					
-					if val[3] == '':
-						dibujarTexto(screen, 'Costo: N/A', [DibujarInfoX+2, DibujarInfoY+21], Fuentes['Droid 10'], COLOR['Azul Claro'])
-						dibujarTexto(screen, 'Costo: N/A', [DibujarInfoX+3, DibujarInfoY+22], Fuentes['Droid 10'], COLOR['Azul'])
-					else:
-						dibujarTexto(screen, 'Costo: ' + str(val[3]), [DibujarInfoX+2, DibujarInfoY+21], Fuentes['Droid 10'], COLOR['Azul Claro'])
-						dibujarTexto(screen, 'Costo: ' + str(val[3]), [DibujarInfoX+3, DibujarInfoY+22], Fuentes['Droid 10'], COLOR['Azul'])
-					
-					break
-			
-			if xD == 30:	# Si ya Pasaron .5 Segundos (30 Frames) entonces dejara de mostrarse la información.
-				
-				DibujarInfoXY = False
-				xD = 0
-			
-		else: xD = 0
-		
-		
-		
-		#===============================================================================================================================
 		#======================================== Sección Derecha ======================================================================
 		#===============================================================================================================================
 		
@@ -2162,6 +2122,49 @@ def main():
 		#===============================================================
 		
 		if DibujarInfo: DibujarInformacionClic(screen, Fuentes, SelTemp)
+		
+		
+		
+		#===============================================================================================================================
+		#======================================== Sección Central ======================================================================
+		#===============================================================================================================================
+		
+		
+		
+		pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension*XPOS, dimension*YPOS], 0)
+		
+		# Si Cargar es Igual a True entonces Dibujara El Mapa.
+		if Cargar: dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
+		
+		if Cargar and not Iniciar and DibujarInfoXY and SelectEstados and SelInfoTemp != ['P',16]:
+			
+			xD += 1
+			pygame.draw.rect(screen, COLOR['Gris Claro'], [DibujarInfoX, DibujarInfoY, 62, 35], 0)
+			
+			dibujarTexto(screen, 'Posición: ' + str(SelInfoTemp[0]) + ', ' + str(SelInfoTemp[1]), [DibujarInfoX+2, DibujarInfoY+1], Fuentes['Droid 10'], COLOR['Azul Claro'])
+			dibujarTexto(screen, 'Posición: ' + str(SelInfoTemp[0]) + ', ' + str(SelInfoTemp[1]), [DibujarInfoX+3, DibujarInfoY+2], Fuentes['Droid 10'], COLOR['Azul'])
+			
+			for val in VALORES:
+				if val[0] == SelInfoTemp:
+					
+					dibujarTexto(screen, 'Tipo: ' + str(val[2]), [DibujarInfoX+2, DibujarInfoY+11], Fuentes['Droid 10'], COLOR['Azul Claro'])
+					dibujarTexto(screen, 'Tipo: ' + str(val[2]), [DibujarInfoX+3, DibujarInfoY+12], Fuentes['Droid 10'], COLOR['Azul'])
+					
+					if val[3] == '':
+						dibujarTexto(screen, 'Costo: N/A', [DibujarInfoX+2, DibujarInfoY+21], Fuentes['Droid 10'], COLOR['Azul Claro'])
+						dibujarTexto(screen, 'Costo: N/A', [DibujarInfoX+3, DibujarInfoY+22], Fuentes['Droid 10'], COLOR['Azul'])
+					else:
+						dibujarTexto(screen, 'Costo: ' + str(val[3]), [DibujarInfoX+2, DibujarInfoY+21], Fuentes['Droid 10'], COLOR['Azul Claro'])
+						dibujarTexto(screen, 'Costo: ' + str(val[3]), [DibujarInfoX+3, DibujarInfoY+22], Fuentes['Droid 10'], COLOR['Azul'])
+					
+					break
+			
+			if xD == 30:	# Si ya Pasaron .5 Segundos (30 Frames) entonces dejara de mostrarse la información.
+				
+				DibujarInfoXY = False
+				xD = 0
+			
+		else: xD = 0
 		
 		
 		
