@@ -87,7 +87,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 
 
 # Función Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
-def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos):
+def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos, BtnMaskPressed):
 	
 	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, Mask
 	global DibujarInfo, InfoSelTemp, Error, CadenaError, DibujarInfoXY
@@ -134,7 +134,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Pared']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Pared'].resize(DistX, DistY)
 					bloque = Objetos['Pared']
@@ -151,7 +151,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Camino']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Camino'].resize(DistX, DistY)
 					bloque = Objetos['Camino']
@@ -168,7 +168,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Bosque']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Bosque'].resize(DistX, DistY)
 					bloque = Objetos['Bosque']
@@ -185,7 +185,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Lava']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Lava'].resize(DistX, DistY)
 					bloque = Objetos['Lava']
@@ -202,7 +202,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Agua']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Agua'].resize(DistX, DistY)
 					bloque = Objetos['Agua']
@@ -219,7 +219,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Arena']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Arena'].resize(DistX, DistY)
 					bloque = Objetos['Arena']
@@ -236,7 +236,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Montaña']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Montaña'].resize(DistX, DistY)
 					bloque = Objetos['Montaña']
@@ -253,7 +253,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 					bloque = Objetos['Nieve']
 					screen.blit(bloque.image, (x,y))
 					
-				elif Mask[j][i] == True:
+				elif Mask[j][i] == True or not BtnMaskPressed:
 					
 					Objetos['Nieve'].resize(DistX, DistY)
 					bloque = Objetos['Nieve']
@@ -1388,6 +1388,7 @@ def main():
 	ArbolRaiz = None
 	
 	BtnMutePressed = False
+	BtnMaskPressed = True
 	
 	btnON  = Boton("img/Botones/BtnOn.png")
 	btnOFF = Boton("img/Botones/BtnOff.png")
@@ -1664,6 +1665,11 @@ def main():
 						if (xr >= 65) and (xr <= 105) and (yr >= 582) and (yr <= 602): BtnMutePressed = False
 					else:
 						if (xr >= 60) and (xr <= 110) and (yr >= 582) and (yr <= 602): BtnMutePressed = True
+					
+					if BtnMaskPressed:
+						if (xr >= 205) and (xr <= 245) and (yr >= 582) and (yr <= 602): BtnMaskPressed = False
+					else:
+						if (xr >= 200) and (xr <= 250) and (yr >= 582) and (yr <= 602): BtnMaskPressed = True
 					
 						#=====================================================================================
 				
@@ -2142,7 +2148,7 @@ def main():
 		pygame.draw.rect(screen, COLOR['Fondo'], [puntoInicio[0], puntoInicio[1], dimension*XPOS, dimension*YPOS], 0)
 		
 		# Si Cargar es Igual a True entonces Dibujara El Mapa.
-		if Cargar: dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos)
+		if Cargar: dibujarMapa(XPOS, YPOS, screen, dimension, puntoInicio, tamanio_fuente, Fuentes, SelTemp, Matrixy, Lisy, Objetos, BtnMaskPressed)
 		
 		if Cargar and not Iniciar and DibujarInfoXY and SelectEstados and SelInfoTemp != ['P',16]:
 			
@@ -2503,20 +2509,23 @@ def main():
 			dibujarTexto(screen, 'Mute', [9, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
 			dibujarTexto(screen, 'Mute', [10, 583], Fuentes['Droid 18'], COLOR['Verde'])
 			
+			dibujarTexto(screen, 'Ocultar', [134, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+			dibujarTexto(screen, 'Ocultar', [135, 583], Fuentes['Droid 18'], COLOR['Verde'])
+			
 			btnON.resize(40,20)
 			btnOFF.resize(50,20)
 			
 			if BtnMutePressed:
-				
 				screen.blit(btnON.image, (65, 582))
 				Fondo1.set_volume(0)
 				Fondo2.set_volume(0)
-				
 			else:
-				
 				screen.blit(btnOFF.image, (60, 582))
 				Fondo1.set_volume(1)
 				Fondo2.set_volume(1)
+			
+			if BtnMaskPressed: screen.blit(btnON.image, (205, 582))
+			else: screen.blit(btnOFF.image, (200, 582))
 		
 		
 		
