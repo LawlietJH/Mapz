@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.5.5
+# Versión: 1.5.6
 
 import Arbol
 import pygame
@@ -532,6 +532,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 	
 	global SELECT, Movimientos, CostoTotal
 	
+	Padre = Actual
 	PosLetra = LETRAS.index(Actual[0])
 	
 	x, y = PosLetra, Actual[1]
@@ -553,7 +554,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [Actual[0],Actual[1]-1]
 						
-						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
+						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						Add = False
 						Movimientos += 1
@@ -588,7 +589,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [Actual[0],Actual[1]+1]
 						
-						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
+						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						Add = False
 						Movimientos += 1
@@ -628,7 +629,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [LETRAS[PosLetra-1],Actual[1]]
 						
-						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
+						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						Add = False
 						Movimientos += 1
@@ -668,7 +669,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [LETRAS[PosLetra+1],Actual[1]]
 						
-						ArbolTrue(ArbolRaiz, Actual, x, y, YPOS, XPOS)
+						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						Add = False
 						Movimientos += 1
@@ -702,7 +703,7 @@ def MaskTrue(X, Y, YPOS, XPOS):
 
 
 
-def ArbolTrue(ArbolRaiz, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda. 
+def ArbolTrue(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda. 
 	
 	NoRepetir = True	# Sin Repetir Los Nodos.
 	AlFinal = True		# Si Se Repiten Nodos, Agrega Hasta El Padre Más Alejado Correspondiente, Si es False, Agrega al Padre Más Próximo Correspondiente.
@@ -714,10 +715,32 @@ def ArbolTrue(ArbolRaiz, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = A
 	
 	Lista = [Up, Right, Down, Left]
 	
-	if Y > 1:		Arbol.Agregar(ArbolRaiz, str(Lista[Orden[0]]), str(Actual), NoRepetir, AlFinal)
-	if X < XPOS-1:	Arbol.Agregar(ArbolRaiz, str(Lista[Orden[1]]), str(Actual), NoRepetir, AlFinal)
-	if Y < YPOS:	Arbol.Agregar(ArbolRaiz, str(Lista[Orden[2]]), str(Actual), NoRepetir, AlFinal)
-	if X > 0:		Arbol.Agregar(ArbolRaiz, str(Lista[Orden[3]]), str(Actual), NoRepetir, AlFinal)
+	# Se Crean Los Nodos Hijos Para El Nodo Actual.
+	if Y > 1:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]], NoRepetir, AlFinal)
+	if X < XPOS-1:	Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]], NoRepetir, AlFinal)
+	if Y < YPOS:	Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]], NoRepetir, AlFinal)
+	if X > 0:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)
+	
+	Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
+	
+	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[0]):
+		Arbol.AgregarPadre(ArbolRaiz, Lista[0], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
+		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[0])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
+	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[1]):
+		Arbol.AgregarPadre(ArbolRaiz, Lista[1], Actual)
+		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[1])
+	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[2]):
+		Arbol.AgregarPadre(ArbolRaiz, Lista[2], Actual)
+		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[2])
+	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[3]):.
+		Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
+		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
+	
+	# ~ Arbol.AgregarEstado(ArbolRaiz, Actual, Estado)			# Cerrado si todos sus hijos ya han sido visitados.
+	# ~ Arbol.AgregarOrden(ArbolRaiz, Actual, OrdenVisitas)		# Lista de Visitas.
+	
+	# Se Indica Si Es El Nodo Inicial.
+	if Padre == 'N/A': Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
 
 
 
@@ -1714,10 +1737,10 @@ def main():
 					
 					seleccion = PuntoInicio
 					
-					ArbolRaiz = Arbol.Raiz(str(seleccion))
+					ArbolRaiz = Arbol.Raiz(seleccion)
 					PosLetra = LETRAS.index(seleccion[0])
 					x, y = PosLetra, seleccion[1]
-					ArbolTrue(ArbolRaiz, seleccion, x, y, YPOS, XPOS)
+					ArbolTrue(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 					Arbol.ImprimirArbol(ArbolRaiz)
 					
 					SELECT = []
@@ -1758,10 +1781,10 @@ def main():
 						
 						seleccion = PuntoInicio
 						
-						ArbolRaiz = Arbol.Raiz(str(seleccion))
+						ArbolRaiz = Arbol.Raiz(seleccion)
 						PosLetra = LETRAS.index(seleccion[0])
 						x, y = PosLetra, seleccion[1]
-						ArbolTrue(ArbolRaiz, seleccion, x, y, YPOS, XPOS)
+						ArbolTrue(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 						Arbol.ImprimirArbol(ArbolRaiz)
 						
 						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
