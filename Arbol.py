@@ -6,36 +6,148 @@ import os
 
 class Arbol:
 	
-    def __init__(self, Elemento):
+	
+	def __init__(self, Coordenada):
 		
-        self.Elem = Elemento
-        self.Hijos = []
+		self.Coord = Coordenada		# Posición Del Nodo.
+		self.Hijos = []				# Conexión a los Hijos.
+		self.PHijos = []
+		self.Padre = None
+		self.Estado = 'Abierto'
+		self.Orden = []
+		self.EsIni = False
+		self.EsFin = False
+		
+	def SetPadre(self, Padre):		self.Padre = Padre			# Posición del Padre, Ejemplo ['E',11] o N/A para el Estado Inicial.
+	
+	def SetHijos(self, Hijo):		self.PHijos.append(Hijo)	# Posiciones de los Hijos, Ejemplo: [['F',12], ['E',13], ['D',12], ].
+	
+	def SetEstado(self, Estado):	self.Estado = Estado		# Estado Actual del Nodo. (Abierto, Cerrado(Si todos sus hijos ya han sido visitados))
+	
+	def SetOrden(self, Orden):		self.Orden = Orden			# Orden de Visita, Ejemplo: [1,3,5,7,...]
+	
+	def SetIniFin(self, EsIni, EsFin):
+		
+		self.EsIni = EsIni		# True si el Nodo es Estado Inicial.
+		self.EsFin = EsFin		# True si el Nodo es Estado Final.
+		
+	def GetDatos(self): return [ self.Coord, self.Padre, self.PHijos, self.Estado, self.Orden, self.EsIni, self.EsFin ]
 
 
-def Agregar(arbol, Elem, Padre, NoRepetir=True, AlFinal=True):
+def Agregar(arbol, Padre, Coord, NoRepetir=True, AlFinal=True):
 	
 	if NoRepetir:
-		if Busqueda(arbol, Elem): return
+		if Busqueda(arbol, Coord): return
 	
-	SubArbol = Recorrer(arbol, Padre, AlFinal);
-	SubArbol.Hijos.append(Arbol(Elem))
+	SubArbol = Recorrer(arbol, Padre, AlFinal)
+	SubArbol.Hijos.append(Arbol(Coord))
 
+#=======================================================================
 
-def Recorrer(arbol, Elem, AlFinal):
+def AgregarPadre(arbol, Coord, Padre):
+	
+	if Coord == arbol.Coord: arbol.SetPadre(Padre); return True
+	for SubArbol in arbol.Hijos:
+		if AgregarPadre(SubArbol, Coord, Padre): return True
+
+def AgregarHijos(arbol, Coord, Hijo):
+	
+	if Coord == arbol.Coord: arbol.SetHijos(Hijo); return True
+	for SubArbol in arbol.Hijos: 
+		if AgregarHijos(SubArbol, Coord, Hijo): return True
+
+def AgregarEstado(arbol, Coord, Estado):
+	
+	if Coord == arbol.Coord: arbol.SetEstado(Estado); return True
+	for SubArbol in arbol.Hijos:
+		if AgregarEstado(SubArbol, Coord, Estado): return True
+
+def AgregarOrden(arbol, Coord, Orden):
+	
+	if Coord == arbol.Coord: arbol.SetOrden(Orden); return True
+	for SubArbol in arbol.Hijos:
+		if AgregarOrden(SubArbol, Coord, Orden): return True
+
+def AgregarIniFin(arbol, Coord, EsIni=False, EsFin=False):
+	
+	if Coord == arbol.Coord: arbol.SetIniFin(EsIni, EsFin); return True
+	for SubArbol in arbol.Hijos:
+		if AgregarIniFin(SubArbol, Coord, EsIni, EsFin): return True
+
+#=======================================================================
+
+def Recorrer(arbol, Coord, AlFinal):
 	
 	if not AlFinal:
-		if arbol.Elem == Elem: return arbol
+		if arbol.Coord == Coord: return arbol
 	
 	for SubArbol in arbol.Hijos:
 		
-		Encontrado = Recorrer(SubArbol, Elem, AlFinal)
+		Encontrado = Recorrer(SubArbol, Coord, AlFinal)
 		
 		if Encontrado != None: return Encontrado
 	
 	if AlFinal:
-		if arbol.Elem == Elem: return arbol
+		if arbol.Coord == Coord: return arbol
 	
 	return None
+
+
+def Busqueda(arbol, Coord):
+	
+	if Coord == arbol.Coord: return True
+	
+	for SubArbol in arbol.Hijos:
+		
+		if Busqueda(SubArbol, Coord): return True
+		
+	return False
+
+
+def BusquedaPrecisa(arbol, Padre, Coord):
+	
+	if Padre == arbol.Coord:
+		
+		# ~ return (True if Coord in arbol.PHijos else False)
+		
+		for x in range(len(arbol.Hijos)):
+			
+			if Coord == arbol.Hijos[x].Coord: return True
+		
+	for SubArbol in arbol.Hijos:
+		
+		if BusquedaPrecisa(SubArbol, Padre, Coord): return True
+	
+	return False
+
+
+def Modificar(arbol, Coord, Padre, PHijos, Estado, Orden, EsIni, EsFin):
+	
+	if Coord == arbol.Coord:
+		
+		arbol.SetPadre(Padre)
+		arbol.SetHijos(PHijos)
+		arbol.SetEstado(Estado)
+		arbol.SetOrden(Orden)
+		arbol.SetIniFin(EsIni, EsFin)
+		return True
+		
+	for SubArbol in arbol.Hijos:
+		
+		if Modificar(SubArbol, Coord, Padre, PHijos, Estado, Orden, EsIni, EsFin): return True
+		
+	return False
+
+
+def ExtraerDatos(arbol, Coord):
+	
+	if Coord == arbol.Coord: return arbol.GetDatos()
+	
+	for SubArbol in arbol.Hijos:
+		
+		if ExtraerDatos(SubArbol, Coord): return arbol.GetDatos()
+		
+	return False
 
 
 def Tabs(Cont):
@@ -72,22 +184,11 @@ def Tabs(Cont):
 	if Cont == 130: print('\t| |' * 29 + '\t', end='')
 	if Cont == 131: print('\t| |' * 30 + '\t', end='')
 	if Cont == 132: print('\t| |' * 31 + '\t', end='')
-	
-
-def Busqueda(arbol, Elem):
-	
-	if Elem == arbol.Elem: return True
-	
-	for SubArbol in arbol.Hijos:
-		
-		if Busqueda(SubArbol, Elem): return True
-		
-	return False
 
 
 def Anchura(arbol, funcion, cola = deque()):
 	
-	funcion(arbol.Elem)
+	funcion(arbol.Coord)
 	
 	if (len(arbol.Hijos) > 0): cola.extend(arbol.Hijos)
 	
@@ -98,7 +199,9 @@ def Profundidad(arbol, Cont):
 	
 	Cont += 1
 	
-	print(arbol.Elem)
+	# ~ print(arbol.Coord, 'Padre:', arbol.Padre, 'Hijos:', arbol.PHijos)
+	# ~ print(arbol.GetDatos())
+	print(arbol.Coord)
 	
 	for hijo in arbol.Hijos:
 		
@@ -118,7 +221,7 @@ def ImprimirArbol(raiz):
 	Profundidad(raiz, Cont)
 
 
-def printElement(Elem): print(Elem)
+def printElement(Coord): print(Coord)
 
 def Raiz(raiz): return Arbol(raiz)
 
@@ -127,35 +230,39 @@ if __name__ == "__main__":	# Datos de Prueba.
 	
 	raiz = Raiz('0')
 	
-	Agregar(raiz, '1','0')
-	Agregar(raiz, '31','0')
-	Agregar(raiz, '21','0')
-	Agregar(raiz, '27','1')
-	Agregar(raiz, '23','1')
-	Agregar(raiz, '2','1')
-	Agregar(raiz, '3','2')
-	Agregar(raiz, '9','1')
-	Agregar(raiz, '4','2')
-	Agregar(raiz, '5','3')
-	Agregar(raiz, '11','3')
-	Agregar(raiz, '6','3')
-	Agregar(raiz, '7','4')
-	Agregar(raiz, '8','5')
-	Agregar(raiz, '26','27')
-	Agregar(raiz, '33','6')
-	Agregar(raiz, '34','6')
-	Agregar(raiz, '36','27')
-	Agregar(raiz, '45','36')
-	Agregar(raiz, '47','36')
-	Agregar(raiz, '32','27')
-	Agregar(raiz, '101','45')
-	Agregar(raiz, '102','45')
-	Agregar(raiz, '103','45')
-	Agregar(raiz, '200','9')
-	Agregar(raiz, '16','47')
-	Agregar(raiz, '17','101')
+	Agregar(raiz, '0', '1')
+	Agregar(raiz, '1', '2')
+	Agregar(raiz, '1', '3')
+	Agregar(raiz, '1', '4')
+	Agregar(raiz, '2', '5')
+	Agregar(raiz, '4', '6')
+	Agregar(raiz, '4', '7')
+	
+	AgregarPadre(raiz, '0', 'N/A')
+	AgregarPadre(raiz, '1', '0')	
+	AgregarPadre(raiz, '2', '1')
+	AgregarPadre(raiz, '3', '1')
+	AgregarPadre(raiz, '4', '1')
+	AgregarPadre(raiz, '5', '2')
+	AgregarPadre(raiz, '6', '4')
+	AgregarPadre(raiz, '7', '4')
+	
+	AgregarHijos(raiz, '0', '1')
+	for x in ['2','3','4']: AgregarHijos(raiz, '1', x)
+	AgregarHijos(raiz, '2', '5')
+	for x in ['6','7']: AgregarHijos(raiz, '4', x)
 	
 	ImprimirArbol(raiz)
+	
+	# ~ print(BusquedaPrecisa(raiz, '4', '7'))
+	
+	# ~ print('Datos: ')
+	
+	# ~ Modificar(raiz, '0', None, None, 'Abierto', [1,3,5], False, False)
+	
+	# ~ Datos = ExtraerDatos(raiz, '101')
+	
+	# ~ print(Datos)
 	
 	
 	
