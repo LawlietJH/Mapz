@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.5.6
+# Versión: 1.5.7
 
 import Arbol
 import pygame
@@ -126,7 +126,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			if Matriz[j][i] == Lisy[Pared]:	# Dibuja el Bloque de Pared.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Costos[NombrePersonaje[NP]][0]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Pared], 'Pared', Costos[NombrePersonaje[NumPlayer]][0]))
 				
 				if not Iniciar:
 					
@@ -143,7 +143,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Camino]:	# Dibuja el Bloque de Camino.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Camino', Costos[NombrePersonaje[NP]][1]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Camino], 'Camino', Costos[NombrePersonaje[NumPlayer]][1]))
 				
 				if not Iniciar:
 					
@@ -160,7 +160,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Bosque]:	# Dibuja el Bloque de Bosque.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Bosque], 'Bosque', Costos[NombrePersonaje[NP]][2]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Bosque], 'Bosque', Costos[NombrePersonaje[NumPlayer]][2]))
 				
 				if not Iniciar:
 					
@@ -177,7 +177,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Lava]:	# Dibuja el Bloque de Lava.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Lava], 'Lava', Costos[NombrePersonaje[NP]][3]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Lava], 'Lava', Costos[NombrePersonaje[NumPlayer]][3]))
 				
 				if not Iniciar:
 					
@@ -194,7 +194,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Agua]:	# Dibuja el Bloque de Agua.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Agua], 'Agua', Costos[NombrePersonaje[NP]][4]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Agua], 'Agua', Costos[NombrePersonaje[NumPlayer]][4]))
 				
 				if not Iniciar:
 						
@@ -211,7 +211,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Arena]:	# Dibuja el Bloque de Arena.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Arena], 'Arena', Costos[NombrePersonaje[NP]][5]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Arena], 'Arena', Costos[NombrePersonaje[NumPlayer]][5]))
 				
 				if not Iniciar:
 						
@@ -228,7 +228,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Montaña]:	# Dibuja el Bloque de Montaña.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Montaña', Costos[NombrePersonaje[NP]][6]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Montaña', Costos[NombrePersonaje[NumPlayer]][6]))
 				
 				if not Iniciar:
 					
@@ -245,7 +245,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			elif Matriz[j][i] == Lisy[Nieve]:	# Dibuja el Bloque de Nieve.
 				
 				# Agrega los Valores del Bloque en la Posición Matriz[j][i] a la Lista Global 'VALORES'.
-				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Nieve', Costos[NombrePersonaje[NP]][7]))
+				VALORES.append(([LETRAS[i],j+1], Lisy[Montaña], 'Nieve', Costos[NombrePersonaje[NumPlayer]][7]))
 				
 				if not Iniciar:
 					
@@ -554,8 +554,6 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [Actual[0],Actual[1]-1]
 						
-						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
-						
 						Add = False
 						Movimientos += 1
 						
@@ -569,6 +567,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 							else: Add = True
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -589,8 +589,6 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [Actual[0],Actual[1]+1]
 						
-						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
-						
 						Add = False
 						Movimientos += 1
 						
@@ -604,6 +602,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 							else: Add = True
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -629,8 +629,6 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [LETRAS[PosLetra-1],Actual[1]]
 						
-						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
-						
 						Add = False
 						Movimientos += 1
 						
@@ -644,6 +642,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 							else: Add = True
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -669,8 +669,6 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 						
 						Actual = [LETRAS[PosLetra+1],Actual[1]]
 						
-						ArbolTrue(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
-						
 						Add = False
 						Movimientos += 1
 						
@@ -684,6 +682,8 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 							else: Add = True
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
+						
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -703,7 +703,7 @@ def MaskTrue(X, Y, YPOS, XPOS):
 
 
 
-def ArbolTrue(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda. 
+def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda. 
 	
 	NoRepetir = True	# Sin Repetir Los Nodos.
 	AlFinal = True		# Si Se Repiten Nodos, Agrega Hasta El Padre Más Alejado Correspondiente, Si es False, Agrega al Padre Más Próximo Correspondiente.
@@ -732,12 +732,17 @@ def ArbolTrue(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Or
 	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[2]):
 		Arbol.AgregarPadre(ArbolRaiz, Lista[2], Actual)
 		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[2])
-	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[3]):.
+	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[3]):
 		Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
 		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
 	
+	print(PuntoInicio, PuntoDestino)
+	Pause()
+	
+	for x in SELECT:
+		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Lista de Visitas.
+	
 	# ~ Arbol.AgregarEstado(ArbolRaiz, Actual, Estado)			# Cerrado si todos sus hijos ya han sido visitados.
-	# ~ Arbol.AgregarOrden(ArbolRaiz, Actual, OrdenVisitas)		# Lista de Visitas.
 	
 	# Se Indica Si Es El Nodo Inicial.
 	if Padre == 'N/A': Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
@@ -898,11 +903,11 @@ def DibujarMiniaturaTextura(screen, Costo, TextInput, Objetos, BtnIzq, BtnDer, X
 	if Costo: pygame.draw.rect(screen, COLOR['Blanco'], [X+98, Y+17, 80, 20], 0)
 	else: pygame.draw.rect(screen, COLOR['Gris Claro'], [X+98, Y+17, 80, 20], 0)
 	
-	if NP != None:
-		if Costos[NombrePersonaje[NP]][TextInput] == '': dibujarTexto(screen, 'N/A', [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
+	if NumPlayer != None:
+		if Costos[NombrePersonaje[NumPlayer]][TextInput] == '': dibujarTexto(screen, 'N/A', [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 		else:
-			if '.' in Costos[NombrePersonaje[NP]][TextInput]: dibujarTexto(screen, str(round(float(Costos[NombrePersonaje[NP]][TextInput]),2)), [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
-			else: dibujarTexto(screen, Costos[NombrePersonaje[NP]][TextInput], [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
+			if '.' in Costos[NombrePersonaje[NumPlayer]][TextInput]: dibujarTexto(screen, str(round(float(Costos[NombrePersonaje[NumPlayer]][TextInput]),2)), [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
+			else: dibujarTexto(screen, Costos[NombrePersonaje[NumPlayer]][TextInput], [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	else: dibujarTexto(screen, 'N/A', [X+100, Y+15], Fuentes['Droid 20'], COLOR['Negro'])
 	
 	
@@ -1111,7 +1116,7 @@ CostoTotal = 0			# Suma Costos en cada Movimiento.
 Movimientos = 1
 NombrePersonaje = []
 DibujarInfoXY = False
-NP = None
+NumPlayer = None				# Variable Que Almacena el Numero de Jugador (Num Player)
 
 # Posiciones en La Lista (Lisy) con Los Números Ordenados Para Cada Tipo de Terreno.
 # La Posición 0 equivale al valor -1 que Simboliza A Los Terrenos No Seleccionados Para El Mapa. 
@@ -1134,7 +1139,7 @@ def main():
 	
 	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados, DibujarInfoXY
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
-	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NP
+	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NumPlayer
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
@@ -1162,7 +1167,7 @@ def main():
 	FULL = False			# Variable Booleana Para Hacer Pantalla Completa.
 	Cargar = False			# Variable Booleana Para Hacer Validaciones al Dibujar El Tablero.
 	
-	NP = None					# Numero de Personaje, Posicionamineto en la Lista.
+	NumPlayer = None			# Numero de Personaje, Posicionamineto en la Lista de Personajes.
 	seleccion = None			# Lista con Las Posiciones, ejemplo [ 'A', 1 ].
 	PuntoInicio = None			# Posición de Inicio, ejemplo [ 'A', 1 ].
 	SelTemp = ['P',16]			# Selección Temporal.
@@ -1274,10 +1279,6 @@ def main():
 	btnSelect1 = Boton("img/Botones/BotonAzul.png")
 	btnSelect2 = Boton("img/Botones/BotonPurpura.png")
 	
-	# Botón de Enmascaramiento True/False, On/Off:
-	# ~ btnON  = Boton("img/Botones/BtnOn.png")
-	# ~ btnOFF = Boton("img/Botones/BtnOff.png")
-	
 	# Botones Con Flechas Izquierda y Derecha Para Elección de Terrenos.
 	# flip() Invierte la Imágen en Espejo en el eje de las X.
 	# flip(False, True) Invierte la Imágen en Espejo en el eje de las Y.
@@ -1364,8 +1365,7 @@ def main():
 	Objetos10 = {'Personaje':personaje, 'Pared':bloque11, 'Camino':bloque13, 'Bosque':bloque14, 'Lava':bloque15,
 				 'Agua':bloque16, 'Arena':bloque17, 'Montaña':bloque18, 'Nieve':bloque19}
 	
-	Input = None
-	
+	# Variables que marcan si hay errores al seleccionar Terrenos, una variable para cada uno.
 	Er1 = False
 	Er2 = False
 	Er3 = False
@@ -1387,40 +1387,42 @@ def main():
 	# Sonidos:
 	
 	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
-	Clic1 = pygame.mixer.Sound("Sonidos\Kwahmah-Click.wav")
-	Clic2 = pygame.mixer.Sound("Sonidos\Clic15.wav")
-	ClicSet = pygame.mixer.Sound("Sonidos\Clic3.wav")
-	ClicUndo = pygame.mixer.Sound("Sonidos\Clic14.wav")
+	Clic1 = pygame.mixer.Sound("Sonidos\Kwahmah-Click.wav")		# Sonido Clic Izquierdo.
+	Clic2 = pygame.mixer.Sound("Sonidos\Clic15.wav")			# Sonido Clic Derecho.
+	ClicSet = pygame.mixer.Sound("Sonidos\Clic3.wav")			# Sonido Al Escribir Un Caracter En La Sección Se Costos.
+	ClicUndo = pygame.mixer.Sound("Sonidos\Clic14.wav")			# Sonido Al Borrar Un Caracter De La Sección Se Costos.
 	
-	Sucess = pygame.mixer.Sound("Sonidos\Level Up.wav")
-	Victoria = pygame.mixer.Sound("Sonidos\Victoria.wav")
+	Sucess = pygame.mixer.Sound("Sonidos\Level Up.wav")			# Sonido Al Cargar Un Mapa Exitosamente.
+	Victoria = pygame.mixer.Sound("Sonidos\Victoria.wav")		# Sonido De Victoria Cuando El Personaje Llega Al Estado Final.
 	
-	Sucess.set_volume(.3)
-	Victoria.set_volume(.3)
+	Sucess.set_volume(.3)			# Reduce Su Volumen al 30%.
+	Victoria.set_volume(.3)			# Reduce Su Volumen al 30%.
 	
-	Fondos = [
-			  pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
-			  pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav"),
-			  pygame.mixer.Sound("Sonidos\Errinerung - Debussy.wav"),
-			  # ~ pygame.mixer.Sound("Sonidos\Tim-Kahn - Cedellia.wav"),
-			  pygame.mixer.Sound("Sonidos\Tim-Kahn - Sigj.wav")
-			 ]
+	# Lista de Objetos de Sonidos Para El Fondo Del Juego al Iniciar.
+	MusicFondos = [
+					pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
+					pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav"),
+					pygame.mixer.Sound("Sonidos\Errinerung - Debussy.wav"),
+					# ~ pygame.mixer.Sound("Sonidos\Tim-Kahn - Cedellia.wav"),
+					pygame.mixer.Sound("Sonidos\Tim-Kahn - Sigj.wav")
+				  ]
 	
-	Fondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")
-	Fondo2 = Fondos[random.randint(0,2)]
+	MusicFondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")				# Musica de Fondo Para El Menu.
+	MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]			# Musica de Fondo Para El Mapa (Al Iniciar la Partida).	Se Obtiene uno al Azar de la lista.			
 	
 	#===================================================================
 	
-	Victory = False
-	ArbolRaiz = None
+	Victory = False					# Si Es True Muestra el Sonido de Victoria (Cuando Se Llega al Punto de Final.
+	ArbolRaiz = None				# Variable Para Almacenar el Objeto Raiz del Arbol.
 	
-	BtnMutePressed = False
-	BtnMaskPressed = True
+	BtnMutePressed = False			# Botón Para Poner Mute en False Por Defecto.
+	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
 	
-	btnON  = Boton("img/Botones/BtnOn.png")
-	btnOFF = Boton("img/Botones/BtnOff.png")
+	# Botón Para Mute y Enmascaramiento True/False, On/Off:
+	btnON  = Boton("img/Botones/BtnOn.png")			# Objeto Botón ON
+	btnOFF = Boton("img/Botones/BtnOff.png")		# Objeto Botón OFF
 	
-	Fondo1.play(-1)
+	MusicFondo1.play(-1)			# Se Ejecuta La Música de Fondo Para el Menu. (El -1 indica que se repita de forma en Búcle).
 	
 	# ~ pygame.mixer.music.play(-1)
 	
@@ -1450,22 +1452,22 @@ def main():
 					elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje, ArbolRaiz)	# Tecla Arriba. Mueve Personaje.
 					elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
 					
-					Arbol.ImprimirArbol(ArbolRaiz)
+					Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
 					
 				if evento.key == pygame.K_ESCAPE: game_over = True		# Tecla ESC Cierra el Juego.
 				
 				#=======================================================
 				
-				if NP != None:
+				if NumPlayer != None:
 					
-					TextInput1 = Costos[NombrePersonaje[NP]][0]
-					TextInput2 = Costos[NombrePersonaje[NP]][1]
-					TextInput3 = Costos[NombrePersonaje[NP]][2]
-					TextInput4 = Costos[NombrePersonaje[NP]][3]
-					TextInput5 = Costos[NombrePersonaje[NP]][4]
-					TextInput6 = Costos[NombrePersonaje[NP]][5]
-					TextInput7 = Costos[NombrePersonaje[NP]][6]
-					TextInput8 = Costos[NombrePersonaje[NP]][7]
+					TextInput1 = Costos[NombrePersonaje[NumPlayer]][0]
+					TextInput2 = Costos[NombrePersonaje[NumPlayer]][1]
+					TextInput3 = Costos[NombrePersonaje[NumPlayer]][2]
+					TextInput4 = Costos[NombrePersonaje[NumPlayer]][3]
+					TextInput5 = Costos[NombrePersonaje[NumPlayer]][4]
+					TextInput6 = Costos[NombrePersonaje[NumPlayer]][5]
+					TextInput7 = Costos[NombrePersonaje[NumPlayer]][6]
+					TextInput8 = Costos[NombrePersonaje[NumPlayer]][7]
 				
 				if evento.key == pygame.K_BACKSPACE:
 					
@@ -1533,15 +1535,15 @@ def main():
 				TextInput5, TextInput6, TextInput7, TextInput8 = TI5, TI6, TI7, TI8
 				
 				# Actualizamos los Datos de los Costos.
-				if NP != None:
-					Costos[NombrePersonaje[NP]][0] = TextInput1
-					Costos[NombrePersonaje[NP]][1] = TextInput2
-					Costos[NombrePersonaje[NP]][2] = TextInput3
-					Costos[NombrePersonaje[NP]][3] = TextInput4
-					Costos[NombrePersonaje[NP]][4] = TextInput5
-					Costos[NombrePersonaje[NP]][5] = TextInput6
-					Costos[NombrePersonaje[NP]][6] = TextInput7
-					Costos[NombrePersonaje[NP]][7] = TextInput8
+				if NumPlayer != None:
+					Costos[NombrePersonaje[NumPlayer]][0] = TextInput1
+					Costos[NombrePersonaje[NumPlayer]][1] = TextInput2
+					Costos[NombrePersonaje[NumPlayer]][2] = TextInput3
+					Costos[NombrePersonaje[NumPlayer]][3] = TextInput4
+					Costos[NombrePersonaje[NumPlayer]][4] = TextInput5
+					Costos[NombrePersonaje[NumPlayer]][5] = TextInput6
+					Costos[NombrePersonaje[NumPlayer]][6] = TextInput7
+					Costos[NombrePersonaje[NumPlayer]][7] = TextInput8
 				
 				#=============================================================================================================================================
 				
@@ -1601,32 +1603,32 @@ def main():
 						
 						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
 						
-						if NP != None:
+						if NumPlayer != None:
 							if Pagina1:
 								Y = 205
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo1 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo1 = True
 								else: Costo1 = False
 								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo2 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo2 = True
 								else: Costo2 = False
 								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo3 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo3 = True
 								else: Costo3 = False
 								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo4 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo4 = True
 								else: Costo4 = False
 								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo5 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo5 = True
 								else: Costo5 = False
 							else:
 								Y = 205
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo6 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo6 = True
 								else: Costo6 = False
 								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo7 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo7 = True
 								else: Costo7 = False
 								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NP != None: Costo8 = True
+								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo8 = True
 								else: Costo8 = False
 						else:
 							Error = True
@@ -1652,7 +1654,7 @@ def main():
 						
 						X = 1006; Y = 228
 						
-						if NP != None:
+						if NumPlayer != None:
 							
 							CadenaError = ''
 							CadenaError2 = ''
@@ -1704,9 +1706,9 @@ def main():
 				
 				if Btn4Pressed: # Si Se Presionó el Botón 3 (Seleccionar Personaje).
 					
-					Fondo1.stop()
-					Fondo1.play(-1)
-					Fondo2.stop()
+					MusicFondo1.stop()
+					MusicFondo1.play(-1)
+					MusicFondo2.stop()
 					
 					Error = False
 					CadenaError = ''
@@ -1724,9 +1726,9 @@ def main():
 					
 				if Btn3Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
 					
-					Fondo2.stop()
-					Fondo2 = Fondos[random.randint(0,len(Fondos)-1)]
-					Fondo2.play(-1)
+					MusicFondo2.stop()
+					MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
+					MusicFondo2.play(-1)
 					
 					Victory = True
 					Error = False
@@ -1737,12 +1739,6 @@ def main():
 					
 					seleccion = PuntoInicio
 					
-					ArbolRaiz = Arbol.Raiz(seleccion)
-					PosLetra = LETRAS.index(seleccion[0])
-					x, y = PosLetra, seleccion[1]
-					ArbolTrue(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
-					Arbol.ImprimirArbol(ArbolRaiz)
-					
 					SELECT = []
 					SELECT.append((seleccion, [Movimientos]))
 					
@@ -1751,9 +1747,15 @@ def main():
 					for val in VALORES:
 						if val[0] == PuntoInicio: CostoTotal += float(val[3])
 					
+					ArbolRaiz = Arbol.Raiz(seleccion)
+					PosLetra = LETRAS.index(seleccion[0])
+					x, y = PosLetra, seleccion[1]
+					AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+					Arbol.ImprimirArbol(ArbolRaiz)
+					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
 					
-					if NP == None:		# Si el Botón 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
+					if NumPlayer == None:		# Si el Botón 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
 						
 						Error = True
 						CadenaError = 'Selecciona Un Personaje.'
@@ -1774,25 +1776,19 @@ def main():
 						Iniciar = True	# Inicia El Juego.
 						Victory = True
 						
-						Fondo2.stop()
-						Fondo2 = Fondos[random.randint(0,len(Fondos)-1)]
-						Fondo1.stop()
-						Fondo2.play(-1)
+						MusicFondo2.stop()
+						MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
+						MusicFondo1.stop()
+						MusicFondo2.play(-1)
 						
 						seleccion = PuntoInicio
 						
-						ArbolRaiz = Arbol.Raiz(seleccion)
-						PosLetra = LETRAS.index(seleccion[0])
-						x, y = PosLetra, seleccion[1]
-						ArbolTrue(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
-						Arbol.ImprimirArbol(ArbolRaiz)
-						
-						personaje = Personaje(RutaPersonaje[NombrePersonaje[NP]]) # Se Crea el Objeto Personaje de la clase (Personaje),
+						personaje = Personaje(RutaPersonaje[NombrePersonaje[NumPlayer]]) # Se Crea el Objeto Personaje de la clase (Personaje),
 																				  # Pasandole La Ruta de la Imagen Que se encuentra en el Diccionario (RutaPersonaje),
 																				  # Que corresponda al Nombre de Personaje de la lista (NombrePersonaje)
-																				  # Que este en la posición del Numero de Personaje Elegido (NP)
+																				  # Que este en la posición del Numero de Personaje Elegido (NumPlayer)
 						
-						if NP == 4 or NP == 8 or NP == 11:	
+						if NumPlayer == 4 or NumPlayer == 8 or NumPlayer == 11:	
 							
 							personaje.flip()				# Acomodamos Al Personaje Mirando a Derecha.
 							personaje.setDireccion('R')
@@ -1805,6 +1801,12 @@ def main():
 								
 						Movimientos += 1
 						SELECT.append((seleccion, [Movimientos]))
+						
+						ArbolRaiz = Arbol.Raiz(seleccion)
+						PosLetra = LETRAS.index(seleccion[0])
+						x, y = PosLetra, seleccion[1]
+						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+						Arbol.ImprimirArbol(ArbolRaiz)
 						
 				elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
 					
@@ -1828,9 +1830,9 @@ def main():
 						
 						Sucess.play()
 						
-						Fondo1.stop()
-						Fondo1.play(-1)
-						Fondo2.stop()
+						MusicFondo1.stop()
+						MusicFondo1.play(-1)
+						MusicFondo2.stop()
 						
 						SELECT = []			 	# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
 						SelectEstados = False	# Permite Saber Si se Permite Selecciona el Estado Inicial y Final.
@@ -1883,7 +1885,7 @@ def main():
 						CostoTotal	 = 0
 						PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
 						PuntoDestino = None		# Se Inicializa la Variable Global PuntoDestino en None.
-						NP			 = None		# Se Inicializa la Variable personaje en None.
+						NumPlayer	 = None		# Se Inicializa la Variable personaje en None.
 						CargarMapa	 = False	# Indíca que El Botón Cargar Mapa Dejo de ser Apretado.
 						Error		 = False	# Indíca Que No Hay Error.
 				
@@ -1975,15 +1977,15 @@ def main():
 			dibujarTexto(screen, 'Personaje: ', [909, 159], Fuentes['Droid 20'], COLOR['Negro'])
 			dibujarTexto(screen, 'Personaje:', [910, 160], Fuentes['Droid 20'], COLOR['Morado'])
 			
-			if NP == None:	# Si Aun No Se Ha Seleccionado Un Personaje.
+			if NumPlayer == None:	# Si Aun No Se Ha Seleccionado Un Personaje.
 				
 				dibujarTexto(screen, 'Ninguno', [1009, 159], Fuentes['Droid 20'], COLOR['Azul'])
 				dibujarTexto(screen, 'Ninguno', [1010, 160], Fuentes['Droid 20'], COLOR['Negro'])
 				
 			else:			# Si ya fue Seleccionado.
 				
-				dibujarTexto(screen, NombrePersonaje[NP], [1009, 159], Fuentes['Droid 20'], COLOR['Azul'])
-				dibujarTexto(screen, NombrePersonaje[NP], [1010, 160], Fuentes['Droid 20'], COLOR['Negro'])
+				dibujarTexto(screen, NombrePersonaje[NumPlayer], [1009, 159], Fuentes['Droid 20'], COLOR['Azul'])
+				dibujarTexto(screen, NombrePersonaje[NumPlayer], [1010, 160], Fuentes['Droid 20'], COLOR['Negro'])
 			
 			
 			if LisyPos2 in [LisyPos1] and LisyPos2 != 0: 
@@ -2232,15 +2234,15 @@ def main():
 		dibujarTexto(screen, 'Personaje: ', [15, 54], Fuentes['Droid 20'], COLOR['Negro'])
 		dibujarTexto(screen, 'Personaje: ', [16, 55], Fuentes['Droid 20'], COLOR['Azul'])
 		
-		if NP == None:	# Si Aun No Se Ha Seleccionado Un Personaje.
+		if NumPlayer == None:	# Si Aun No Se Ha Seleccionado Un Personaje.
 			
 			dibujarTexto(screen, 'Seleccionar', [122, 54], Fuentes['Droid 20'], COLOR['Morado'])
 			dibujarTexto(screen, 'Seleccionar', [123, 55], Fuentes['Droid 20'], COLOR['Negro'])
 			
 		else:			# Si ya fue Seleccionado.
 			
-			dibujarTexto(screen,  NombrePersonaje[NP], [122, 54], Fuentes['Droid 20'], COLOR['Morado'])
-			dibujarTexto(screen,  NombrePersonaje[NP], [123, 55], Fuentes['Droid 20'], COLOR['Negro'])
+			dibujarTexto(screen,  NombrePersonaje[NumPlayer], [122, 54], Fuentes['Droid 20'], COLOR['Morado'])
+			dibujarTexto(screen,  NombrePersonaje[NumPlayer], [123, 55], Fuentes['Droid 20'], COLOR['Negro'])
 		
 		dibujarTexto(screen, 'Posición Actual: ', [14, 95],  Fuentes['Droid 20'], COLOR['Negro'])
 		dibujarTexto(screen, 'Posición Actual: ', [15, 96],  Fuentes['Droid 20'], COLOR['Azul'])
@@ -2371,21 +2373,21 @@ def main():
 				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers1 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 0						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 0						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers2:		# Si El Personaje 2 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers2 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 1						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 1						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers3:		# Si El Personaje 3 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers3 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 2						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 2						# Se Asigna a NumPlayer el Numero De Personaje.
 			
 			Y += 60
 			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
@@ -2405,21 +2407,21 @@ def main():
 				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers4 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 3						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 3						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers5:		# Si El Personaje 2 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers5 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 4						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 4						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers6:		# Si El Personaje 3 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers6 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 5					# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 5					# Se Asigna a NumPlayer el Numero De Personaje.
 			
 			Y += 60
 			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
@@ -2439,21 +2441,21 @@ def main():
 				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers7 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 6						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 6						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers8:		# Si El Personaje 2 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers8 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 7						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 7						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers9:		# Si El Personaje 3 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers9 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 8					# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 8					# Se Asigna a NumPlayer el Numero De Personaje.
 			
 			Y += 60
 			pygame.draw.rect(screen, COLOR['Blanco'], [28,  Y-2, 54, 54], 0)
@@ -2473,21 +2475,21 @@ def main():
 				pygame.draw.rect(screen, COLOR['Seleccion'], [30,  Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers10 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 9						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 9						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers11:		# Si El Personaje 2 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [100, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers11 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 10						# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 10						# Se Asigna a NumPlayer el Numero De Personaje.
 				
 			elif seleccionPers12:		# Si El Personaje 3 Fue Seleccionado
 				
 				pygame.draw.rect(screen, COLOR['Seleccion'], [170, Y, 51, 51], 0)		# Se Muestra el Recuadro de Selección (Color Amarillento) Temporalmente.
 				
 				seleccionPers12 = False		# No Volvera a entrar aqui hasta que se vuelva a seleccionar.
-				NP = 11					# Se Asigna a NP el Numero De Personaje.
+				NumPlayer = 11					# Se Asigna a NumPlayer el Numero De Personaje.
 			
 			Y += 70
 			pygame.draw.line(screen, COLOR['Negro'],  [9, Y], [250,  Y], 3)
@@ -2544,12 +2546,12 @@ def main():
 			
 			if BtnMutePressed:
 				screen.blit(btnON.image, (65, 582))
-				Fondo1.set_volume(0)
-				Fondo2.set_volume(0)
+				MusicFondo1.set_volume(0)
+				MusicFondo2.set_volume(0)
 			else:
 				screen.blit(btnOFF.image, (60, 582))
-				Fondo1.set_volume(1)
-				Fondo2.set_volume(1)
+				MusicFondo1.set_volume(1)
+				MusicFondo2.set_volume(1)
 			
 			if BtnMaskPressed: screen.blit(btnON.image, (205, 582))
 			else: screen.blit(btnOFF.image, (200, 582))
