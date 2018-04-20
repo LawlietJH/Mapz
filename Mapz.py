@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.5.7
+# Versión: 1.5.8
 
 import Arbol
 import pygame
@@ -715,16 +715,26 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 	
 	Lista = [Up, Right, Down, Left]
 	
-	# Se Crean Los Nodos Hijos Para El Nodo Actual.
-	if Y > 1:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]], NoRepetir, AlFinal)
-	if X < XPOS-1:	Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]], NoRepetir, AlFinal)
-	if Y < YPOS:	Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]], NoRepetir, AlFinal)
-	if X > 0:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)
+	# Verifica que sean Coordenadas Con Costos, Los que son N/A No se agregan al Árbol.
+	for x in VALORES:
+		
+		if x[0] == Lista[Orden[0]]:
+			if x[3] != '':
+				if Y > 1:			Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+		if x[0] == Lista[Orden[1]]:
+			if x[3] != '':
+				if X < XPOS-1:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+		if x[0] == Lista[Orden[2]]:
+			if x[3] != '':
+				if Y < YPOS:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+		if x[0] == Lista[Orden[3]]:
+			if x[3] != '':
+				if X > 0:			Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
 	
 	for x in SELECT:
-		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Lista de Orden de Visitas.
+		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Se Agrega La Lista Con El Orden De Visitas.
 	
 	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[0]):
 		Arbol.AgregarPadre(ArbolRaiz, Lista[0], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
