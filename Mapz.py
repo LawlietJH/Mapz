@@ -723,6 +723,9 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 	
 	Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
 	
+	for x in SELECT:
+		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Lista de Orden de Visitas.
+	
 	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[0]):
 		Arbol.AgregarPadre(ArbolRaiz, Lista[0], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
 		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[0])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
@@ -736,11 +739,7 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 		Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
 		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
 	
-	print(PuntoInicio, PuntoDestino)
-	Pause()
-	
-	for x in SELECT:
-		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Lista de Visitas.
+	# ~ Pause()
 	
 	# ~ Arbol.AgregarEstado(ArbolRaiz, Actual, Estado)			# Cerrado si todos sus hijos ya han sido visitados.
 	
