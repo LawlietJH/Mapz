@@ -1183,7 +1183,11 @@ def main():
 	pygame.mixer.init()			# Inicializa el Mesclador.
 	
 	screen = pygame.display.set_mode(DIMENCIONES)	# Objeto Que Crea La Ventana.
+	
 	BGimg = load_image('img/fondo-negro.jpg')		# Carga el Fondo de la Ventana.
+	
+	Icono = pygame.image.load("img/Icon.png")
+	pygame.display.set_icon(Icono)
 	
 	pygame.display.set_caption("Laberinto")			# Titulo de la Ventana del Juego.
 	game_over = False								# Variable Que Permite indicar si se termino el juego o no.
@@ -1200,7 +1204,7 @@ def main():
 	TextInput7 = ''		# Input Para El Costo en Terreno 7 (Montaña).
 	TextInput8 = ''		# Input Para El Costo en Terreno 8 (Nieve).
 	
-	# Incializamos El Diccionario de Costos Por Terreno
+	# Incializamos El Diccionario de Costos Por Terreno.
 	Costos = {
 			  'Hombre':		[TextInput1, TextInput2, TextInput3, TextInput4, TextInput5, TextInput6, TextInput7, TextInput8],
 			  'Gato':		[TextInput1, TextInput2, TextInput3, TextInput4, TextInput5, TextInput6, TextInput7, TextInput8],
