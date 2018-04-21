@@ -31,7 +31,28 @@ class Arbol:
 		self.EsIni = EsIni		# True si el Nodo es Estado Inicial.
 		self.EsFin = EsFin		# True si el Nodo es Estado Final.
 		
-	def GetDatos(self): return [ self.Coord, self.Padre, self.PHijos, self.Estado, self.Orden, self.EsIni, self.EsFin ]
+	# ~ def GetPadre(self):		return self.Padre
+	
+	# ~ def GetHijos(self):		return self.PHijos
+	
+	# ~ def GetEstado(self):	return self.Estado
+	
+	# ~ def GetOrden(self):		return self.Orden
+	
+	# ~ def GetIniFin(self):	return [ self.EsIni, self.EsFin ]
+	
+	def GetDatos(self):
+		
+		return {
+				'Objetos':self.Hijos,
+				'Coordenadas':self.Coord,
+				'Padre':self.Padre,
+				'Hijos':self.PHijos,
+				'Estado':self.Estado,
+				'OrdenVisitas':self.Orden,
+				'EsInicial':self.EsIni,
+				'EsFinal':self.EsFin
+			   }
 
 
 def Agregar(arbol, Padre, Coord, NoRepetir=True, AlFinal=True):
@@ -139,15 +160,58 @@ def Modificar(arbol, Coord, Padre, PHijos, Estado, Orden, EsIni, EsFin):
 	return False
 
 
-def ExtraerDatos(arbol, Coord):
+def ExtraerDatos(arbol, Padre, Coord):
 	
-	if Coord == arbol.Coord: return arbol.GetDatos()
-	
+	if Padre == arbol.Coord:
+		
+		for x in range(len(arbol.Hijos)):
+			
+			if Coord == arbol.Hijos[x].Coord: return [True, arbol.Hijos[x].GetDatos()]
+			
 	for SubArbol in arbol.Hijos:
 		
-		if ExtraerDatos(SubArbol, Coord): return arbol.GetDatos()
+		if ExtraerDatos(SubArbol, Padre, Coord)[0]: return [True, arbol.Hijos[x].GetDatos()]
 		
-	return False
+	return [False, None]
+
+
+# ~ def GetObjetoNodo(arbol, Padre, Coord):
+	
+	# ~ if Padre == arbol.Coord:
+		
+		# ~ for x in range(len(arbol.Hijos)):
+			
+			# ~ if Coord == arbol.Hijos[x].Coord: return [True, arbol]
+			
+	# ~ for SubArbol in arbol.Hijos:
+		
+		# ~ Lista = GetObjetoNodo(SubArbol, Padre, Coord)
+		
+		# ~ if Lista[0]: return Lista
+		
+	# ~ return [False, None]
+
+
+def ActualizaEstado(arbol):
+	
+	if arbol.Estado == 'Abierto':
+		
+		xD = True
+		
+		if len(arbol.Hijos) == 0:
+			
+			if len(arbol.Orden) > 0: arbol.Estado = 'Cerrado'
+			
+		else:
+			
+			for SubArbol in arbol.Hijos:
+				
+				if len(SubArbol.Orden) == 0: xD = False
+				
+			if xD: arbol.Estado = 'Cerrado'		# Cerrado si todos sus hijos ya han sido visitados.
+	
+	for SubArbol in arbol.Hijos: ActualizaEstado(SubArbol)
+
 
 
 def Tabs(Cont):
@@ -201,7 +265,7 @@ def Profundidad(arbol, Cont):
 	
 	# ~ print(arbol.Coord, 'Padre:', arbol.Padre, 'Hijos:', arbol.PHijos)
 	# ~ print(arbol.GetDatos())
-	print(arbol.Coord)
+	print(arbol.Coord, arbol.Orden, arbol.Estado)
 	
 	for hijo in arbol.Hijos:
 		
@@ -251,6 +315,15 @@ if __name__ == "__main__":	# Datos de Prueba.
 	for x in ['2','3','4']: AgregarHijos(raiz, '1', x)
 	AgregarHijos(raiz, '2', '5')
 	for x in ['6','7']: AgregarHijos(raiz, '4', x)
+	
+	AgregarOrden(raiz, '0', ['1'])
+	AgregarOrden(raiz, '1', ['2'])
+	AgregarOrden(raiz, '2', ['3','5'])
+	AgregarOrden(raiz, '3', ['4'])
+	AgregarOrden(raiz, '4', ['6'])
+	AgregarOrden(raiz, '5', ['7'])
+	
+	ActualizaEstado(raiz)
 	
 	ImprimirArbol(raiz)
 	
