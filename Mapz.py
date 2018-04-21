@@ -749,12 +749,10 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 		Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
 		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
 	
-	# ~ Pause()
-	
-	# ~ Arbol.AgregarEstado(ArbolRaiz, Actual, Estado)			# Cerrado si todos sus hijos ya han sido visitados.
-	
 	# Se Indica Si Es El Nodo Inicial.
 	if Padre == 'N/A': Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
+	
+	Arbol.ActualizaEstado(ArbolRaiz)		# Actualiza Los Estados (Abierto/Cerrado) De Todos Los Nodos.
 
 
 
