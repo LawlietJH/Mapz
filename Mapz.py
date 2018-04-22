@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.5.8
+# Versión: 1.5.9
 
 import Arbol
 import pygame
@@ -756,6 +756,42 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 
 
 
+def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Cont, Fuentes):
+	
+	Cont += 1
+	Cony = 1
+	
+	# ~ print(arbol.Coord, arbol.Orden, arbol.Estado)
+	
+	pygame.draw.rect(screen, COLOR['Blanco'], [PX, PY, X1, Y1], 0)
+	
+	dibujarTexto(screen, str(arbol.Coord),  [PX+12, PY+15], Fuentes['Droid 15'], COLOR['Verde Claro'])
+	dibujarTexto(screen, str(arbol.Orden),  [PX+12, PY+30], Fuentes['Droid 15'], COLOR['Verde Claro'])
+	dibujarTexto(screen, str(arbol.Estado), [PX+12, PY+45], Fuentes['Droid 15'], COLOR['Verde Claro'])
+	
+	PY += Y1+20
+	
+	for hijo in arbol.Hijos:
+		
+		pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), PY-20 ],              [ PX+int(X1/2),    PY+int(X1/2) ], 3)
+		pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), PY+int(X1/2) ], [ PX+int(X1/2)+X1, PY+int(X1/2) ], 3)
+		Cony += 1
+		
+		xD = MostrarArbol(hijo, screen, PX+150, PY, X1, Y1, Cont, Fuentes)
+		
+		# ~ if xD == 1: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY ], 3)
+		# ~ if xD == 2: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY+int(X1/2)+20 ], 3)
+		# ~ if xD == 3: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY+int(X1/2)+20 ], 3)
+		# ~ if xD == 4: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY+int(X1/2)+20 ], 3)
+		
+		PY += (Y1+20) * xD
+		
+	Cont -= 1
+	
+	return Cony
+
+
+
 #===================================================================================================
 
 def AbrirArchivo():
@@ -1428,10 +1464,18 @@ def main():
 	
 	BtnMutePressed = False			# Botón Para Poner Mute en False Por Defecto.
 	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
+	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	
 	# Botón Para Mute y Enmascaramiento True/False, On/Off:
 	btnON  = Boton("img/Botones/BtnOn.png")			# Objeto Botón ON
 	btnOFF = Boton("img/Botones/BtnOff.png")		# Objeto Botón OFF
+	
+	MoveX = 0
+	MoveY = 0
+	XX1 = 0
+	YY1 = 0
+	
+	#===================================================================
 	
 	MusicFondo1.play(-1)			# Se Ejecuta La Música de Fondo Para el Menu. (El -1 indica que se repita de forma en Búcle).
 	
@@ -1456,7 +1500,7 @@ def main():
 			elif evento.type == pygame.KEYDOWN:		# Manipulación del Teclado.
 				
 				# Si Ya Fue Cargado El Tablero, Se Presionó El Botón 'Comenzar' y El Estado Inicial y Final Son Distintos, Podra Moverse El Personaje.
-				if Cargar and Iniciar and seleccion != PuntoDestino:
+				if Cargar and Iniciar and seleccion != PuntoDestino and not BtnMostrarArbol:
 					
 					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje, ArbolRaiz)	# Tecla Izquierda. Mueve Personaje.
 					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje, ArbolRaiz)	# Tecla Derecha. Mueve Personaje.
@@ -1464,6 +1508,13 @@ def main():
 					elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
 					
 					Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
+				
+				if BtnMostrarArbol:
+					
+					if   evento.key == pygame.K_LEFT:	MoveX += 10
+					elif evento.key == pygame.K_RIGHT:	MoveX -= 10
+					elif evento.key == pygame.K_UP:		MoveY += 10
+					elif evento.key == pygame.K_DOWN:	MoveY -= 10
 					
 				if evento.key == pygame.K_ESCAPE: game_over = True		# Tecla ESC Cierra el Juego.
 				
@@ -1567,6 +1618,17 @@ def main():
 						#~ screen = pygame.display.set_mode(DIMENCIONES)
 						#~ FULL = False
 			
+			
+			elif evento.type == pygame.KEYUP:
+				
+				if BtnMostrarArbol:
+					
+					if   evento.key == pygame.K_LEFT:	MoveX = 0
+					elif evento.key == pygame.K_RIGHT:	MoveX = 0
+					elif evento.key == pygame.K_UP:		MoveY = 0
+					elif evento.key == pygame.K_DOWN:	MoveY = 0
+				
+			
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
 			
 			elif evento.type == pygame.MOUSEBUTTONDOWN: #============================== Al Mantener Presionado Cualquier Botón del Mouse. ==============================
@@ -1602,104 +1664,13 @@ def main():
 					
 					xr, yr = pos[0], pos[1]		# Posición X y Y del Mouse por separado, Coordenadas por Pixeles.
 					
-					# Cooredenadas Botón 1 (Cargar Mapa):
-					if (xr >= 927) and (xr <= 1077) and (yr >= 24) and (yr <= 56):
+					if Iniciar:
 						
-						Btn1Pressed = True
-						CargarMapa = True
-						Error2 = False
-						CadenaError2 = ''
-					
-					if Cargar: 			# Si se cargo ya el Mapa.
-						
-						pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
-						
-						if NumPlayer != None:
-							if Pagina1:
-								Y = 205
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo1 = True
-								else: Costo1 = False
-								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo2 = True
-								else: Costo2 = False
-								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo3 = True
-								else: Costo3 = False
-								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo4 = True
-								else: Costo4 = False
-								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo5 = True
-								else: Costo5 = False
-							else:
-								Y = 205
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo6 = True
-								else: Costo6 = False
-								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo7 = True
-								else: Costo7 = False
-								Y += 70
-								if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo8 = True
-								else: Costo8 = False
+						if BtnMostrarArbol:
+							MoveX, MoveY = 0, 0
+							if (xr >= 1055) and (xr <= 1095) and (yr >= 582) and (yr <= 602): BtnMostrarArbol = False 
 						else:
-							Error = True
-							CadenaError = 'Selecciona Un Personaje.'
-						
-						if SelectEstados:
-							
-							SelTemp = seleccion				# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
-							SelTemp = obtenerPosicionClic(XPOS, YPOS, pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
-						
-						#===========================================================================
-						
-						if (xr >= 80)   and (xr <= 180)  and (yr >= 325) and (yr <= 360) and Iniciar: Btn3Pressed = True
-						if (xr >= 70)   and (xr <= 190)  and (yr >= 355) and (yr <= 410) and Iniciar: Btn4Pressed = True
-						
-						if (xr >= 950)  and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
-						if (xr >= 1050) and (xr <= 1075) and (yr >= 550) and (yr <= 570):
-							
-							if Pagina1: Pagina1 = False
-							else: Pagina1 = True
-					
-						# ================= Cooredenadas Botón Izquierda y Derecha =================
-						
-						X = 1006; Y = 228
-						
-						if NumPlayer != None:
-							
-							CadenaError = ''
-							CadenaError2 = ''
-							
-							LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
-						else:
-							Error = True
-							CadenaError = 'Selecciona Un Personaje'
-						#=====================================================================================
-						
-						# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
-						if SelectPerson == True:
-							
-							Y = 339
-							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True; Error = False
-							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True; Error = False
-							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True; Error = False
-							
-							Y += 60
-							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True; Error = False
-							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True; Error = False
-							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True; Error = False
-							
-							Y += 60
-							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True; Error = False
-							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True; Error = False
-							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True; Error = False
-							
-							Y += 60
-							if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True; Error = False
-							elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True; Error = False
-							elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True; Error = False
-					
-						#=====================================================================================
+							if (xr >= 1050) and (xr <= 1100) and (yr >= 582) and (yr <= 602): BtnMostrarArbol = True
 					
 					if BtnMutePressed:
 						if (xr >= 65) and (xr <= 105) and (yr >= 582) and (yr <= 602): BtnMutePressed = False
@@ -1711,6 +1682,107 @@ def main():
 					else:
 						if (xr >= 200) and (xr <= 250) and (yr >= 582) and (yr <= 602): BtnMaskPressed = True
 					
+					if not BtnMostrarArbol:
+						
+						# Cooredenadas Botón 1 (Cargar Mapa):
+						if (xr >= 927) and (xr <= 1077) and (yr >= 24) and (yr <= 56):
+							
+							Btn1Pressed = True
+							CargarMapa = True
+							Error2 = False
+							CadenaError2 = ''
+						
+						if Cargar: 			# Si se cargo ya el Mapa.
+							
+							pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
+							
+							if NumPlayer != None:
+								if Pagina1:
+									Y = 205
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo1 = True
+									else: Costo1 = False
+									Y += 70
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo2 = True
+									else: Costo2 = False
+									Y += 70
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo3 = True
+									else: Costo3 = False
+									Y += 70
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo4 = True
+									else: Costo4 = False
+									Y += 70
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo5 = True
+									else: Costo5 = False
+								else:
+									Y = 205
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo6 = True
+									else: Costo6 = False
+									Y += 70
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo7 = True
+									else: Costo7 = False
+									Y += 70
+									if (xr >= 1010) and (xr <= 1090) and (yr >= Y) and (yr <= Y+20) and NumPlayer != None: Costo8 = True
+									else: Costo8 = False
+							else:
+								Error = True
+								CadenaError = 'Selecciona Un Personaje.'
+							
+							if SelectEstados:
+								
+								SelTemp = seleccion				# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
+								SelTemp = obtenerPosicionClic(XPOS, YPOS, pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
+							
+							#===========================================================================
+							
+							if (xr >= 80)   and (xr <= 180)  and (yr >= 325) and (yr <= 360) and Iniciar: Btn3Pressed = True
+							if (xr >= 70)   and (xr <= 190)  and (yr >= 355) and (yr <= 410) and Iniciar: Btn4Pressed = True
+							
+							if (xr >= 950)  and (xr <= 1050) and (yr >= 110) and (yr <= 135): Btn2Pressed = True
+							if (xr >= 1050) and (xr <= 1075) and (yr >= 550) and (yr <= 570):
+								
+								if Pagina1: Pagina1 = False
+								else: Pagina1 = True
+						
+							# ================= Cooredenadas Botón Izquierda y Derecha =================
+							
+							X = 1006; Y = 228
+							
+							if NumPlayer != None:
+								
+								CadenaError = ''
+								CadenaError2 = ''
+								
+								LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8 = BotonesFlechas(X,Y,xr,yr,Lisy,LisyPos1,LisyPos2,LisyPos3,LisyPos4,LisyPos5,LisyPos6,LisyPos7,LisyPos8)
+							else:
+								Error = True
+								CadenaError = 'Selecciona Un Personaje'
+							#=====================================================================================
+							
+							# Coordenadas Recuadros Personajes 1, 2 y 3 respectivamente:
+							if SelectPerson == True:
+								
+								Y = 339
+								if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers1 = True; Error = False
+								elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers2 = True; Error = False
+								elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers3 = True; Error = False
+								
+								Y += 60
+								if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers4 = True; Error = False
+								elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers5 = True; Error = False
+								elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers6 = True; Error = False
+								
+								Y += 60
+								if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers7 = True; Error = False
+								elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers8 = True; Error = False
+								elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers9 = True; Error = False
+								
+								Y += 60
+								if   (xr >= 29)  and (xr <= 82)  and (yr >= Y) and (yr <= Y+53): seleccionPers10 = True; Error = False
+								elif (xr >= 99)  and (xr <= 152) and (yr >= Y) and (yr <= Y+53): seleccionPers11 = True; Error = False
+								elif (xr >= 169) and (xr <= 222) and (yr >= Y) and (yr <= Y+53): seleccionPers12 = True; Error = False
+						
+							#=====================================================================================
+						
 						#=====================================================================================
 				
 			elif evento.type == pygame.MOUSEBUTTONUP: #============================== Al Dejar de Presionar Cualquier Botón del Mouse. ==============================
@@ -2542,30 +2614,47 @@ def main():
 		#======================================== Sección Baja =============================================
 		#===================================================================================================
 		
+		Contador = 100
 		
+		if BtnMostrarArbol:
+			
+			XX1 += MoveX
+			YY1 += MoveY
+			PX, PY = 20, 20
+			
+			pygame.draw.rect(screen, COLOR['Fondo'], [ 0, 0, DIMENCIONES[0], DIMENCIONES[1] ], 0)
+			
+			MostrarArbol(ArbolRaiz, screen, PX+XX1, PY+YY1, 100, 100, Contador, Fuentes)
 		
-		if True:
-			
-			dibujarTexto(screen, 'Mute', [9, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
-			dibujarTexto(screen, 'Mute', [10, 583], Fuentes['Droid 18'], COLOR['Verde'])
-			
-			dibujarTexto(screen, 'Ocultar', [134, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
-			dibujarTexto(screen, 'Ocultar', [135, 583], Fuentes['Droid 18'], COLOR['Verde'])
-			
-			btnON.resize(40,20)
-			btnOFF.resize(50,20)
-			
-			if BtnMutePressed:
-				screen.blit(btnON.image, (65, 582))
-				MusicFondo1.set_volume(0)
-				MusicFondo2.set_volume(0)
-			else:
-				screen.blit(btnOFF.image, (60, 582))
-				MusicFondo1.set_volume(1)
-				MusicFondo2.set_volume(1)
-			
-			if BtnMaskPressed: screen.blit(btnON.image, (205, 582))
-			else: screen.blit(btnOFF.image, (200, 582))
+		dibujarTexto(screen, 'Mute', [9, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+		dibujarTexto(screen, 'Mute', [10, 583], Fuentes['Droid 18'], COLOR['Verde'])
+		
+		dibujarTexto(screen, 'Ocultar', [134, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+		dibujarTexto(screen, 'Ocultar', [135, 583], Fuentes['Droid 18'], COLOR['Verde'])
+		
+		if Iniciar:
+			dibujarTexto(screen, 'Mostrar Árbol', [929, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+			dibujarTexto(screen, 'Mostrar Árbol', [930, 583], Fuentes['Droid 18'], COLOR['Verde'])
+		
+		btnON.resize(40,20)
+		btnOFF.resize(50,20)
+		
+		if BtnMutePressed:
+			screen.blit(btnON.image, (65, 582))
+			MusicFondo1.set_volume(0)
+			MusicFondo2.set_volume(0)
+		else:
+			screen.blit(btnOFF.image, (60, 582))
+			MusicFondo1.set_volume(1)
+			MusicFondo2.set_volume(1)
+		
+		if BtnMaskPressed: screen.blit(btnON.image, (205, 582))
+		else: screen.blit(btnOFF.image, (200, 582))
+		
+		if Iniciar:
+		
+			if BtnMostrarArbol: screen.blit(btnON.image, (1055, 582))
+			else: screen.blit(btnOFF.image, (1050, 582))
 		
 		
 		
