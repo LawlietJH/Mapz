@@ -1,7 +1,7 @@
 # Mapz
 
 ## En Python: 3.5.0
-## Versión Actual: 1.5.8
+## Versión Actual: 1.6.0
 ## Dependencias: Pygame.
 
 - - -
@@ -28,6 +28,9 @@ python -m pip install pygame
     * __Costos Con Máximo 2 Decimales. _(Corregido el 06/03/2018 en v1.4.6)___
     * __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aún Antes De Comenzar El Juego. _(Corregido el 21/03/2018 en v1.4.9)___
 * __Parte 2: _23/04/2018 y 25/04/2018_.__
+  * ___Calificación:_ ???/100.__
+  * ___Penalizaciones:___
+  * ___Observaciones:___
 * __Parte 3: _16/05/2018 y 21/05/2018_.__
 
 - - -
@@ -51,10 +54,13 @@ python -m pip install pygame
    * __v1.4.0: _02/03/2018_, v1.4.1: _03/03/2018_, v1.4.2: _04/03/2018_, v1.4.3: _04/03/2018_, v1.4.4: _04/03/2018___
    * __v1.4.5: _05/03/2018_, v1.4.6: _06/03/2018_, v1.4.7: _07/03/2018_, v1.4.8: _07/03/2018_, v1.4.9: _21/03/2018_.__
 
-### Proyecto Parte 2: Comenzada.
+### Proyecto Parte 2: Finalizada.
 
  * __Versión 1.5:__
    
    * __v1.5.0: _28/03/2018_, v1.5.1: _29/03/2018_, v1.5.2: _15/04/2018_, v1.5.3: _15/04/2018_, v1.5.4: _15/04/2018___
-   * __v1.5.5: _16/04/2018_, v1.5.6: _18/04/2018_, v1.5.7: _20/04/2018_, v1.5.8: _20/04/2018_.__
+   * __v1.5.5: _16/04/2018_, v1.5.6: _18/04/2018_, v1.5.7: _20/04/2018_, v1.5.8: _20/04/2018_, v1.5.9: _21/04/2018_.__
    
+ * __Versión 1.6:__
+   
+   * __v1.6.0: _24/04/2018_.__
