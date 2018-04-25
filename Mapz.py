@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.0
+# Versión: 1.6.1
 
 import Arbol
 import pygame
@@ -1643,8 +1643,50 @@ def main():
 					#~ else:
 						#~ screen = pygame.display.set_mode(DIMENCIONES)
 						#~ FULL = False
-			
-			
+				
+				if evento.key == pygame.K_c:	# Presiona Botón 1 (Cargar Mapa).
+					
+					Clic1.play()
+					
+					Btn1Pressed = True
+					CargarMapa = True
+					Error2 = False
+					CadenaError2 = ''
+					
+				if not BtnMostrarArbol:
+					
+					if Cargar: 			# Si se cargo ya el Mapa.
+						
+						if evento.key == pygame.K_RETURN:	# Presiona Botón 2 (Comenzar).
+							if not Iniciar:
+								
+								Clic1.play()
+								Btn2Pressed = True
+							
+						if evento.key == pygame.K_r:	# Presiona Botón 3 (Reiniciar).
+							if Iniciar:
+								
+								Clic1.play()
+								Btn3Pressed = True
+							
+						if evento.key == pygame.K_p:	# Presiona Botón 4 (Seleccionar Personaje).
+							if Iniciar:
+								
+								Clic1.play()
+								Btn4Pressed = True
+						
+						if evento.key == pygame.K_LEFT:		# Presiona Botón de Página Anterior (En Selección de Terrenos).
+							if not Iniciar and not BtnMostrarArbol:
+								
+								Clic1.play()
+								Pagina1 = True
+						
+						if evento.key == pygame.K_RIGHT:	# Presiona Botón de Página Siguiente (En Selección de Terrenos).
+							if not Iniciar and not BtnMostrarArbol:
+								
+								Clic1.play()
+								Pagina1 = False
+							
 			elif evento.type == pygame.KEYUP:
 				
 				if BtnMostrarArbol:
@@ -1653,7 +1695,241 @@ def main():
 					elif evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:	MoveX = 0
 					elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	MoveY = 0
 					elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	MoveY = 0
+							
+				if evento.key == pygame.K_v:
+					
+					if Iniciar:
+						
+						if BtnMostrarArbol:
+							Clic2.play()
+							BtnMostrarArbol = False
+						else:
+							Clic1.play()
+							BtnMostrarArbol = True
+							XX1 = 0
+							YY1 = 0
 				
+				if evento.key == pygame.K_m:
+					
+					if BtnMutePressed:
+						Clic2.play()
+						BtnMutePressed = False
+					else:
+						Clic1.play()
+						BtnMutePressed = True
+				
+				if evento.key == pygame.K_o:
+					
+					if BtnMaskPressed:
+						Clic2.play()
+						BtnMaskPressed = False
+					else:
+						Clic1.play()
+						BtnMaskPressed = True
+				
+				if not BtnMostrarArbol:
+						
+					if evento.key == pygame.K_c:
+						
+						xMatrixy, xLisy, xXPOS, xYPOS, xPOS = TODOArchivo()		# Obtenemos Valores desde la Función Temporalmente.
+						
+						if Error:		# Si Hubo Error.
+						
+							Error2 = False
+						
+						if xMatrixy == None:	# Si los Valores Se Encuentran En Null (None aqui en python) significa que hubo un error.
+							
+							if Cargar == False: pass		# Si el Valor era False se mantiene.
+							else: Cargar = True				# Si el Valor Era None cambia a True.
+							CargarMapa = False				# Se Cancela el Cargar el Mapa.
+						
+						else:	# Si la Matriz tiene informacion, Todo Estuvo Correcto y Validado.
+							
+							Sucess.play()
+							
+							MusicFondo1.stop()
+							MusicFondo1.play(-1)
+							MusicFondo2.stop()
+							
+							SELECT = []			 	# Se Reinicia La Variable Global SELECT, que guarda el Recorrido para imprimirlo en la Matriz. 
+							SelectEstados = False	# Permite Saber Si se Permite Selecciona el Estado Inicial y Final.
+							Pagina1 = True		 	# Se Vuelve a Posicionar la Página 1 en la Seleccion de Terrenos para el Mapa.
+							DibujarInfo = False  	# Al Cargar Un Nuevo Mapa, Se Deja de Mostrar La Información de Seleccion.
+							Iniciar = False		 	# Aun no se permite Iniciar La Partida.
+							Cargar = True		 	# Se Dibuja El Mapa.
+							SelectPerson = True		# Permite Seleccionar Algun Personaje.
+							
+							# Se Crean Nuevos Objetos Bloque para el nuevo Mapa.
+							bloque1 = Bloque("img/Texturas/Pared.jpg")		# Objeto Pared.
+							bloque3 = Bloque("img/Texturas/Camino.jpg")		# Objeto Camino.
+							bloque4 = Bloque("img/Texturas/Bosque.jpg")		# Objeto Bosque.
+							bloque5 = Bloque("img/Texturas/Lava.jpg")		# Objeto Lava.
+							bloque6 = Bloque("img/Texturas/Agua.jpg")		# Objeto Agua.
+							bloque7 = Bloque("img/Texturas/Arena.jpg")		# Objeto Arena.
+							bloque8 = Bloque("img/Texturas/Montania.jpg")	# Objeto Montaña.
+							bloque9 = Bloque("img/Texturas/Nieve.jpg")		# Objeto Nieve.
+							
+							# Se Pasan los valores Temporales a los Originales.
+							Matrixy = xMatrixy
+							Lisy = ['-1']				# Se Reinicia la Lista con el Primer Elemento, el -1 para la Selección de Terrenos.
+							Lisy = Lisy + xLisy			# Se le añaden todos los Valores.
+							
+							# Se Reinician Las Variables Globales (Pared, Camino, Bosque, Lava, Agua, Arena, Montaña, Nieve) en 0.
+							# Se Reinician Las Variables De Posición Para la Selección de Terrenos en 0.
+							Pared   = LisyPos1 = 0
+							Camino  = LisyPos2 = 0
+							Bosque  = LisyPos3 = 0
+							Lava    = LisyPos4 = 0
+							Agua    = LisyPos5 = 0
+							Arena   = LisyPos6 = 0
+							Montaña = LisyPos7 = 0
+							Nieve	= LisyPos8 = 0
+							
+							# Obtenemos El Ancho y Alto del Mapa, Para Cargar La Matriz Correctamente.
+							XPOS = xXPOS		# Valor de las Letras.
+							YPOS = xYPOS		# Valor de las Numeros.
+							POS = xPOS			# Obtenemos Cual es el Mas grande de Los 2.
+							
+							Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia el Enmascaramiento del Mapa.
+							
+							puntoInicio, dimension = ajustarMedidas(POS, tamanio_fuente)	# Se Indica El Punto de Inicio Para Dibujar La Matriz.
+							
+							# Se Reinicia el Diccionario Objetos con los Nuevos Objetos Generados.
+							Objetos = {'Pared':bloque1,	'Camino':bloque3,	'Bosque': bloque4,	'Lava': bloque5,
+									   'Agua': bloque6,	'Arena': bloque7,	'Montaña':bloque8,	'Nieve':bloque9}
+							
+							Movimientos  = 0
+							CostoTotal	 = 0
+							PuntoInicio	 = None		# Se Inicializa la Variable Global PuntoInicio en None.
+							PuntoDestino = None		# Se Inicializa la Variable Global PuntoDestino en None.
+							NumPlayer	 = None		# Se Inicializa la Variable personaje en None.
+							CargarMapa	 = False	# Indíca que El Botón Cargar Mapa Dejo de ser Apretado.
+							Error		 = False	# Indíca Que No Hay Error.
+					
+					if Cargar: 			# Si se cargo ya el Mapa.
+						
+						if evento.key == pygame.K_RETURN:
+							
+							if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
+								
+								if NumPlayer == None:		# Si el Botón 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
+									
+									Error = True
+									CadenaError = 'Selecciona Un Personaje.'
+									Iniciar = False
+								
+								elif PuntoInicio == None:
+									
+									Error = True
+									CadenaError = 'Selecciona un Estado Inicial.'
+								  
+								elif PuntoDestino == None:
+									
+									Error = True
+									CadenaError = 'Selecciona un Estado Final.'
+								  
+								else:			# Si Se Selecciono Un Personaje, Se Iniciará.
+									
+									Iniciar = True	# Inicia El Juego.
+									Victory = True
+									
+									MusicFondo2.stop()
+									MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
+									MusicFondo1.stop()
+									MusicFondo2.play(-1)
+									
+									seleccion = PuntoInicio
+									
+									personaje = Personaje(RutaPersonaje[NombrePersonaje[NumPlayer]]) # Se Crea el Objeto Personaje de la clase (Personaje),
+																							  # Pasandole La Ruta de la Imagen Que se encuentra en el Diccionario (RutaPersonaje),
+																							  # Que corresponda al Nombre de Personaje de la lista (NombrePersonaje)
+																							  # Que este en la posición del Numero de Personaje Elegido (NumPlayer)
+									
+									if NumPlayer == 4 or NumPlayer == 8 or NumPlayer == 11:	
+										
+										personaje.flip()				# Acomodamos Al Personaje Mirando a Derecha.
+										personaje.setDireccion('R')
+										
+									Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
+									SelectPerson = False					# Ya No Permite Seleccionar otro Personaje hasta Presionar el Botón 4 (Seleccionar Personaje)
+									
+									for val in VALORES:
+										if val[0] == PuntoInicio: CostoTotal += float(val[3])
+											
+									Movimientos += 1
+									SELECT.append((seleccion, [Movimientos]))
+									
+									ArbolRaiz = Arbol.Raiz(seleccion)
+									PosLetra = LETRAS.index(seleccion[0])
+									x, y = PosLetra, seleccion[1]
+									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+									Arbol.ImprimirArbol(ArbolRaiz)
+									
+							elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
+								
+								CadenaError2 = 'Bloques Aún No Asignados.'
+								
+							
+						if evento.key == pygame.K_r:
+							
+							if Btn3Pressed: # Si Se Presionó el Botón 3 (Reiniciar).
+								
+								MusicFondo2.stop()
+								MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
+								MusicFondo2.play(-1)
+								
+								Victory = True
+								Error = False
+								CadenaError = ''
+								
+								Movimientos = 1
+								CostoTotal = 0
+								
+								seleccion = PuntoInicio
+								
+								SELECT = []
+								SELECT.append((seleccion, [Movimientos]))
+								
+								Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia el Enmascaramiento del Mapa.
+								
+								for val in VALORES:
+									if val[0] == PuntoInicio: CostoTotal += float(val[3])
+								
+								ArbolRaiz = Arbol.Raiz(seleccion)
+								PosLetra = LETRAS.index(seleccion[0])
+								x, y = PosLetra, seleccion[1]
+								AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+								Arbol.ImprimirArbol(ArbolRaiz)
+								
+						if evento.key == pygame.K_p:
+							
+							if Btn4Pressed: # Si Se Presionó el Botón 3 (Seleccionar Personaje).
+								
+								MusicFondo1.stop()
+								MusicFondo1.play(-1)
+								MusicFondo2.stop()
+								
+								Error = False
+								CadenaError = ''
+								
+								Movimientos = 0
+								CostoTotal = 0
+								
+								SELECT = []
+								Mask = [ [ False for x in range(XPOS) ] for x in range(YPOS) ]		# Se Reinicia el Enmascaramiento del Mapa.
+								
+								DibujarInfo = False
+								SelectPerson = True
+								Iniciar = False
+								Cargar = True
+								
+				
+				Btn1Pressed = False			# Indica Que El Botón 'Cargar Mapa' Ya No esta Siendo Presionado. 
+				Btn2Pressed = False			# Indica Que El Botón 'Comenzar' Ya No esta Siendo Presionado. 
+				Btn3Pressed = False			# Indica Que El Botón 'Reiniciar' Ya No esta Siendo Presionado. 
+				Btn4Pressed = False			# Indica Que El Botón 'Seleccionar Personaje' Ya No esta Siendo Presionado. 
+				SelTemp = ['P',16]				# La Selección Temporal se manda a un valor jamas cargado en el mapa. (16, 16)
+												# Para que deje de mostrarse la selección con el Puntero.
 			
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
 			
@@ -2672,8 +2948,8 @@ def main():
 		dibujarTexto(screen, 'Ocultar', [135, 583], Fuentes['Droid 18'], COLOR['Verde'])
 		
 		if Iniciar:
-			dibujarTexto(screen, 'Mostrar Árbol', [929, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
-			dibujarTexto(screen, 'Mostrar Árbol', [930, 583], Fuentes['Droid 18'], COLOR['Verde'])
+			dibujarTexto(screen, 'Ver Árbol', [964, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+			dibujarTexto(screen, 'Ver Árbol', [965, 583], Fuentes['Droid 18'], COLOR['Verde'])
 		
 		btnON.resize(40,20)
 		btnOFF.resize(50,20)
