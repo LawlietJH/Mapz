@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.5.9
+# Versión: 1.6.0
 
 import Arbol
 import pygame
@@ -87,7 +87,7 @@ class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botone
 
 
 # Función Que Dibuja La Matriz Para Cargar Los Terrenos. Dibuja El Mapa.
-def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos, BtnMaskPressed):
+def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes, SelTemp, Matriz, Lisy, Objetos, BtnMaskPressed):		# Dibuja El Mapa y Valida Todo Lo Necesiario para este.
 	
 	global SELECT, VALORES, seleccion, PuntoInicio, PuntoDestino, Mask
 	global DibujarInfo, InfoSelTemp, Error, CadenaError, DibujarInfoXY
@@ -380,7 +380,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 		Fuentes['Alice 30'], COLOR['Azul'])
 
 
-def DibujarInformacionClic(screen, Fuentes, SelTemp):
+def DibujarInformacionClic(screen, Fuentes, SelTemp):		# Dibuja La Información Cuando se le da Clic Derecho el Un Terreno del Mapa.
 	
 	Cont = 0
 	Temp = False	# Si no hay Visitas se queda en False.
@@ -488,14 +488,14 @@ def DibujarInformacionClic(screen, Fuentes, SelTemp):
 
 #===================================================================================================
 
-def dibujarTexto(screen, texto, posicion, fuente, color):
+def dibujarTexto(screen, texto, posicion, fuente, color):		# Dibuja Texto En Pantalla.
 	
 	Texto = fuente.render(texto, 1, color)		# Se Pasa El Texto Con La Fuente Especificada.
 	screen.blit(Texto, posicion)				# Se Dibuja En Pantalla El Texto en la Posición Indicada.
 
 #===================================================================================================
 
-def ajustarMedidas(POS, tamanio_fuente):
+def ajustarMedidas(POS, tamanio_fuente):		# Ajusta el Recuadro del Mapa (la Seccion Centro) en las Medidas Ajustadas al Tamaño de la Ventana.
 	
 	# Para Imprimir La Matriz:
 	MargenX = 300
@@ -508,7 +508,7 @@ def ajustarMedidas(POS, tamanio_fuente):
 
 #===================================================================================================
 
-def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
+def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):		# Obtiene La Coordenada del Mapa en la que se le de clic.
 	
 	xr, yr = mouse[0], mouse[1]
 	
@@ -528,7 +528,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):
 
 #===================================================================================================
 
-def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
+def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene la posicion para cada movimiento del Personaje en el Mapa.
 	
 	global SELECT, Movimientos, CostoTotal
 	
@@ -691,7 +691,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):
 
 
 
-def MaskTrue(X, Y, YPOS, XPOS):
+def MaskTrue(X, Y, YPOS, XPOS):		# Pone En True La Posicion Actual del Personaje y sus 4 lados de esa posicion, en la Matriz de Enmascaramiento Para El Mapa.
 	
 	global Mask
 	
@@ -703,7 +703,7 @@ def MaskTrue(X, Y, YPOS, XPOS):
 
 
 
-def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda. 
+def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda.	XPOS y YPOS son Las Medidad Del Mapa, desde 2x2 hasta 15x15.
 	
 	NoRepetir = True	# Sin Repetir Los Nodos.
 	AlFinal = True		# Si Se Repiten Nodos, Agrega Hasta El Padre Más Alejado Correspondiente, Si es False, Agrega al Padre Más Próximo Correspondiente.
@@ -731,64 +731,89 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 			if x[3] != '':
 				if X > 0:			Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
-	Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
+	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
+	
+	if Val[0]:
+		if Val[1]['Padre'] == None:
+			Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
 	
 	for x in SELECT:
 		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Se Agrega La Lista Con El Orden De Visitas.
 	
-	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[0]):
-		Arbol.AgregarPadre(ArbolRaiz, Lista[0], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
-		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[0])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
-	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[1]):
-		Arbol.AgregarPadre(ArbolRaiz, Lista[1], Actual)
-		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[1])
-	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[2]):
-		Arbol.AgregarPadre(ArbolRaiz, Lista[2], Actual)
-		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[2])
-	if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[3]):
-		Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
-		Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
+	if Val[0]:
+		if Val[1]['Hijos'] == []:
+			
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[0]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[0], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[0])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[1]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[1], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[1])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[2]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[2], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[2])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[3]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
 	
 	# Se Indica Si Es El Nodo Inicial.
-	if Padre == 'N/A': Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
+	if Actual == PuntoInicio:    Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
+	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
 	
 	Arbol.ActualizaEstado(ArbolRaiz)		# Actualiza Los Estados (Abierto/Cerrado) De Todos Los Nodos.
 
 
 
-def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Cont, Fuentes):
+def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Fuentes):		# Muestra EL Arbol de Forma Grafica. (Recorrido en Profundidad).
 	
-	Cont += 1
-	Cony = 1
+	pygame.draw.rect(screen, COLOR['Blanco'], [PX, PY, X1+120, Y1], 0)		# Dibuja El Cuadro Para Cada Nodo.
 	
-	# ~ print(arbol.Coord, arbol.Orden, arbol.Estado)
+	dibujarTexto(screen, 'Coordenada:    ' + str(arbol.Coord), [PX+6, PY+6], Fuentes['Droid 12'], COLOR['Azul'])
+	dibujarTexto(screen, 'Coordenada:    ' + str(arbol.Coord), [PX+7, PY+6], Fuentes['Droid 12'], COLOR['Negro'])
 	
-	pygame.draw.rect(screen, COLOR['Blanco'], [PX, PY, X1, Y1], 0)
+	dibujarTexto(screen, 'Padre:    ' + str(arbol.Padre), [PX+6, PY+18],  Fuentes['Droid 12'], COLOR['Azul'])
+	dibujarTexto(screen, 'Padre:    ' + str(arbol.Padre), [PX+7, PY+18],  Fuentes['Droid 12'], COLOR['Negro'])
 	
-	dibujarTexto(screen, str(arbol.Coord),  [PX+12, PY+15], Fuentes['Droid 15'], COLOR['Verde Claro'])
-	dibujarTexto(screen, str(arbol.Orden),  [PX+12, PY+30], Fuentes['Droid 15'], COLOR['Verde Claro'])
-	dibujarTexto(screen, str(arbol.Estado), [PX+12, PY+45], Fuentes['Droid 15'], COLOR['Verde Claro'])
+	if arbol.Hijos == []:
+		dibujarTexto(screen, 'Hijos:      Ninguno', [PX+6, PY+30], Fuentes['Droid 12'], COLOR['Azul'])
+		dibujarTexto(screen, 'Hijos:      Ninguno', [PX+7, PY+30], Fuentes['Droid 12'], COLOR['Negro'])
+	else:
+		dibujarTexto(screen, 'Hijos:      ' + str(arbol.PHijos), [PX+6, PY+30], Fuentes['Droid 12'], COLOR['Azul'])
+		dibujarTexto(screen, 'Hijos:      ' + str(arbol.PHijos), [PX+7, PY+30], Fuentes['Droid 12'], COLOR['Negro'])
+	
+	if arbol.Orden == []:
+		dibujarTexto(screen, 'Visitas:   Sin Visitas', [PX+6, PY+42], Fuentes['Droid 12'], COLOR['Azul'])
+		dibujarTexto(screen, 'Visitas:   Sin Visitas', [PX+7, PY+42], Fuentes['Droid 12'], COLOR['Negro'])
+	else:
+		dibujarTexto(screen, 'Visitas:   ' + str(arbol.Orden), [PX+6, PY+42], Fuentes['Droid 12'], COLOR['Azul'])
+		dibujarTexto(screen, 'Visitas:   ' + str(arbol.Orden), [PX+7, PY+42], Fuentes['Droid 12'], COLOR['Negro'])
+	
+	dibujarTexto(screen, 'Estado:   ' + str(arbol.Estado), [PX+6, PY+54], Fuentes['Droid 12'], COLOR['Azul'])
+	dibujarTexto(screen, 'Estado:   ' + str(arbol.Estado), [PX+7, PY+54], Fuentes['Droid 12'], COLOR['Negro'])
+	
+	if arbol.EsIni: 
+		dibujarTexto(screen, 'EsInicial:  Si', [PX+6, PY+78], Fuentes['Droid 12'], COLOR['Azul'])
+		dibujarTexto(screen, 'EsInicial:  Si', [PX+7, PY+78], Fuentes['Droid 12'], COLOR['Negro'])
+	
+	if arbol.EsFin: 
+		dibujarTexto(screen, 'EsFinal:    Si', [PX+6, PY+78], Fuentes['Droid 12'], COLOR['Azul'])
+		dibujarTexto(screen, 'EsFinal:    Si', [PX+7, PY+78], Fuentes['Droid 12'], COLOR['Negro'])
 	
 	PY += Y1+20
 	
 	for hijo in arbol.Hijos:
 		
-		pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), PY-20 ],              [ PX+int(X1/2),    PY+int(X1/2) ], 3)
-		pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), PY+int(X1/2) ], [ PX+int(X1/2)+X1, PY+int(X1/2) ], 3)
-		Cony += 1
+		xD = Arbol.ContadorDeNodos(hijo, 0)
 		
-		xD = MostrarArbol(hijo, screen, PX+150, PY, X1, Y1, Cont, Fuentes)
+		if arbol.Hijos.index(hijo) != arbol.Hijos.index(arbol.Hijos[-1]):		# Rellena Los Espacios Faltante de las Conexiones de Nodos.
+			for x in range(xD): pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), (PY-20) + ((Y1) * x) ], [ PX+int(X1/2), PY+int(X1/2) + ((Y1+20) * x) + 50], 10)
 		
-		# ~ if xD == 1: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY ], 3)
-		# ~ if xD == 2: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY+int(X1/2)+20 ], 3)
-		# ~ if xD == 3: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY+int(X1/2)+20 ], 3)
-		# ~ if xD == 4: pygame.draw.line(screen, COLOR['Naranja'], [ PX+int(X1/2), PY ], [ PX+int(X1/2), PY+int(X1/2)+20 ], 3)
+		pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), PY-20 ],        [ PX+int(X1/2),    PY+int(X1/2) + 5 ], 10)
+		pygame.draw.line(screen, COLOR['Rojo'], [ PX+int(X1/2), PY+int(X1/2) ], [ PX+int(X1/2)+X1, PY+int(X1/2) ], 10)
+		
+		MostrarArbol(hijo, screen, PX+X1+50, PY, X1, Y1, Fuentes)
 		
 		PY += (Y1+20) * xD
-		
-	Cont -= 1
-	
-	return Cony
 
 
 
@@ -1277,6 +1302,7 @@ def main():
 			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
 			   'Droid 18':pygame.font.Font("fuentes/DroidSans.ttf", 18),
 			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
+			   'Droid 12':pygame.font.Font("fuentes/DroidSans.ttf", 12),
 			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10),
 			   'Droid 8': pygame.font.Font("fuentes/DroidSans.ttf", 8),
 			   'Droid 7': pygame.font.Font("fuentes/DroidSans.ttf", 7),
@@ -1511,10 +1537,11 @@ def main():
 				
 				if BtnMostrarArbol:
 					
-					if   evento.key == pygame.K_LEFT:	MoveX += 10
-					elif evento.key == pygame.K_RIGHT:	MoveX -= 10
-					elif evento.key == pygame.K_UP:		MoveY += 10
-					elif evento.key == pygame.K_DOWN:	MoveY -= 10
+					print(XX1, YY1)
+					if   evento.key == pygame.K_LEFT  or evento.key == pygame.K_a:	MoveX += 15
+					elif evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:	MoveX -= 15
+					elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	MoveY += 15
+					elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	MoveY -= 15
 					
 				if evento.key == pygame.K_ESCAPE: game_over = True		# Tecla ESC Cierra el Juego.
 				
@@ -1623,10 +1650,10 @@ def main():
 				
 				if BtnMostrarArbol:
 					
-					if   evento.key == pygame.K_LEFT:	MoveX = 0
-					elif evento.key == pygame.K_RIGHT:	MoveX = 0
-					elif evento.key == pygame.K_UP:		MoveY = 0
-					elif evento.key == pygame.K_DOWN:	MoveY = 0
+					if   evento.key == pygame.K_LEFT  or evento.key == pygame.K_a:	MoveX = 0
+					elif evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:	MoveX = 0
+					elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	MoveY = 0
+					elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	MoveY = 0
 				
 			
 			#~ elif evento.type == pygame.JOYBUTTONDOWN
@@ -2614,17 +2641,31 @@ def main():
 		#======================================== Sección Baja =============================================
 		#===================================================================================================
 		
-		Contador = 100
+		
 		
 		if BtnMostrarArbol:
 			
-			XX1 += MoveX
-			YY1 += MoveY
+			Niveles = Arbol.ContadorDeNivel(ArbolRaiz)[0] * 120
+			Nodos = Arbol.ContadorDeNodos(ArbolRaiz) * 120
+			
+			print(Nodos, Niveles)
+			if XX1 > 150:
+				if MoveX == -15: XX1 += MoveX
+			elif XX1 < Niveles*-1:
+				if MoveX == 15: XX1 += MoveX
+			else: XX1 += MoveX
+			
+			if YY1 > 150:
+				if MoveY == -15: YY1 += MoveY
+			elif YY1 < Nodos*-1:
+				if MoveY == 15: YY1 += MoveY
+			else: YY1 += MoveY
+			
 			PX, PY = 20, 20
 			
 			pygame.draw.rect(screen, COLOR['Fondo'], [ 0, 0, DIMENCIONES[0], DIMENCIONES[1] ], 0)
 			
-			MostrarArbol(ArbolRaiz, screen, PX+XX1, PY+YY1, 100, 100, Contador, Fuentes)
+			MostrarArbol(ArbolRaiz, screen, PX+XX1, PY+YY1, 100, 100, Fuentes)
 		
 		dibujarTexto(screen, 'Mute', [9, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
 		dibujarTexto(screen, 'Mute', [10, 583], Fuentes['Droid 18'], COLOR['Verde'])
