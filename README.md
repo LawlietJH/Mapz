@@ -27,7 +27,7 @@ __Permite Presionar Las Teclas:__
 
 * __Una vez Cargado El Mapa: (Seleccion De Terrenos, Personaje, Costos y Puntos Inicio y Detino)__
 
-  * ___ENTER:_ Presiona El Botón 'Cargar' que permite Cargar Un Mapa.__
+  * ___ENTER:_ Presiona El Botón 'Comenzar' que permiteComenzar La Partida (Requiere Haber Seleccionado Un Personaje Primero, Luego Haber Seleccionado Todos Los Terrenos Necesarios para El Mapa y después, haber seleccionado Un Terreno (Con Costo) Para El Punto Inicio y otro para el Punto Destino).__
   * ___Flecha Izquierda:_ Cambia a Página Anterior en Seleccion de Terrenos.__
   * ___Flecha Derecha:_ Cambia a Página Siguiente en Seleccion de Terrenos.__
   * ___Clic Izquierdo (Mouse):_ Seleccion de Punto Inicio y Posteriormente Punto Destino, Dar otro Clic en otro Terreno, Reinicia el Punto Inicio y Destino.__
