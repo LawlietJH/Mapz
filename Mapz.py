@@ -1528,16 +1528,15 @@ def main():
 				# Si Ya Fue Cargado El Tablero, Se Presionó El Botón 'Comenzar' y El Estado Inicial y Final Son Distintos, Podra Moverse El Personaje.
 				if Cargar and Iniciar and seleccion != PuntoDestino and not BtnMostrarArbol:
 					
-					if   evento.key == pygame.K_LEFT:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje, ArbolRaiz)	# Tecla Izquierda. Mueve Personaje.
-					elif evento.key == pygame.K_RIGHT:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje, ArbolRaiz)	# Tecla Derecha. Mueve Personaje.
-					elif evento.key == pygame.K_UP:		seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje, ArbolRaiz)	# Tecla Arriba. Mueve Personaje.
-					elif evento.key == pygame.K_DOWN:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
+					if   evento.key == pygame.K_LEFT  or evento.key == pygame.K_a:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje, ArbolRaiz)	# Tecla Izquierda. Mueve Personaje.
+					elif evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje, ArbolRaiz)	# Tecla Derecha. Mueve Personaje.
+					elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje, ArbolRaiz)	# Tecla Arriba. Mueve Personaje.
+					elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
 					
 					Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
 				
 				if BtnMostrarArbol:
 					
-					print(XX1, YY1)
 					if   evento.key == pygame.K_LEFT  or evento.key == pygame.K_a:	MoveX += 15
 					elif evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:	MoveX -= 15
 					elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	MoveY += 15
@@ -2648,7 +2647,6 @@ def main():
 			Niveles = Arbol.ContadorDeNivel(ArbolRaiz)[0] * 120
 			Nodos = Arbol.ContadorDeNodos(ArbolRaiz) * 120
 			
-			print(Nodos, Niveles)
 			if XX1 > 150:
 				if MoveX == -15: XX1 += MoveX
 			elif XX1 < Niveles*-1:
