@@ -15,6 +15,42 @@ python -m pip install pygame
 ```
 - - -
 
+## Interacciones: (Pueden Utilizarse Completamente Clics con el Mouse)
+
+__Permite Presionar Las Teclas:__
+
+* __Al Comienzo:__
+
+  * ___Letra 'C':_ Presiona El Botón 'Cargar' que permite Cargar Un Mapa.__
+  * ___Letra 'M':_ Presiona El Botón 'Mute' del Tipo ON/OFF Para Silencia o No La Música de Fondo.__
+  * ___Letra 'O':_ Presiona El Botón 'Ocultar' del Tipo ON/OFF Para Enmascarar o No el Mapa al Iniciar El Juego.__
+
+* __Una vez Cargado El Mapa: (Seleccion De Terrenos, Personaje, Costos y Puntos Inicio y Detino)__
+
+  * ___ENTER:_ Presiona El Botón 'Cargar' que permite Cargar Un Mapa.__
+  * ___Flecha Izquierda:_ Cambia a Página Anterior en Seleccion de Terrenos.__
+  * ___Flecha Derecha:_ Cambia a Página Siguiente en Seleccion de Terrenos.__
+  * ___Clic Izquierdo (Mouse):_ Seleccion de Punto Inicio y Posteriormente Punto Destino, Dar otro Clic en otro Terreno, Reinicia el Punto Inicio y Destino.__
+  * ___Clic Derecho (Mouse):_ Da La Información del Terreno Seleccionado en el Mapa.__
+  
+* __Una vez Iniciado El Juego: (Interacción Con El Mapa)__
+
+  * ___Tecla 'V':_ Presiona El Botón 'Ver Árbol' del Tipo ON/OFF Para Mostrar o No el Árbol Generado Con El Mapa al Avanzar En El Juego.__
+  * ___Tecla 'R':_ Presiona El Botón 'Reniciar' Para Volver a Comenzar La Partida Sin Alterar Nada.__
+  * ___Tecla 'P':_ Presiona El Botón 'Seleccionar Personaje' Para Permitir Seleccionar Otro Personaje o Solo Modificar Costos o Modificar Los Puntos Inicio y Destino, asi tambien como poder Cambiar Los Terrenos o El Mapa.__
+  * ___Flecha Izquierda y Tecla 'A':_ Avanzan El Personaje A Terreno a la Izquierda (Siempre y Cuando Tenga Costo ese Terreno).__
+  * ___Flecha Arriba y Tecla 'W':_ Avanzan El Personaje A Terreno Arriba (Siempre y Cuando Tenga Costo ese Terreno).__
+  * ___Flecha Derecha y Tecla 'D':_ Avanzan El Personaje A Terreno a la Derecha (Siempre y Cuando Tenga Costo ese Terreno).__
+  * ___Flecha Abajo y Tecla 'S':_ Avanzan El Personaje A Terreno Abajo (Siempre y Cuando Tenga Costo ese Terreno).__
+  
+* __Una vez Mostrado EL Árbol: (Tiene Estructura de Carpetas)__
+
+  * ___Flecha Izquierda y Tecla 'A':_ Desplaza a la Izquierda.__
+  * ___Flecha Arriba y Tecla 'W':_ Desplaza a Arriba.__
+  * ___Flecha Derecha y Tecla 'D':_ Desplaza a la Derecha.__
+  * ___Flecha Abajo y Tecla 'S':_ Desplaza a Abajo.__
+  
+  
 ## Fechas:
 
 ### Revisiónes de Proyecto: (Las Penalizaciones y Observaciones se Deben Corregir Aún Después de las Entregas.)
@@ -59,7 +95,7 @@ python -m pip install pygame
  * __Versión 1.5:__
    
    * __v1.5.0: _28/03/2018_, v1.5.1: _29/03/2018_, v1.5.2: _15/04/2018_, v1.5.3: _15/04/2018_, v1.5.4: _15/04/2018___
-   * __v1.5.5: _16/04/2018_, v1.5.6: _18/04/2018_, v1.5.7: _20/04/2018_, v1.5.8: _20/04/2018_, v1.5.9: _21/04/2018_.__
+   * __v1.5.5: _16/04/2018_, v1.5.6: _18/04/2018_, v1.5.7: _20/04/2018_, v1.5.8: _20/04/2018_, v1.5.9: _21/04/2018___
    
  * __Versión 1.6:__
    
