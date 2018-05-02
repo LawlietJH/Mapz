@@ -1328,7 +1328,7 @@ def main():
 	
 	# Miniaturas para elección de Terrenos para el Mapa:
 	bloque11 = Bloque("img/Texturas/Pared.jpg")
-	bloque13 = Bloque("img/Texturas/camino.jpg")
+	bloque13 = Bloque("img/Texturas/Camino.jpg")
 	bloque14 = Bloque("img/Texturas/Bosque.jpg")
 	bloque15 = Bloque("img/Texturas/Lava.jpg")
 	bloque16 = Bloque("img/Texturas/Agua.jpg")
@@ -1460,27 +1460,27 @@ def main():
 	# Sonidos:
 	
 	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
-	Clic1 = pygame.mixer.Sound("Sonidos\Kwahmah-Click.wav")		# Sonido Clic Izquierdo.
-	Clic2 = pygame.mixer.Sound("Sonidos\Clic15.wav")			# Sonido Clic Derecho.
-	ClicSet = pygame.mixer.Sound("Sonidos\Clic3.wav")			# Sonido Al Escribir Un Caracter En La Sección Se Costos.
-	ClicUndo = pygame.mixer.Sound("Sonidos\Clic14.wav")			# Sonido Al Borrar Un Caracter De La Sección Se Costos.
+	Clic1 = pygame.mixer.Sound("Sonidos/Kwahmah-Click.wav")		# Sonido Clic Izquierdo.
+	Clic2 = pygame.mixer.Sound("Sonidos/Clic15.wav")			# Sonido Clic Derecho.
+	ClicSet = pygame.mixer.Sound("Sonidos/Clic3.wav")			# Sonido Al Escribir Un Caracter En La Sección Se Costos.
+	ClicUndo = pygame.mixer.Sound("Sonidos/Clic14.wav")			# Sonido Al Borrar Un Caracter De La Sección Se Costos.
 	
-	Sucess = pygame.mixer.Sound("Sonidos\Level Up.wav")			# Sonido Al Cargar Un Mapa Exitosamente.
-	Victoria = pygame.mixer.Sound("Sonidos\Victoria.wav")		# Sonido De Victoria Cuando El Personaje Llega Al Estado Final.
+	Sucess = pygame.mixer.Sound("Sonidos/Level Up.wav")			# Sonido Al Cargar Un Mapa Exitosamente.
+	Victoria = pygame.mixer.Sound("Sonidos/Victoria.wav")		# Sonido De Victoria Cuando El Personaje Llega Al Estado Final.
 	
 	Sucess.set_volume(.3)			# Reduce Su Volumen al 30%.
 	Victoria.set_volume(.3)			# Reduce Su Volumen al 30%.
 	
 	# Lista de Objetos de Sonidos Para El Fondo Del Juego al Iniciar.
 	MusicFondos = [
-					pygame.mixer.Sound("Sonidos\Memz Pretty Pluck Sound.wav"),
-					pygame.mixer.Sound("Sonidos\Setuniman - Little Pleasures.wav"),
-					pygame.mixer.Sound("Sonidos\Errinerung - Debussy.wav"),
-					# ~ pygame.mixer.Sound("Sonidos\Tim-Kahn - Cedellia.wav"),
-					pygame.mixer.Sound("Sonidos\Tim-Kahn - Sigj.wav")
+					pygame.mixer.Sound("Sonidos/Memz Pretty Pluck Sound.wav"),
+					pygame.mixer.Sound("Sonidos/Setuniman - Little Pleasures.wav"),
+					pygame.mixer.Sound("Sonidos/Errinerung - Debussy.wav"),
+					# ~ pygame.mixer.Sound("Sonidos/Tim-Kahn - Cedellia.wav"),
+					pygame.mixer.Sound("Sonidos/Tim-Kahn - Sigj.wav")
 				  ]
 	
-	MusicFondo1 = pygame.mixer.Sound("Sonidos\Memz Guitar.wav")				# Musica de Fondo Para El Menu.
+	MusicFondo1 = pygame.mixer.Sound("Sonidos/Memz Guitar.wav")				# Musica de Fondo Para El Menu.
 	MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]			# Musica de Fondo Para El Mapa (Al Iniciar la Partida).	Se Obtiene uno al Azar de la lista.			
 	
 	#===================================================================
