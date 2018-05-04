@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.2
+# Versión: 1.6.3
 
 import Arbol
 import pygame
@@ -584,7 +584,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
 						
 						break
 		
@@ -619,7 +619,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
 						
 						break
 		
@@ -659,7 +659,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
 						
 						break
 		
@@ -699,7 +699,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
 						
 						break
 		
@@ -734,24 +734,24 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 	# Verifica que sean Coordenadas Con Costos, Los que son N/A No se agregan al Árbol.
 	#==================================================================================
 	for x in VALORES:
-		if x[0] == Lista[Orden[0]] and x[3] != '':
+		if x[0] == Lista[Orden[0]-1] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
-		if x[0] == Lista[Orden[1]] and x[3] != '':
+		if x[0] == Lista[Orden[1]-1] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
-		if x[0] == Lista[Orden[2]] and x[3] != '':
+		if x[0] == Lista[Orden[2]-1] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
-		if x[0] == Lista[Orden[3]] and x[3] != '':
+		if x[0] == Lista[Orden[3]-1] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	#==================================================================================
 	
 	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
@@ -766,18 +766,18 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 	if Val[0]:
 		if Val[1]['Hijos'] == []:
 			
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[0]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[0], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[0])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[1]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[1], Actual)
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[1])
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[2]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[2], Actual)
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[2])
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[3]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[3], Actual)
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[3])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[0]-1]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[0]-1], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[0]-1])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[1]-1]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[1]-1], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[1]-1])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[2]-1]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[2]-1], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[2]-1])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[3]-1]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[3]-1], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[3]-1])
 	
 	# Se Indica Si Es El Nodo Inicial.
 	if Actual == PuntoInicio:    Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
@@ -1903,7 +1903,7 @@ def main():
 									ArbolRaiz = Arbol.Raiz(seleccion)
 									PosLetra = LETRAS.index(seleccion[0])
 									x, y = PosLetra, seleccion[1]
-									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
 									Arbol.ImprimirArbol(ArbolRaiz)
 									
 							elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
@@ -1939,7 +1939,7 @@ def main():
 								ArbolRaiz = Arbol.Raiz(seleccion)
 								PosLetra = LETRAS.index(seleccion[0])
 								x, y = PosLetra, seleccion[1]
-								AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+								AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
 								Arbol.ImprimirArbol(ArbolRaiz)
 								
 						if evento.key == pygame.K_p:
@@ -2223,7 +2223,7 @@ def main():
 					ArbolRaiz = Arbol.Raiz(seleccion)
 					PosLetra = LETRAS.index(seleccion[0])
 					x, y = PosLetra, seleccion[1]
-					AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+					AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
 					Arbol.ImprimirArbol(ArbolRaiz)
 					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
@@ -2243,7 +2243,12 @@ def main():
 						
 						Error = True
 						CadenaError = 'Selecciona un Estado Final.'
-					  
+					
+					elif 0 in Direcciones:
+						
+						Error = True
+						CadenaError = 'Elige un Orden de Expansión.'
+					
 					else:			# Si Se Selecciono Un Personaje, Se Iniciará.
 						
 						Iniciar = True	# Inicia El Juego.
@@ -2278,7 +2283,7 @@ def main():
 						ArbolRaiz = Arbol.Raiz(seleccion)
 						PosLetra = LETRAS.index(seleccion[0])
 						x, y = PosLetra, seleccion[1]
-						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
+						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
 						Arbol.ImprimirArbol(ArbolRaiz)
 						
 				elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
@@ -3081,6 +3086,11 @@ def main():
 				
 				dibujarTexto(screen, 'Selecciona Las Flechas', [49, 61], Fuentes['Droid 15'], COLOR['Verde'])
 				dibujarTexto(screen, 'Selecciona Las Flechas', [50, 62], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+				dibujarTexto(screen, 'Cambia El Orden Dando Clic', [29, 171], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, 'Cambia El Orden Dando Clic', [30, 172], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Sobre Las Flechas.', [29, 191], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, 'Sobre Las Flechas.', [30, 192], Fuentes['Droid 15'], COLOR['Verde Claro'])
 				
 				screen.blit(FlechaArr.image, (55, 100))
 				screen.blit(FlechaDer.image, (95, 100))
