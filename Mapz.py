@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.1
+# Versión: 1.6.2
 
 import Arbol
 import pygame
@@ -53,7 +53,7 @@ class Bloque(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Cada Tipo de 
 		self.image = pygame.transform.scale(self.image, (TX, TY))
 
 
-class Boton(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Botones ('Cargar Mapa' y 'Comenzar').
+class Boton(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Botones.
 	
 	def __init__(self, Nombre):		# Pasamos La Ruta de la Imagen a Cargar Como Bloque.
 		
@@ -63,6 +63,22 @@ class Boton(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Botones ('Carg
 	def resize(self, TX, TY):		# Cambia el tamaño de la imagen para cargarla al programa con las medidas necesarias.
 		
 		self.image = pygame.transform.scale(self.image, (TX, TY))
+
+
+class Flecha(pygame.sprite.Sprite, pygame.font.Font):	# Clase Para Flechas.
+	
+	def __init__(self, Nombre):		# Pasamos La Ruta de la Imagen a Cargar Como Bloque.
+		
+		pygame.sprite.Sprite.__init__(self)				# Hereda de la Clase Sprite de pygame.
+		self.image = load_image(Nombre, True)			# Carga La Imagen Con la función load_image.
+	
+	def resize(self, TX, TY):		# Cambia el tamaño de la imagen para cargarla al programa con las medidas necesarias.
+		
+		self.image = pygame.transform.scale(self.image, (TX, TY))
+	
+	def rotate(self, Grados=90):	# Grados de Rotacion de la imagen.
+		
+		self.image = pygame.transform.rotate(self.image, Grados)
 
 
 class BotonDir(pygame.sprite.Sprite, pygame.font.Font):		# Clase Para Los Botones De Dirección (Flechas Izquierda y Derecha)
@@ -716,20 +732,27 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 	Lista = [Up, Right, Down, Left]
 	
 	# Verifica que sean Coordenadas Con Costos, Los que son N/A No se agregan al Árbol.
+	#==================================================================================
 	for x in VALORES:
-		
-		if x[0] == Lista[Orden[0]]:
-			if x[3] != '':
-				if Y > 1:			Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
-		if x[0] == Lista[Orden[1]]:
-			if x[3] != '':
-				if X < XPOS-1:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
-		if x[0] == Lista[Orden[2]]:
-			if x[3] != '':
-				if Y < YPOS:		Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
-		if x[0] == Lista[Orden[3]]:
-			if x[3] != '':
-				if X > 0:			Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+		if x[0] == Lista[Orden[0]] and x[3] != '':
+			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+	
+	for x in VALORES:
+		if x[0] == Lista[Orden[1]] and x[3] != '':
+			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+	
+	for x in VALORES:
+		if x[0] == Lista[Orden[2]] and x[3] != '':
+			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+	
+	for x in VALORES:
+		if x[0] == Lista[Orden[3]] and x[3] != '':
+			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+	#==================================================================================
 	
 	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
 	
@@ -1162,6 +1185,7 @@ LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
 SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Número de Visita.
+Direcciones = [0,0,0,0]	# Lista de Orden de Expansión de Nodos.
 
 # Variables Globales: ==================================================
 
@@ -1208,7 +1232,7 @@ def main():
 	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados, DibujarInfoXY
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NumPlayer
-	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask
+	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask, Direcciones
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -1459,7 +1483,6 @@ def main():
 	
 	# Sonidos:
 	
-	# ~ MusicaFondo = pygame.mixer.music.load("Sonidos\Errinerung - Debussy Arabesque no 1 clip 4.mp3")
 	Clic1 = pygame.mixer.Sound("Sonidos/Kwahmah-Click.wav")		# Sonido Clic Izquierdo.
 	Clic2 = pygame.mixer.Sound("Sonidos/Clic15.wav")			# Sonido Clic Derecho.
 	ClicSet = pygame.mixer.Sound("Sonidos/Clic3.wav")			# Sonido Al Escribir Un Caracter En La Sección Se Costos.
@@ -1488,13 +1511,20 @@ def main():
 	Victory = False					# Si Es True Muestra el Sonido de Victoria (Cuando Se Llega al Punto de Final.
 	ArbolRaiz = None				# Variable Para Almacenar el Objeto Raiz del Arbol.
 	
-	BtnMutePressed = False			# Botón Para Poner Mute en False Por Defecto.
+	BtnMutePressed = True			# Botón Para Poner Mute en False Por Defecto.
 	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
+	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
+	
+	ContDir = 0
 	
 	# Botón Para Mute y Enmascaramiento True/False, On/Off:
 	btnON  = Boton("img/Botones/BtnOn.png")			# Objeto Botón ON
 	btnOFF = Boton("img/Botones/BtnOff.png")		# Objeto Botón OFF
+	FlechaIzq = Flecha("img/Botones/Flecha.png")	# Objeto Flecha
+	FlechaAba = Flecha("img/Botones/Flecha.png");	FlechaAba.rotate(90)
+	FlechaDer = Flecha("img/Botones/Flecha.png");	FlechaDer.rotate(180)
+	FlechaArr = Flecha("img/Botones/Flecha.png");	FlechaArr.rotate(270)
 	
 	MoveX = 0
 	MoveY = 0
@@ -1674,13 +1704,13 @@ def main():
 								
 								Clic1.play()
 								Btn4Pressed = True
-						
+							
 						if evento.key == pygame.K_LEFT:		# Presiona Botón de Página Anterior (En Selección de Terrenos).
 							if not Iniciar and not BtnMostrarArbol:
 								
 								Clic1.play()
 								Pagina1 = True
-						
+							
 						if evento.key == pygame.K_RIGHT:	# Presiona Botón de Página Siguiente (En Selección de Terrenos).
 							if not Iniciar and not BtnMostrarArbol:
 								
@@ -1696,19 +1726,6 @@ def main():
 					elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	MoveY = 0
 					elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	MoveY = 0
 							
-				if evento.key == pygame.K_v:
-					
-					if Iniciar:
-						
-						if BtnMostrarArbol:
-							Clic2.play()
-							BtnMostrarArbol = False
-						else:
-							Clic1.play()
-							BtnMostrarArbol = True
-							XX1 = 0
-							YY1 = 0
-				
 				if evento.key == pygame.K_m:
 					
 					if BtnMutePressed:
@@ -1727,8 +1744,32 @@ def main():
 						Clic1.play()
 						BtnMaskPressed = True
 				
-				if not BtnMostrarArbol:
+				if evento.key == pygame.K_v:
+					
+					if Iniciar:
 						
+						if BtnMostrarArbol:
+							Clic2.play()
+							BtnMostrarArbol = False
+						else:
+							Clic1.play()
+							BtnMostrarArbol = True
+							XX1 = 0
+							YY1 = 0
+				
+				if not BtnMostrarArbol:
+					
+					if Cargar and not Iniciar:
+						
+						if evento.key == pygame.K_e:
+							
+							if BtnOrdenExpansion:
+								Clic2.play()
+								BtnOrdenExpansion = False
+							else:
+								Clic1.play()
+								BtnOrdenExpansion = True
+					
 					if evento.key == pygame.K_c:
 						
 						xMatrixy, xLisy, xXPOS, xYPOS, xPOS = TODOArchivo()		# Obtenemos Valores desde la Función Temporalmente.
@@ -1997,6 +2038,53 @@ def main():
 						if Cargar: 			# Si se cargo ya el Mapa.
 							
 							pygame.mouse.set_visible(False)	# Hacemos Invisible Temporalmente el Cursor del Mouse.
+							
+							if not Iniciar:
+								
+								if BtnOrdenExpansion:
+									
+									if (xr >= 485) and (xr <= 525) and (yr >= 582) and (yr <= 602): BtnOrdenExpansion = False
+									
+									# Clics En Las Flechas
+									#===========================================================================
+									if (xr >= 55)  and (xr <= 75)  and (yr >= 100) and (yr <= 120):		# Flecha Arriba. 
+										
+										while True:
+											
+											if not ContDir in Direcciones: Direcciones[0] = ContDir; break
+											else: ContDir += 1
+											ContDir %= 5
+											if ContDir == 0: Direcciones[0] = ContDir; break
+											
+									if (xr >= 95)  and (xr <= 115) and (yr >= 100) and (yr <= 120):		# Flecha Derecha.
+										
+										while True:
+											
+											if not ContDir in Direcciones: Direcciones[1] = ContDir; break
+											else: ContDir += 1
+											ContDir %= 5
+											if ContDir == 0: Direcciones[1] = ContDir; break
+											
+									if (xr >= 135) and (xr <= 155) and (yr >= 100) and (yr <= 120):		# Flecha Abajo.
+										
+										while True:
+											
+											if not ContDir in Direcciones: Direcciones[2] = ContDir; break
+											else: ContDir += 1
+											ContDir %= 5
+											if ContDir == 0: Direcciones[2] = ContDir; break
+											
+									if (xr >= 175) and (xr <= 195) and (yr >= 100) and (yr <= 120):		# Flecha Izquierda.
+										
+										while True:
+											
+											if not ContDir in Direcciones: Direcciones[3] = ContDir; break
+											else: ContDir += 1
+											ContDir %= 5
+											if ContDir == 0: Direcciones[3] = ContDir; break
+									#===========================================================================
+								else:
+									if (xr >= 480) and (xr <= 530) and (yr >= 582) and (yr <= 602): BtnOrdenExpansion = True
 							
 							if NumPlayer != None:
 								if Pagina1:
@@ -2947,6 +3035,10 @@ def main():
 		dibujarTexto(screen, 'Ocultar', [134, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
 		dibujarTexto(screen, 'Ocultar', [135, 583], Fuentes['Droid 18'], COLOR['Verde'])
 		
+		if Cargar and not Iniciar:
+			dibujarTexto(screen, 'Orden Expansión', [330, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
+			dibujarTexto(screen, 'Orden Expansión', [331, 583], Fuentes['Droid 18'], COLOR['Verde'])
+		
 		if Iniciar:
 			dibujarTexto(screen, 'Ver Árbol', [964, 582], Fuentes['Droid 18'], COLOR['Verde Claro'])
 			dibujarTexto(screen, 'Ver Árbol', [965, 583], Fuentes['Droid 18'], COLOR['Verde'])
@@ -2966,8 +3058,52 @@ def main():
 		if BtnMaskPressed: screen.blit(btnON.image, (205, 582))
 		else: screen.blit(btnOFF.image, (200, 582))
 		
-		if Iniciar:
+		if Cargar and not Iniciar:
+			
+			if BtnOrdenExpansion:
+				
+				FlechaIzq.resize(20,20)
+				FlechaAba.resize(20,20)
+				FlechaDer.resize(20,20)
+				FlechaArr.resize(20,20)
+				
+				screen.blit(btnON.image, (485, 582))
+				
+				# Dibuja El Rectangulo Para la Sección Izquierda.
+				pygame.draw.rect(screen, COLOR['Blanco'], [10, 10,   240,  30], 0)
+				pygame.draw.rect(screen, COLOR['Blanco'], [10, 10,   240,  30], 3)
+				pygame.draw.rect(screen, COLOR['Blanco'], [10, 40,   240, 265], 0)
+				pygame.draw.line(screen, COLOR['Negro'],  [9,  40], [250,  40], 3)
+				pygame.draw.line(screen, COLOR['Negro'],  [9, 305], [250, 305], 3)
+				
+				dibujarTexto(screen, 'Orden de Expansion', [33, 11], Fuentes['Wendy 30'], COLOR['Verde'])
+				dibujarTexto(screen, 'Orden de Expansion', [34, 12], Fuentes['Wendy 30'], COLOR['Verde Claro'])
+				
+				dibujarTexto(screen, 'Selecciona Las Flechas', [49, 61], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, 'Selecciona Las Flechas', [50, 62], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+				screen.blit(FlechaArr.image, (55, 100))
+				screen.blit(FlechaDer.image, (95, 100))
+				screen.blit(FlechaAba.image, (135, 100))
+				screen.blit(FlechaIzq.image, (175, 100))
+				
+				dibujarTexto(screen, str(Direcciones[0]), [61, 129], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, str(Direcciones[0]), [62, 130], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+				dibujarTexto(screen, str(Direcciones[1]), [101, 129], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, str(Direcciones[1]), [102, 130], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+				dibujarTexto(screen, str(Direcciones[2]), [141, 129], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, str(Direcciones[2]), [142, 130], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+				dibujarTexto(screen, str(Direcciones[3]), [181, 129], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, str(Direcciones[3]), [182, 130], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+			else: screen.blit(btnOFF.image, (480, 582))
+			
+		else: BtnOrdenExpansion = False
 		
+		if Iniciar:
 			if BtnMostrarArbol: screen.blit(btnON.image, (1055, 582))
 			else: screen.blit(btnOFF.image, (1050, 582))
 		
