@@ -1174,7 +1174,7 @@ def InputAdd(Add, C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, 
 
 # Constantes Globales: =================================================
 
-COLOR  = {'Blanco':		(255, 255, 255),		'Negro':		(0,     0,   0),
+COLOR  = {'Blanco':		(255, 255, 255),		'Negro':		(  0,   0,   0),
 		  'Gris':		(189, 189, 189),		'Gris Claro':	(216, 216, 216),
 		  'Rojo':		(255,   0,   0),		'Rojo Claro':	(255,  50,  50),
 		  'Verde':		(  4, 180,   4),		'Verde Claro':	(  0, 255,   0),
@@ -1238,7 +1238,8 @@ def main():
 	global SELECT, Movimientos, DibujarInfo, Pagina1, SelectEstados, DibujarInfoXY
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NumPlayer
-	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask, Direcciones
+	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask
+	global Direcciones, NoRepetir
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -1521,13 +1522,16 @@ def main():
 	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
+	BtnRepetirNodos = False			# Botón Para Selección de Repetición o No de Nodos.
 	
 	ContDir = 0
 	
 	# Botón Para Mute y Enmascaramiento True/False, On/Off:
 	btnON  = Boton("img/Botones/BtnOn.png")			# Objeto Botón ON
 	btnOFF = Boton("img/Botones/BtnOff.png")		# Objeto Botón OFF
-	FlechaIzq = Flecha("img/Botones/Flecha.png")	# Objeto Flecha
+	
+	# Objetos Flecha.
+	FlechaIzq = Flecha("img/Botones/Flecha.png")
 	FlechaAba = Flecha("img/Botones/Flecha.png");	FlechaAba.rotate(90)
 	FlechaDer = Flecha("img/Botones/Flecha.png");	FlechaDer.rotate(180)
 	FlechaArr = Flecha("img/Botones/Flecha.png");	FlechaArr.rotate(270)
@@ -2088,6 +2092,12 @@ def main():
 											else: ContDir += 1
 											ContDir %= 5
 											if ContDir == 0: Direcciones[3] = ContDir; break
+									
+									if BtnRepetirNodos:
+										if (xr >= 155) and (xr <= 195) and (yr >= 230) and (yr <= 250): BtnRepetirNodos = False
+									else:
+										if (xr >= 150) and (xr <= 200) and (yr >= 230) and (yr <= 250): BtnRepetirNodos = True
+										
 									#===========================================================================
 								else:
 									if (xr >= 480) and (xr <= 530) and (yr >= 582) and (yr <= 602): BtnOrdenExpansion = True
@@ -3114,6 +3124,17 @@ def main():
 				
 				dibujarTexto(screen, str(Direcciones[3]), [181, 129], Fuentes['Droid 15'], COLOR['Verde'])
 				dibujarTexto(screen, str(Direcciones[3]), [182, 130], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				
+				dibujarTexto(screen, 'Repetir Nodos', [29, 230], Fuentes['Droid 18'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Repetir Nodos', [30, 231], Fuentes['Droid 18'], COLOR['Verde'])
+				
+				if BtnRepetirNodos:
+					screen.blit(btnON.image, (155, 230))
+					NoRepetir = False
+				else:
+					screen.blit(btnOFF.image, (150, 230))
+					NoRepetir = True
+				
 				
 			else: screen.blit(btnOFF.image, (480, 582))
 			
