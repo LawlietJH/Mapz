@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.3
+# Versión: 1.6.4
 
 import Arbol
 import pygame
@@ -719,9 +719,13 @@ def MaskTrue(X, Y, YPOS, XPOS):		# Pone En True La Posicion Actual del Personaje
 
 
 
-def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):	# Orden = Arriba, Derecha, Abajo, Izquierda.	XPOS y YPOS son Las Medidad Del Mapa, desde 2x2 hasta 15x15.
+def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden):		# XPOS y YPOS son Las Medidad Del Mapa, desde 2x2 hasta 15x15.
 	
-	NoRepetir = True	# Sin Repetir Los Nodos.
+	global VISITA, NoRepetir
+	
+	VISITA += 1
+	
+	# ~ NoRepetir = True	# Sin Repetir Los Nodos.
 	AlFinal = True		# Si Se Repiten Nodos, Agrega Hasta El Padre Más Alejado Correspondiente, Si es False, Agrega al Padre Más Próximo Correspondiente.
 	
 	Up    = [LETRAS[X], Y-1]
@@ -760,8 +764,7 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 		if Val[1]['Padre'] == None:
 			Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
 	
-	for x in SELECT:
-		if x[0] == Actual: Arbol.AgregarOrden(ArbolRaiz, Actual, x[1])			# Se Agrega La Lista Con El Orden De Visitas.
+	Arbol.AgregarOrden(ArbolRaiz, Actual, VISITA)			# Se Agrega La Lista Con El Orden De Visitas.
 	
 	if Val[0]:
 		if Val[1]['Hijos'] == []:
@@ -783,7 +786,8 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden=[0,1,2,3]):
 	if Actual == PuntoInicio:    Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
 	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
 	
-	Arbol.ActualizaEstado(ArbolRaiz)		# Actualiza Los Estados (Abierto/Cerrado) De Todos Los Nodos.
+	Arbol.AgregarEstado(ArbolRaiz, Actual, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
+	# ~ Arbol.ActualizaEstado(ArbolRaiz)		# Actualiza Los Estados (Abierto/Cerrado) De Todos Los Nodos.
 
 
 
@@ -1185,7 +1189,9 @@ LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
 SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Número de Visita.
-Direcciones = [0,0,0,0]	# Lista de Orden de Expansión de Nodos.
+Direcciones = [1,2,3,4]	# Lista de Orden de Expansión de Nodos.
+NoRepetir = True
+VISITA = 0
 
 # Variables Globales: ==================================================
 

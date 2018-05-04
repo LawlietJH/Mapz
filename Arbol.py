@@ -57,33 +57,50 @@ def Agregar(arbol, Padre, Coord, NoRepetir=True, AlFinal=True):
 
 def AgregarPadre(arbol, Coord, Padre):
 	
-	if Coord == arbol.Coord: arbol.SetPadre(Padre); return True
 	for SubArbol in arbol.Hijos:
 		if AgregarPadre(SubArbol, Coord, Padre): return True
+	if Coord == arbol.Coord: arbol.SetPadre(Padre); return True
 
 def AgregarHijos(arbol, Coord, Hijo):
 	
-	if Coord == arbol.Coord: arbol.SetHijos(Hijo); return True
 	for SubArbol in arbol.Hijos: 
 		if AgregarHijos(SubArbol, Coord, Hijo): return True
+	if Coord == arbol.Coord: arbol.SetHijos(Hijo); return True
 
 def AgregarEstado(arbol, Coord, Estado):
 	
-	if Coord == arbol.Coord: arbol.SetEstado(Estado); return True
 	for SubArbol in arbol.Hijos:
 		if AgregarEstado(SubArbol, Coord, Estado): return True
+	if Coord == arbol.Coord: arbol.SetEstado(Estado); return True
 
 def AgregarOrden(arbol, Coord, Orden):
 	
-	if Coord == arbol.Coord: arbol.SetOrden(Orden); return True
 	for SubArbol in arbol.Hijos:
 		if AgregarOrden(SubArbol, Coord, Orden): return True
+	if Coord == arbol.Coord: arbol.Orden.append(Orden); return True
+
+# ~ def AgregarOrdenPrecisa(arbol, Padre, Coord, Visita):
+	
+	# ~ if Padre == 'N/A': arbol.Orden.append(Visita); return True
+	
+	# ~ for SubArbol in arbol.Hijos:
+		
+		# ~ if AgregarOrden(SubArbol, Padre, Coord, Visita): return True
+	
+	# ~ if Padre == arbol.Coord:
+		
+		# ~ for x in range(len(arbol.Hijos)):
+			
+			# ~ if Coord == arbol.Hijos[x].Coord: arbol.Hijos[x].Orden.append(Visita); return True
+		
+	# ~ return False
+
 
 def AgregarIniFin(arbol, Coord, EsIni=False, EsFin=False):
 	
-	if Coord == arbol.Coord: arbol.SetIniFin(EsIni, EsFin); return True
 	for SubArbol in arbol.Hijos:
 		if AgregarIniFin(SubArbol, Coord, EsIni, EsFin): return True
+	if Coord == arbol.Coord: arbol.SetIniFin(EsIni, EsFin); return True
 
 #=======================================================================
 
@@ -291,30 +308,30 @@ if __name__ == "__main__":	# Datos de Prueba.
 	raiz = Raiz('0')
 	
 	Agregar(raiz, '0', '1')
-	Agregar(raiz, '1', '2')
-	Agregar(raiz, '1', '3')
 	Agregar(raiz, '1', '4')
+	Agregar(raiz, '1', 'a')
+	Agregar(raiz, '1', '2')
 	Agregar(raiz, '2', '5')
 	Agregar(raiz, '4', '6')
 	Agregar(raiz, '4', '7')
 	
 	AgregarPadre(raiz, '0', 'N/A')
-	AgregarPadre(raiz, '1', '0')	
-	AgregarPadre(raiz, '2', '1')
-	AgregarPadre(raiz, '3', '1')
+	AgregarPadre(raiz, '1', '0')
 	AgregarPadre(raiz, '4', '1')
+	AgregarPadre(raiz, 'a', '1')	
+	AgregarPadre(raiz, '2', '1')
 	AgregarPadre(raiz, '5', '2')
 	AgregarPadre(raiz, '6', '4')
 	AgregarPadre(raiz, '7', '4')
 	
 	AgregarHijos(raiz, '0', '1')
-	for x in ['2','3','4']: AgregarHijos(raiz, '1', x)
+	for x in ['4','a','2']: AgregarHijos(raiz, '1', x)
 	AgregarHijos(raiz, '2', '5')
 	for x in ['6','7']: AgregarHijos(raiz, '4', x)
 	
 	AgregarOrden(raiz, '0', ['1'])
 	AgregarOrden(raiz, '1', ['2'])
-	AgregarOrden(raiz, '2', ['3','5'])
+	AgregarOrden(raiz, '2', ['a','5'])
 	AgregarOrden(raiz, '3', ['4'])
 	AgregarOrden(raiz, '4', ['6'])
 	AgregarOrden(raiz, '5', ['7'])
