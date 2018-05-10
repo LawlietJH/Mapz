@@ -1,7 +1,7 @@
 # Mapz
 
 ## En Python: 3.5.0
-## Versión Actual: 1.6.1
+## Versión Actual: 1.6.4
 ## Dependencias: Pygame.
 ## Compatibilidad: Windows y Linux.
 
@@ -63,7 +63,7 @@ __Permite Presionar Las Teclas:__
 ### Revisiónes de Proyecto: (Las Penalizaciones y Observaciones se Deben Corregir Aún Después de las Entregas.)
  
 * __Parte 1: _05/03/2018 y 07/03/2018_.__
-  * ___Calificación:_ 95/100.__
+  * ___Calificación:_ 100/100.__
   * ___Penalizaciones:___
     * __No Se Debe Tener Que Cargar De Nuevo El Mapa Para Seleccionar Otro Personaje. -5 Puntos. _(Corregido el 07/03/2018 en v1.4.8)___
   * ___Observaciones:___
@@ -71,7 +71,7 @@ __Permite Presionar Las Teclas:__
     * __Costos Con Máximo 2 Decimales. _(Corregido el 06/03/2018 en v1.4.6)___
     * __Mostrar Información de Terrenos al Clic derecho de Forma Constante Aún Antes De Comenzar El Juego. _(Corregido el 21/03/2018 en v1.4.9)___
 * __Parte 2: _23/04/2018 y 25/04/2018_.__
-  * ___Calificación:_ ???/100.__
+  * ___Calificación:_ 100/100.__
   * ___Penalizaciones:___
   * ___Observaciones:___
 * __Parte 3: _16/05/2018 y 21/05/2018_.__
@@ -107,3 +107,9 @@ __Permite Presionar Las Teclas:__
  * __Versión 1.6:__
    
    * __v1.6.0: _24/04/2018_, v1.6.1: _24/04/2018_.__
+
+### Proyecto Parte 3: Comenzada.
+
+ * __Versión 1.6:__
+   
+   * __v1.6.2: _04/05/2018_, v1.6.3: _04/05/2018_, v1.6.4: _04/05/2018_.__
