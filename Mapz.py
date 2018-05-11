@@ -3,10 +3,10 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.4
+# Versión: 1.6.5
 
 import Arbol
-import pygame
+import pygame 
 from pygame.locals import *
 import explorer
 import random
@@ -845,6 +845,82 @@ def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Fuentes):		# Muestra EL Arbol de
 
 
 #===================================================================================================
+#===================================================================================================
+#===================================================================================================
+
+
+
+def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz):
+	
+	global Direcciones, Pila, Movimientos, ListaHijos
+	
+	os.system('cls')
+	
+	X = LETRAS.index(Padre[0])
+	Y = Padre[1]
+	
+	Up    = [LETRAS[X], Y-1]
+	Right = [LETRAS[X+1], Y]
+	Down  = [LETRAS[X], Y+1]
+	Left  = [LETRAS[X-1], Y]
+	
+	Lista = [Up, Right, Down, Left]
+	Hijos = []
+	
+	Abue = []
+	if Padre != PuntoInicio: Abue = Pila[-2][0]
+	print(Direcciones)
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(1)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(1)])
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(2)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(2)])
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(3)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(3)])
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(4)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(4)])
+	
+	
+	xD = False
+	
+	for x in ListaHijos:
+		if Padre == x[0]: xD = True; break
+	
+	if xD == False: ListaHijos.append([Padre, Hijos, []])
+	
+	for Pos, Hijs, Movs in ListaHijos:
+		
+		if Pos == Padre:
+			
+			if Hijs != []:
+				
+				Movs.append(Movimientos)
+				Pila[-1][1].append(Movimientos)
+				
+				Movimientos += 1
+				Pila.append((Hijs[0], [Movimientos]))
+				
+				X = ListaHijos.index([Pos, Hijs, Movs])
+				ListaHijos[X][1].pop(0)
+				
+			else: print('Pop:', Pila.pop())
+			
+			break
+			
+	print('\n\nPila:')
+	for x in Pila: print(x)
+	
+	print('\n\nLista:')
+	for x in ListaHijos: print(x)
+	
+	MaskTrue(LETRAS.index(Pila[-1][0][0]), Pila[-1][0][1]-1, YPOS, XPOS)
+	
+	return Pila[-1][0]
+
+
+
+#===================================================================================================
+#===================================================================================================
+#===================================================================================================
 
 def AbrirArchivo():
 	
@@ -1189,9 +1265,10 @@ LETRAS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
 
 VALORES   = []		# Lista de Valores para Los Terrenos y Mostrar su Informacion.
 SELECT    = []		# Lista de Seleccionados, Contendra: Posiciones Visitadas, Número de Visita.
-Direcciones = [1,2,3,4]	# Lista de Orden de Expansión de Nodos.
+Direcciones = [4,1,2,3]	# Lista de Orden de Expansión de Nodos.
 NoRepetir = True
 VISITA = 0
+ListaHijos = []
 
 # Variables Globales: ==================================================
 
@@ -1228,6 +1305,7 @@ Montaña = 0
 Nieve	= 0
 
 Mask = []
+Pila = []
 
 #===================================================================================================
 #============================================== Main ===============================================
@@ -1239,7 +1317,7 @@ def main():
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NumPlayer
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask
-	global Direcciones, NoRepetir
+	global Direcciones, NoRepetir, Pila, ListaHijos
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -1518,7 +1596,7 @@ def main():
 	Victory = False					# Si Es True Muestra el Sonido de Victoria (Cuando Se Llega al Punto de Final.
 	ArbolRaiz = None				# Variable Para Almacenar el Objeto Raiz del Arbol.
 	
-	BtnMutePressed = True			# Botón Para Poner Mute en False Por Defecto.
+	BtnMutePressed = False			# Botón Para Poner Mute en False Por Defecto.
 	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
@@ -1567,6 +1645,8 @@ def main():
 				
 				# Si Ya Fue Cargado El Tablero, Se Presionó El Botón 'Comenzar' y El Estado Inicial y Final Son Distintos, Podra Moverse El Personaje.
 				if Cargar and Iniciar and seleccion != PuntoDestino and not BtnMostrarArbol:
+					
+					# ~ seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz)
 					
 					if   evento.key == pygame.K_LEFT  or evento.key == pygame.K_a:	seleccion = obtenerPosicion(XPOS, YPOS, 'L', seleccion, personaje, ArbolRaiz)	# Tecla Izquierda. Mueve Personaje.
 					elif evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:	seleccion = obtenerPosicion(XPOS, YPOS, 'R', seleccion, personaje, ArbolRaiz)	# Tecla Derecha. Mueve Personaje.
@@ -2242,6 +2322,11 @@ def main():
 					AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
 					Arbol.ImprimirArbol(ArbolRaiz)
 					
+					#===============================================
+					Pila = [(PuntoInicio, [])]
+					ListaHijos = []
+					#===============================================
+					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
 					
 					if NumPlayer == None:		# Si el Botón 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
@@ -2301,6 +2386,12 @@ def main():
 						x, y = PosLetra, seleccion[1]
 						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
 						Arbol.ImprimirArbol(ArbolRaiz)
+						
+						#===============================================
+						Pila = [(PuntoInicio, [])]
+						ListaHijos = []
+						#===============================================
+						
 						
 				elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
 					
@@ -3166,5 +3257,6 @@ def main():
 if __name__ == "__main__":
 	
 	main()
+
 
 
