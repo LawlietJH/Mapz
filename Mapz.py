@@ -3,10 +3,10 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.6
+# Versión: 1.6.7
 
 import Arbol
-import pygame 
+import pygame
 from pygame.locals import *
 import explorer
 import random
@@ -542,6 +542,26 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):		# Obti
 			
 	return actual
 
+
+
+def obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, p_inicio, Lista):		# Obtiene La Coordenada del Mapa en la que se le de clic.
+	
+	for i in range(XPOS):
+		
+		for j in range(YPOS):
+			
+			Actual = [LETRAS[i], j + 1]
+			
+			if Actual in Lista:
+				
+				x = i * dimension + p_inicio[0]
+				y = j * dimension + p_inicio[1]
+				
+				pygame.draw.line(screen, COLOR['Morado'], [x+dimension-5, y+5], [x+5, y+dimension-5], 3)
+				pygame.draw.line(screen, COLOR['Morado'], [x+5, y+5], [x+dimension-5, y+dimension-5], 3)
+
+
+
 #===================================================================================================
 
 def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene la posicion para cada movimiento del Personaje en el Mapa.
@@ -722,7 +742,7 @@ def MaskTrue(X, Y, YPOS, XPOS):		# Pone En True La Posicion Actual del Personaje
 def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden):		# XPOS y YPOS son Las Medidad Del Mapa, desde 2x2 hasta 15x15.
 	
 	global VISITA, NoRepetir
-	print(Padre, Actual)
+	
 	VISITA += 1
 	
 	# ~ NoRepetir = True	# Sin Repetir Los Nodos.
@@ -852,14 +872,12 @@ def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Fuentes):		# Muestra EL Arbol de
 
 def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 	
-	global Direcciones, ListaHijos, SELECT, NoRepetir
-	global Movimientos, CostoTotal, Pila
+	global Direcciones, ListaHijos
+	global Movimientos, Pila
 	
-	os.system('cls')
+	# ~ os.system('cls')
 	
 	Hijos = []
-	
-	AlFinal = True
 	xD = False
 	
 	X = LETRAS.index(Padre[0])
@@ -875,13 +893,13 @@ def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 	if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
 	
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(1)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(1)])
+		if x[0] == Lista[Direcciones.index(1)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(1)]); break
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(2)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(2)])
+		if x[0] == Lista[Direcciones.index(2)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(2)]); break
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(3)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(3)])
+		if x[0] == Lista[Direcciones.index(3)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(3)]); break
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(4)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(4)])
+		if x[0] == Lista[Direcciones.index(4)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(4)]); break
 	
 	for x in ListaHijos:
 		if Padre == x[0]: xD = True; break
@@ -891,9 +909,7 @@ def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 	Movimientos += 1
 	
 	for Pos, Hijs, Movs in ListaHijos:
-		
 		if Pos == Padre:
-			
 			if Hijs != []:
 				
 				Movs.append(Movimientos)
@@ -904,24 +920,33 @@ def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 				X = ListaHijos.index([Pos, Hijs, Movs])
 				ListaHijos[X][1].pop(0)
 				
-			else: print('Pop:', Pila.pop())
+			else: Pila.pop()
 			
 			break
 			
-	print('\n\nPila:')
-	for x in Pila: print(x)
+	# ~ print('\n\nPila:')
+	# ~ for x in Pila: print(x)
 	
-	print('\n\nLista:')
-	for x in ListaHijos: print(x)
-	
-	#===================================================================
+	# ~ print('\n\nLista:')
+	# ~ for x in ListaHijos: print(x)
 	
 	Actual = Pila[-1][0]
 	
+	AgregarAlArbolBacktracking(Actual, Padre, XPOS, YPOS, ArbolRaiz)
+	
+	return Actual
+
+
+def AgregarAlArbolBacktracking(Actual, Padre, XPOS, YPOS, ArbolRaiz):
+	
+	global Direcciones, SELECT, NoRepetir
+	global Movimientos, CostoTotal
+	
+	AlFinal = True
+	xD = False
+	
 	for z in VALORES:
 		if z[0] == Actual: CostoTotal += float(z[3]); break
-	
-	xD = False
 	
 	for Pos, Movs in SELECT:
 		
@@ -937,15 +962,13 @@ def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 	MaskTrue(LETRAS.index(Actual[0]), Actual[1]-1, YPOS, XPOS)
 	
 	Arbol.Agregar(ArbolRaiz, Padre, Actual, NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
-	Arbol.AgregarOrden(ArbolRaiz, Actual, Movimientos)					# Se Agrega La Lista Con El Orden De Visitas.
+	Arbol.AgregarOrden(ArbolRaiz, Actual, Movimientos)				# Se Agrega La Lista Con El Orden De Visitas.
 	
 	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
 	
 	if Val[0]:
 		if Val[1]['Padre'] == None:
 			Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
-	
-	# ~ print(Val)
 	
 	if Val[0]:
 		if Val[1]['Hijos'] == []:
@@ -984,51 +1007,7 @@ def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
 	
 	Arbol.AgregarEstado(ArbolRaiz, Actual, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
-	
-	#===================================================================
-	
-	return Actual
 
-
-def OtroxD():
-	
-	global SELECT, Movimientos, CostoTotal
-	
-	Padre = Actual
-	PosLetra = LETRAS.index(Actual[0])
-	
-	x, y = PosLetra, Actual[1]
-	
-	y -= 1
-	for z in VALORES:
-		if z[0] == [LETRAS[x],y]:
-			if z[3] == '': pass
-			else:
-				
-				MaskTrue(x, y-1, YPOS, XPOS)
-				
-				CostoTotal += float(z[3])
-				
-				Actual = [Actual[0],Actual[1]-1]
-				
-				Add = False
-				Movimientos += 1
-				
-				for Pos, Movs in SELECT:
-					
-					if Actual == Pos:
-						Movs.append(Movimientos)
-						Add = False
-						break
-						
-					else: Add = True
-					
-				if Add: SELECT.append((Actual, [Movimientos]))
-				
-				AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
-				
-				break
-		
 
 
 #===================================================================================================
@@ -1443,6 +1422,7 @@ def main():
 	DibujarInfoX = 0
 	DibujarInfoY = 0
 	SelInfoTemp  = []
+	PadreSeleccion = []
 	
 	Lisy = ['-1']		# Lista de Terrenos, -1 igual al Terreno Vacio
 	LisyPos1 = 0		# Para Terreno Tipo Pared
@@ -1742,6 +1722,9 @@ def main():
 	
 	#===================================================================
 	
+	ListaBT = []
+	ContFPS = 0
+	
 	# Inicio Del Juego:
 	while game_over is False:
 		
@@ -1768,7 +1751,7 @@ def main():
 						elif evento.key == pygame.K_UP    or evento.key == pygame.K_w:	seleccion = obtenerPosicion(XPOS, YPOS, 'U', seleccion, personaje, ArbolRaiz)	# Tecla Arriba. Mueve Personaje.
 						elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
 						
-						Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
+						# ~ Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
 						
 				if BtnMostrarArbol:
 					
@@ -2105,11 +2088,57 @@ def main():
 									Movimientos += 1
 									SELECT.append((seleccion, [Movimientos]))
 									
-									ArbolRaiz = Arbol.Raiz(seleccion)
-									PosLetra = LETRAS.index(seleccion[0])
-									x, y = PosLetra, seleccion[1]
-									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
-									Arbol.ImprimirArbol(ArbolRaiz)
+									if TipoBusqueda == 0:
+										
+										ArbolRaiz = Arbol.Raiz(seleccion)
+										PosLetra = LETRAS.index(seleccion[0])
+										x, y = PosLetra, seleccion[1]
+										AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
+										# ~ Arbol.ImprimirArbol(ArbolRaiz)
+										
+									if TipoBusqueda == 1:
+										
+										#===============================================
+										PadreSeleccion = seleccion
+										ListaBT = []
+										ListaHijos = []
+										Pila = [(PuntoInicio, [])]
+										ArbolRaiz = Arbol.Raiz(seleccion)
+										
+										#================================================================================
+										XTemp = LETRAS.index(seleccion[0])
+										YTemp = seleccion[1]
+										
+										UpTemp    = [LETRAS[XTemp], YTemp-1]
+										RightTemp = [LETRAS[XTemp+1], YTemp]
+										DownTemp  = [LETRAS[XTemp], YTemp+1]
+										LeftTemp  = [LETRAS[XTemp-1], YTemp]
+										
+										ListaTemp = [UpTemp, RightTemp, DownTemp, LeftTemp]
+										
+										# Se Le agrega a lista de Hijos sus Hijos (Solo las Coordenadas).
+										for x in VALORES:
+											if x[0] == ListaTemp[Direcciones.index(1)] and x[3] != '':
+												Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(1)]); break
+										for x in VALORES:
+											if x[0] == ListaTemp[Direcciones.index(2)] and x[3] != '':
+												Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(2)]); break
+										for x in VALORES:
+											if x[0] == ListaTemp[Direcciones.index(3)] and x[3] != '':
+												Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(3)]); break
+										for x in VALORES:
+											if x[0] == ListaTemp[Direcciones.index(4)] and x[3] != '':
+												Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(4)]); break
+										
+										Arbol.AgregarIniFin(ArbolRaiz, seleccion, True)				# Se Indica que es el Nodo Inicial.
+										Arbol.AgregarEstado(ArbolRaiz, seleccion, 'Cerrado')		# Si el Nodo es Visitado, Es Cerrado.
+										Arbol.AgregarPadre(ArbolRaiz, seleccion, 'N/A')				# Se le agrega al Nodo Actual cual es su Padre.
+										Arbol.AgregarOrden(ArbolRaiz, seleccion, Movimientos)		# Se Agrega La Lista Con El Orden De Visitas.
+										#================================================================================
+										
+										seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+										# ~ Arbol.ImprimirArbol(ArbolRaiz)
+										#===============================================
 									
 							elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
 								
@@ -2141,11 +2170,57 @@ def main():
 								for val in VALORES:
 									if val[0] == PuntoInicio: CostoTotal += float(val[3])
 								
-								ArbolRaiz = Arbol.Raiz(seleccion)
-								PosLetra = LETRAS.index(seleccion[0])
-								x, y = PosLetra, seleccion[1]
-								AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
-								Arbol.ImprimirArbol(ArbolRaiz)
+								if TipoBusqueda == 0:
+									
+									ArbolRaiz = Arbol.Raiz(seleccion)
+									PosLetra = LETRAS.index(seleccion[0])
+									x, y = PosLetra, seleccion[1]
+									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
+									# ~ Arbol.ImprimirArbol(ArbolRaiz)
+									
+								if TipoBusqueda == 1:
+									
+									#===============================================
+									PadreSeleccion = seleccion
+									ListaBT = []
+									ListaHijos = []
+									Pila = [(PuntoInicio, [])]
+									ArbolRaiz = Arbol.Raiz(seleccion)
+									
+									#================================================================================
+									XTemp = LETRAS.index(seleccion[0])
+									YTemp = seleccion[1]
+									
+									UpTemp    = [LETRAS[XTemp], YTemp-1]
+									RightTemp = [LETRAS[XTemp+1], YTemp]
+									DownTemp  = [LETRAS[XTemp], YTemp+1]
+									LeftTemp  = [LETRAS[XTemp-1], YTemp]
+									
+									ListaTemp = [UpTemp, RightTemp, DownTemp, LeftTemp]
+									
+									# Se Le agrega a lista de Hijos sus Hijos (Solo las Coordenadas).
+									for x in VALORES:
+										if x[0] == ListaTemp[Direcciones.index(1)] and x[3] != '':
+											Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(1)]); break
+									for x in VALORES:
+										if x[0] == ListaTemp[Direcciones.index(2)] and x[3] != '':
+											Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(2)]); break
+									for x in VALORES:
+										if x[0] == ListaTemp[Direcciones.index(3)] and x[3] != '':
+											Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(3)]); break
+									for x in VALORES:
+										if x[0] == ListaTemp[Direcciones.index(4)] and x[3] != '':
+											Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(4)]); break
+									
+									Arbol.AgregarIniFin(ArbolRaiz, seleccion, True)				# Se Indica que es el Nodo Inicial.
+									Arbol.AgregarEstado(ArbolRaiz, seleccion, 'Cerrado')		# Si el Nodo es Visitado, Es Cerrado.
+									Arbol.AgregarPadre(ArbolRaiz, seleccion, 'N/A')				# Se le agrega al Nodo Actual cual es su Padre.
+									Arbol.AgregarOrden(ArbolRaiz, seleccion, Movimientos)		# Se Agrega La Lista Con El Orden De Visitas.
+									#================================================================================
+									
+									seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+									# ~ Arbol.ImprimirArbol(ArbolRaiz)
+									#===============================================
 								
 						if evento.key == pygame.K_p:
 							
@@ -2195,12 +2270,12 @@ def main():
 						xD = 0
 						
 						DibujarInfoXY = True
-						Pos = pygame.mouse.get_pos()	# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
+						Pos = pygame.mouse.get_pos()					# Obtiene una Tupla con los Valores X y Y del Mouse, en Pixeles.
 						DibujarInfoX, DibujarInfoY = Pos[0], Pos[1]		# Posición X y Y del Mouse por separado, Coordenadas por Pixeles.
 						
 						SelInfoTemp = obtenerPosicionClic(XPOS, YPOS, Pos, dimension, puntoInicio, seleccion)		# Función Que crea una selección Temporal
 						
-						SelTemp = seleccion				# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
+						SelTemp = seleccion								# Selección temporal, para mostrar el cuadro seleccionado con el mouse.
 						SelTemp = obtenerPosicionClic(XPOS, YPOS, Pos, dimension, puntoInicio, SelTemp)		# Función Que crea una selección Temporal
 						
 				else:
@@ -2437,18 +2512,50 @@ def main():
 						PosLetra = LETRAS.index(seleccion[0])
 						x, y = PosLetra, seleccion[1]
 						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
-						Arbol.ImprimirArbol(ArbolRaiz)
+						# ~ Arbol.ImprimirArbol(ArbolRaiz)
 					
 					elif TipoBusqueda == 1:
 						
 						#===============================================
+						PadreSeleccion = seleccion
+						ListaBT = []
 						ListaHijos = []
 						Pila = [(PuntoInicio, [])]
 						ArbolRaiz = Arbol.Raiz(seleccion)
+						
+						#================================================================================
+						XTemp = LETRAS.index(seleccion[0])
+						YTemp = seleccion[1]
+						
+						UpTemp    = [LETRAS[XTemp], YTemp-1]
+						RightTemp = [LETRAS[XTemp+1], YTemp]
+						DownTemp  = [LETRAS[XTemp], YTemp+1]
+						LeftTemp  = [LETRAS[XTemp-1], YTemp]
+						
+						ListaTemp = [UpTemp, RightTemp, DownTemp, LeftTemp]
+						
+						# Se Le agrega a lista de Hijos sus Hijos (Solo las Coordenadas).
+						for x in VALORES:
+							if x[0] == ListaTemp[Direcciones.index(1)] and x[3] != '':
+								Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(1)]); break
+						for x in VALORES:
+							if x[0] == ListaTemp[Direcciones.index(2)] and x[3] != '':
+								Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(2)]); break
+						for x in VALORES:
+							if x[0] == ListaTemp[Direcciones.index(3)] and x[3] != '':
+								Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(3)]); break
+						for x in VALORES:
+							if x[0] == ListaTemp[Direcciones.index(4)] and x[3] != '':
+								Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(4)]); break
+						
+						Arbol.AgregarIniFin(ArbolRaiz, seleccion, True)				# Se Indica que es el Nodo Inicial.
+						Arbol.AgregarEstado(ArbolRaiz, seleccion, 'Cerrado')		# Si el Nodo es Visitado, Es Cerrado.
+						Arbol.AgregarPadre(ArbolRaiz, seleccion, 'N/A')				# Se le agrega al Nodo Actual cual es su Padre.
+						Arbol.AgregarOrden(ArbolRaiz, seleccion, Movimientos)		# Se Agrega La Lista Con El Orden De Visitas.
+						#================================================================================
+						
 						seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
-						Arbol.AgregarIniFin(ArbolRaiz, seleccion, True)			# Se Indica que es el Nodo Inicial.
-						Arbol.AgregarEstado(ArbolRaiz, seleccion, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
-						Arbol.ImprimirArbol(ArbolRaiz)
+						# ~ Arbol.ImprimirArbol(ArbolRaiz)
 						#===============================================
 					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
@@ -2511,18 +2618,48 @@ def main():
 							PosLetra = LETRAS.index(seleccion[0])
 							x, y = PosLetra, seleccion[1]
 							AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
-							Arbol.ImprimirArbol(ArbolRaiz)
+							# ~ Arbol.ImprimirArbol(ArbolRaiz)
 						
 						elif TipoBusqueda == 1:
 							
 							#===============================================
+							PadreSeleccion = seleccion
+							ListaBT = []
 							ListaHijos = []
 							Pila = [(PuntoInicio, [])]
 							ArbolRaiz = Arbol.Raiz(seleccion)
-							seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+							
+							#================================================================================
+							XTemp = LETRAS.index(seleccion[0])
+							YTemp = seleccion[1]
+							
+							UpTemp    = [LETRAS[XTemp], YTemp-1]
+							RightTemp = [LETRAS[XTemp+1], YTemp]
+							DownTemp  = [LETRAS[XTemp], YTemp+1]
+							LeftTemp  = [LETRAS[XTemp-1], YTemp]
+							
+							ListaTemp = [UpTemp, RightTemp, DownTemp, LeftTemp]
+							
+							# Se Le agrega a lista de Hijos sus Hijos (Solo las Coordenadas).
+							for x in VALORES:
+								if x[0] == ListaTemp[Direcciones.index(1)] and x[3] != '':
+									Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(1)]); break
+							for x in VALORES:
+								if x[0] == ListaTemp[Direcciones.index(2)] and x[3] != '':
+									Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(2)]); break
+							for x in VALORES:
+								if x[0] == ListaTemp[Direcciones.index(3)] and x[3] != '':
+									Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(3)]); break
+							for x in VALORES:
+								if x[0] == ListaTemp[Direcciones.index(4)] and x[3] != '':
+									Arbol.AgregarHijos(ArbolRaiz, seleccion, ListaTemp[Direcciones.index(4)]); break
+							
 							Arbol.AgregarIniFin(ArbolRaiz, seleccion, True)			# Se Indica que es el Nodo Inicial.
 							Arbol.AgregarEstado(ArbolRaiz, seleccion, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
-							Arbol.ImprimirArbol(ArbolRaiz)
+							#================================================================================
+							
+							seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+							# ~ Arbol.ImprimirArbol(ArbolRaiz)
 							#===============================================
 						
 						
@@ -3376,18 +3513,37 @@ def main():
 				
 				if TipoBusqueda == 1:
 					
-					if xD % 150 == 0:
+					if not PadreSeleccion in ListaBT: ListaBT.append(PadreSeleccion)
+					
+					if seleccion in ListaBT:
+						Ind = ListaBT.index(seleccion) + 1
+						ListaBT = ListaBT[:Ind]
+					else:
+						if not seleccion in ListaBT: ListaBT.append(seleccion)
+					
+					ContFPS += 1
+					
+					if ContFPS % 8 == 1:		# Imprime Cada 1/10 de Segundo, o Sea Cada 30 FPS (Frames Por Segundo)
+						
+						PadreSeleccion = seleccion
 						
 						seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz)
-						
-					xD += 1
-				
-			else: xD = 0
+					
+					obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, ListaBT)
+					
 				# ~ elif TipoBusqueda == 2:
 					
 					# ~ seleccion = AEstrella(XPOS, YPOS, seleccion, personaje, ArbolRaiz)
-		
-		
+				
+			else:
+				
+				if not seleccion in ListaBT: ListaBT.append(seleccion)
+				
+				ContFPS = 0
+				
+				obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, ListaBT)
+			
+			
 		#===================================================================================================
 		#===================================================================================================
 		#===================================================================================================
