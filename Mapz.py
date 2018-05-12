@@ -544,7 +544,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):		# Obti
 
 
 
-def obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, p_inicio, Lista):		# Obtiene La Coordenada del Mapa en la que se le de clic.
+def obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, p_inicio, Seleccion, Lista):		# Dibuja El Camino Más Corto Hecho Con Backtracking.
 	
 	for i in range(XPOS):
 		
@@ -557,8 +557,35 @@ def obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, p_inicio, Lista):		#
 				x = i * dimension + p_inicio[0]
 				y = j * dimension + p_inicio[1]
 				
-				pygame.draw.line(screen, COLOR['Morado'], [x+dimension-5, y+5], [x+5, y+dimension-5], 3)
-				pygame.draw.line(screen, COLOR['Morado'], [x+5, y+5], [x+dimension-5, y+dimension-5], 3)
+				if Actual == PuntoInicio or Actual == PuntoDestino: pygame.draw.circle(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], 6)
+					
+				Padre = Lista[Lista.index(Actual)-1]
+				try: Hijo = Lista[Lista.index(Actual)+1]
+				except: Hijo = Seleccion
+				
+				X1 = LETRAS.index(Actual[0])
+				Y1 = Actual[1]
+				# ~ print(Padre == [LETRAS[X1], Y1+1])
+				# ~ Pause()
+				if Padre == [LETRAS[X1], Y1-1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y], 5)
+				if Padre == [LETRAS[X1+1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+dimension, y+(dimension//2)], 5)
+				if Padre == [LETRAS[X1], Y1+1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y+dimension], 5)
+				if Padre == [LETRAS[X1-1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x, y+(dimension//2)], 5)
+				
+				#===================================================
+				
+				if Hijo == [LETRAS[X1], Y1-1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y], 5)
+				if Hijo == [LETRAS[X1+1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+dimension, y+(dimension//2)], 5)
+				if Hijo == [LETRAS[X1], Y1+1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y+dimension], 5)
+				if Hijo == [LETRAS[X1-1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x, y+(dimension//2)], 5)
 
 
 
@@ -3523,13 +3550,13 @@ def main():
 					
 					ContFPS += 1
 					
-					if ContFPS % 8 == 1:		# Imprime Cada 1/10 de Segundo, o Sea Cada 30 FPS (Frames Por Segundo)
+					if ContFPS % 8 == 1:		# Imprime Cada 0.13 de Segundos, o Sea Cada 8 FPS (Frames Por Segundo)
 						
 						PadreSeleccion = seleccion
 						
 						seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz)
 					
-					obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, ListaBT)
+					obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, seleccion, ListaBT)
 					
 				# ~ elif TipoBusqueda == 2:
 					
@@ -3541,7 +3568,7 @@ def main():
 				
 				ContFPS = 0
 				
-				obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, ListaBT)
+				obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
 			
 			
 		#===================================================================================================
