@@ -1609,6 +1609,9 @@ def main():
 	BtnPagIzq = BotonDir(RutaBtn)						# Botón Derecho Para Cambiar de Página en la Selección de Terrenos.
 	BtnPagDer = BotonDir(RutaBtn); BtnPagDer.flip()		# Botón Izquierdo Para Cambiar de Página en la Selección de Terrenos.
 	
+	BtnTipoBusquedaIzq = BotonDir(RutaBtn)								# Botón Derecho Para Cambiar la Selección del Tipo de Busqueda.
+	BtnTipoBusquedaDer = BotonDir(RutaBtn); BtnTipoBusquedaDer.flip()	# Botón Izquierdo Para Cambiar la Selección del Tipo de Busqueda.
+	
 	seleccionPers1 = None		# Para Saber Si El Personaje 1 Fue Seleccionado.
 	seleccionPers2 = None		# Para Saber Si El Personaje 2 Fue Seleccionado.
 	seleccionPers3 = None		# Para Saber Si El Personaje 3 Fue Seleccionado.
@@ -1723,6 +1726,7 @@ def main():
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
 	BtnRepetirNodos = False			# Botón Para Selección de Repetición o No de Nodos.
+	BtnTipoBusqueda = 'Normal'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
 	
 	ContDir = 0
 	
@@ -2391,9 +2395,17 @@ def main():
 											if ContDir == 0: Direcciones[3] = ContDir; break
 									
 									if BtnRepetirNodos:
-										if (xr >= 155) and (xr <= 195) and (yr >= 230) and (yr <= 250): BtnRepetirNodos = False
+										if (xr >= 155) and (xr <= 195) and (yr >= 220) and (yr <= 240): BtnRepetirNodos = False
 									else:
-										if (xr >= 150) and (xr <= 200) and (yr >= 230) and (yr <= 250): BtnRepetirNodos = True
+										if (xr >= 150) and (xr <= 200) and (yr >= 220) and (yr <= 240): BtnRepetirNodos = True
+										
+									if (xr >= 30) and (xr <= 55) and (yr >= 277) and (yr <= 297):
+										if BtnTipoBusqueda == 'Backtracking': TipoBusqueda = 0; BtnTipoBusqueda = 'Normal'
+										elif BtnTipoBusqueda == 'A Estrella': TipoBusqueda = 1; BtnTipoBusqueda = 'Backtracking'
+										
+									elif (xr >= 185) and (xr <= 210) and (yr >= 277) and (yr <= 297):
+										if BtnTipoBusqueda == 'Normal': TipoBusqueda = 1; BtnTipoBusqueda = 'Backtracking'
+										elif BtnTipoBusqueda == 'Backtracking': TipoBusqueda = 2; BtnTipoBusqueda = 'A Estrella'
 										
 									#===========================================================================
 								else:
@@ -3513,15 +3525,37 @@ def main():
 				dibujarTexto(screen, str(Direcciones[3]), [181, 129], Fuentes['Droid 15'], COLOR['Verde'])
 				dibujarTexto(screen, str(Direcciones[3]), [182, 130], Fuentes['Droid 15'], COLOR['Verde Claro'])
 				
-				dibujarTexto(screen, 'Repetir Nodos', [29, 230], Fuentes['Droid 18'], COLOR['Verde Claro'])
-				dibujarTexto(screen, 'Repetir Nodos', [30, 231], Fuentes['Droid 18'], COLOR['Verde'])
+				dibujarTexto(screen, 'Repetir Nodos', [29, 220], Fuentes['Droid 18'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Repetir Nodos', [30, 221], Fuentes['Droid 18'], COLOR['Verde'])
 				
 				if BtnRepetirNodos:
-					screen.blit(btnON.image, (155, 230))
+					screen.blit(btnON.image, (155, 220))
 					NoRepetir = False
 				else:
-					screen.blit(btnOFF.image, (150, 230))
+					screen.blit(btnOFF.image, (150, 220))
 					NoRepetir = True
+				
+				dibujarTexto(screen, 'Tipo de Busqueda:', [29, 250], Fuentes['Droid 18'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Tipo de Busqueda:', [30, 251], Fuentes['Droid 18'], COLOR['Verde'])
+				
+				BtnTipoBusquedaIzq.resize(25,20); screen.blit(BtnTipoBusquedaIzq.image, (30, 277))
+				BtnTipoBusquedaDer.resize(25,20); screen.blit(BtnTipoBusquedaDer.image, (185, 277))
+				
+				if BtnTipoBusqueda == 'Normal':
+					
+					dibujarTexto(screen, 'Normal', [92, 275], Fuentes['Droid 18'], COLOR['Azul Claro'])
+					dibujarTexto(screen, 'Normal', [93, 276], Fuentes['Droid 18'], COLOR['Azul'])
+					
+				elif BtnTipoBusqueda == 'Backtracking':
+					
+					dibujarTexto(screen, 'Backtracking', [70, 275], Fuentes['Droid 18'], COLOR['Azul Claro'])
+					dibujarTexto(screen, 'Backtracking', [71, 276], Fuentes['Droid 18'], COLOR['Azul'])
+					
+				elif BtnTipoBusqueda == 'A Estrella':
+					
+					dibujarTexto(screen, 'A Estrella', [83, 275], Fuentes['Droid 18'], COLOR['Azul Claro'])
+					dibujarTexto(screen, 'A Estrella', [84, 276], Fuentes['Droid 18'], COLOR['Azul'])
+					
 				
 				
 			else: screen.blit(btnOFF.image, (480, 582))
@@ -3538,7 +3572,7 @@ def main():
 			
 			if seleccion != PuntoDestino:
 				
-				if TipoBusqueda == 1:
+				if TipoBusqueda == 1 and not BtnMostrarArbol:
 					
 					if not PadreSeleccion in ListaBT: ListaBT.append(PadreSeleccion)
 					
@@ -3563,12 +3597,11 @@ def main():
 					# ~ seleccion = AEstrella(XPOS, YPOS, seleccion, personaje, ArbolRaiz)
 				
 			else:
-				
-				if not seleccion in ListaBT: ListaBT.append(seleccion)
-				
-				ContFPS = 0
-				
-				obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
+				if not BtnMostrarArbol:
+					
+					ContFPS = 0
+					if not seleccion in ListaBT: ListaBT.append(seleccion)
+					obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
 			
 			
 		#===================================================================================================
