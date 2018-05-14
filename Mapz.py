@@ -1532,6 +1532,7 @@ def main():
 			   'Droid 25':pygame.font.Font("fuentes/DroidSans.ttf", 25),
 			   'Droid 20':pygame.font.Font("fuentes/DroidSans.ttf", 20),
 			   'Droid 18':pygame.font.Font("fuentes/DroidSans.ttf", 18),
+			   'Droid 16':pygame.font.Font("fuentes/DroidSans.ttf", 16),
 			   'Droid 15':pygame.font.Font("fuentes/DroidSans.ttf", 15),
 			   'Droid 12':pygame.font.Font("fuentes/DroidSans.ttf", 12),
 			   'Droid 10':pygame.font.Font("fuentes/DroidSans.ttf", 10),
@@ -3065,15 +3066,33 @@ def main():
 		
 		if Iniciar:
 			
+			dibujarTexto(screen, 'Busqueda: ', [920, 460], Fuentes['Droid 16'], COLOR['Verde Claro'])
+			dibujarTexto(screen, 'Busqueda: ', [921, 461], Fuentes['Droid 16'], COLOR['Verde'])
+			
+			if BtnTipoBusqueda == 'Normal':
+				
+				dibujarTexto(screen, 'Manual', [1002, 460], Fuentes['Droid 16'], COLOR['Azul Claro'])
+				dibujarTexto(screen, 'Manual', [1003, 461], Fuentes['Droid 16'], COLOR['Azul'])
+				
+			elif BtnTipoBusqueda == 'Backtracking':
+				
+				dibujarTexto(screen, 'Backtracking', [1002, 460], Fuentes['Droid 16'], COLOR['Azul Claro'])
+				dibujarTexto(screen, 'Backtracking', [1003, 461], Fuentes['Droid 16'], COLOR['Azul'])
+				
+			elif BtnTipoBusqueda == 'A Estrella':
+				
+				dibujarTexto(screen, 'A* (Estrella)', [1002, 460], Fuentes['Droid 16'], COLOR['Azul Claro'])
+				dibujarTexto(screen, 'A* (Estrella)', [1003, 461], Fuentes['Droid 16'], COLOR['Azul'])
+				
 			Flechas = [FlechaArr, FlechaDer, FlechaAba, FlechaIzq]
 			
-			dibujarTexto(screen, 'Orden de Expansión', [930, 500], Fuentes['Droid 15'], COLOR['Negro'])
-			dibujarTexto(screen, 'Orden de Expansión', [931, 500], Fuentes['Droid 15'], COLOR['Negro'])
+			dibujarTexto(screen, 'Orden de Expansión', [920, 500], Fuentes['Droid 16'], COLOR['Negro'])
+			dibujarTexto(screen, 'Orden de Expansión', [921, 501], Fuentes['Droid 16'], COLOR['Azul'])
 			
-			screen.blit(Flechas[Direcciones.index(1)].image, (930, 540))
-			screen.blit(Flechas[Direcciones.index(2)].image, (970, 540))
-			screen.blit(Flechas[Direcciones.index(3)].image, (1010, 540))
-			screen.blit(Flechas[Direcciones.index(4)].image, (1050, 540))
+			screen.blit(Flechas[Direcciones.index(1)].image, (920, 540))
+			screen.blit(Flechas[Direcciones.index(2)].image, (960, 540))
+			screen.blit(Flechas[Direcciones.index(3)].image, (1000, 540))
+			screen.blit(Flechas[Direcciones.index(4)].image, (1040, 540))
 		
 		
 		
