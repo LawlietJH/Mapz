@@ -1045,7 +1045,7 @@ def AbrirArchivo():
 	global Error, CadenaError
 	
 	Cadena = ''
-	Nombre = explorer.GetFileName()
+	Nombre = explorer.Explorer.GetFileName(DirInicial=os.getcwd()+'/Mapas')
 	
 	if Nombre == None:
 		
