@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.7
+# Versión: 1.6.8
 
 import Arbol
 import pygame
@@ -1388,7 +1388,7 @@ Direcciones = [1,2,3,4]	# Lista de Orden de Expansión de Nodos.
 NoRepetir = True
 VISITA = 0
 ListaHijos = []
-TipoBusqueda = 1	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Sin Metodo, 1 = Backtracking, 2 = A* (A Estrella).
+TipoBusqueda = 0	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
 
 
 # Variables Globales: ==================================================
@@ -1740,10 +1740,18 @@ def main():
 	FlechaDer = Flecha("img/Botones/Flecha.png");	FlechaDer.rotate(180)
 	FlechaArr = Flecha("img/Botones/Flecha.png");	FlechaArr.rotate(270)
 	
+	FlechaIzq.resize(20,20)
+	FlechaAba.resize(20,20)
+	FlechaDer.resize(20,20)
+	FlechaArr.resize(20,20)
+	
 	MoveX = 0
 	MoveY = 0
 	XX1 = 0
 	YY1 = 0
+	
+	ListaBT = []
+	ContFPS = 0
 	
 	#===================================================================
 	
@@ -1752,9 +1760,6 @@ def main():
 	# ~ pygame.mixer.music.play(-1)
 	
 	#===================================================================
-	
-	ListaBT = []
-	ContFPS = 0
 	
 	# Inicio Del Juego:
 	while game_over is False:
@@ -3054,11 +3059,21 @@ def main():
 				BtnPagIzq.resize(25,20)
 				screen.blit(BtnPagIzq.image, (1050, 550))
 		
-		
-		
 		#===============================================================
 		
 		if DibujarInfo: DibujarInformacionClic(screen, Fuentes, SelTemp)
+		
+		if Iniciar:
+			
+			Flechas = [FlechaArr, FlechaDer, FlechaAba, FlechaIzq]
+			
+			dibujarTexto(screen, 'Orden de Expansión', [930, 500], Fuentes['Droid 15'], COLOR['Negro'])
+			dibujarTexto(screen, 'Orden de Expansión', [931, 500], Fuentes['Droid 15'], COLOR['Negro'])
+			
+			screen.blit(Flechas[Direcciones.index(1)].image, (930, 540))
+			screen.blit(Flechas[Direcciones.index(2)].image, (970, 540))
+			screen.blit(Flechas[Direcciones.index(3)].image, (1010, 540))
+			screen.blit(Flechas[Direcciones.index(4)].image, (1050, 540))
 		
 		
 		
@@ -3482,11 +3497,6 @@ def main():
 		if Cargar and not Iniciar:
 			
 			if BtnOrdenExpansion:
-				
-				FlechaIzq.resize(20,20)
-				FlechaAba.resize(20,20)
-				FlechaDer.resize(20,20)
-				FlechaArr.resize(20,20)
 				
 				screen.blit(btnON.image, (485, 582))
 				
