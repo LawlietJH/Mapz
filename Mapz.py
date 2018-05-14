@@ -631,7 +631,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -666,7 +666,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -706,7 +706,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -746,7 +746,7 @@ def obtenerPosicion(XPOS, YPOS, Dir, Actual, personaje, ArbolRaiz):		# Obtiene l
 							
 						if Add: SELECT.append((Actual, [Movimientos]))
 						
-						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS, Direcciones)
+						AgregarAlArbol(ArbolRaiz, Padre, Actual, x, y, YPOS, XPOS)
 						
 						break
 		
@@ -766,7 +766,7 @@ def MaskTrue(X, Y, YPOS, XPOS):		# Pone En True La Posicion Actual del Personaje
 
 
 
-def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden):		# XPOS y YPOS son Las Medidad Del Mapa, desde 2x2 hasta 15x15.
+def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS):		# XPOS y YPOS son Las Medidad Del Mapa, desde 2x2 hasta 15x15.
 	
 	global VISITA, NoRepetir
 	
@@ -785,24 +785,24 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden):		# XPOS y
 	# Verifica que sean Coordenadas Con Costos, Los que son N/A No se agregan al Árbol.
 	#==================================================================================
 	for x in VALORES:
-		if x[0] == Lista[Orden[0]-1] and x[3] != '':
+		if x[0] == Lista[Direcciones.index(1)] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[0]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(1)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
-		if x[0] == Lista[Orden[1]-1] and x[3] != '':
+		if x[0] == Lista[Direcciones.index(2)] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[1]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(2)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
-		if x[0] == Lista[Orden[2]-1] and x[3] != '':
+		if x[0] == Lista[Direcciones.index(3)] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[2]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(3)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
-		if x[0] == Lista[Orden[3]-1] and x[3] != '':
+		if x[0] == Lista[Direcciones.index(4)] and x[3] != '':
 			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
-				Arbol.Agregar(ArbolRaiz, Actual, Lista[Orden[3]-1], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
+				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(4)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	#==================================================================================
 	
 	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
@@ -816,25 +816,24 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS, Orden):		# XPOS y
 	if Val[0]:
 		if Val[1]['Hijos'] == []:
 			
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[0]-1]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[0]-1], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[0]-1])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[1]-1]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[1]-1], Actual)
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[1]-1])
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[2]-1]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[2]-1], Actual)
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[2]-1])
-			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Orden[3]-1]):
-				Arbol.AgregarPadre(ArbolRaiz, Lista[Orden[3]-1], Actual)
-				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Orden[3]-1])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(1)]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Direcciones.index(1)], Actual)			# Se Le agrega a los Hijos del Nodo Actual, el Nodo Actual Como Padre (Solo La Coordenada).
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Direcciones.index(1)])			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(2)]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Direcciones.index(2)], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Direcciones.index(2)])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(3)]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Direcciones.index(3)], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Direcciones.index(3)])
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(4)]):
+				Arbol.AgregarPadre(ArbolRaiz, Lista[Direcciones.index(4)], Actual)
+				Arbol.AgregarHijos(ArbolRaiz, Actual, Lista[Direcciones.index(4)])
 	
 	# Se Indica Si Es El Nodo Inicial.
 	if Actual == PuntoInicio:    Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
 	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
 	
 	Arbol.AgregarEstado(ArbolRaiz, Actual, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
-	# ~ Arbol.ActualizaEstado(ArbolRaiz)		# Actualiza Los Estados (Abierto/Cerrado) De Todos Los Nodos.
 
 
 
@@ -2130,7 +2129,7 @@ def main():
 										ArbolRaiz = Arbol.Raiz(seleccion)
 										PosLetra = LETRAS.index(seleccion[0])
 										x, y = PosLetra, seleccion[1]
-										AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
+										AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 										# ~ Arbol.ImprimirArbol(ArbolRaiz)
 										
 									if TipoBusqueda == 1:
@@ -2212,7 +2211,7 @@ def main():
 									ArbolRaiz = Arbol.Raiz(seleccion)
 									PosLetra = LETRAS.index(seleccion[0])
 									x, y = PosLetra, seleccion[1]
-									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
+									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 									# ~ Arbol.ImprimirArbol(ArbolRaiz)
 									
 								if TipoBusqueda == 1:
@@ -2556,7 +2555,7 @@ def main():
 						ArbolRaiz = Arbol.Raiz(seleccion)
 						PosLetra = LETRAS.index(seleccion[0])
 						x, y = PosLetra, seleccion[1]
-						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
+						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)
 					
 					elif TipoBusqueda == 1:
@@ -2662,7 +2661,7 @@ def main():
 							ArbolRaiz = Arbol.Raiz(seleccion)
 							PosLetra = LETRAS.index(seleccion[0])
 							x, y = PosLetra, seleccion[1]
-							AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS, Direcciones)
+							AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 							# ~ Arbol.ImprimirArbol(ArbolRaiz)
 						
 						elif TipoBusqueda == 1:
