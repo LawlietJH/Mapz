@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.6.8
+# Versión: 1.6.9
 
 import Arbol
 import pygame
@@ -1059,9 +1059,11 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	global Direcciones, ListaHijos
 	global Movimientos, Pila
 	
+	if Abue != []: ListaHijos.append(Abue)
+	
 	os.system('cls')
 	
-	Hijos = []
+	# ~ Hijos = []
 	xD = False
 	
 	X = LETRAS.index(Padre[0])
@@ -1080,32 +1082,40 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(1)] and x[3] != '':
 			for y in Pila:
-				if not Lista[Direcciones.index(4)] == y[0]: xD = True
-			if xD == False: Pila.append([Lista[Direcciones.index(1)], DistanciaManhattan(Lista[Direcciones.index(1)])])
+				if Lista[Direcciones.index(1)] == y[0] or Lista[Direcciones.index(1)] in ListaHijos: xD = True
+			if xD == False:
+				Pila.append([Lista[Direcciones.index(1)], DistanciaManhattan(Lista[Direcciones.index(1)])])
+				ListaHijos.append(Lista[Direcciones.index(1)])
 			break
 	
 	xD = False
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(2)] and x[3] != '':
 			for y in Pila:
-				if not Lista[Direcciones.index(4)] == y[0]: xD = True
-			if xD == False: Pila.append([Lista[Direcciones.index(2)], DistanciaManhattan(Lista[Direcciones.index(2)])])
+				if Lista[Direcciones.index(2)] == y[0] or Lista[Direcciones.index(2)] in ListaHijos: xD = True
+			if xD == False:
+				Pila.append([Lista[Direcciones.index(2)], DistanciaManhattan(Lista[Direcciones.index(2)])])
+				ListaHijos.append(Lista[Direcciones.index(2)])
 			break
 	
 	xD = False
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(3)] and x[3] != '':
 			for y in Pila:
-				if not Lista[Direcciones.index(4)] == y[0]: xD = True
-			if xD == False: Pila.append([Lista[Direcciones.index(3)], DistanciaManhattan(Lista[Direcciones.index(3)])])
+				if Lista[Direcciones.index(3)] == y[0] or Lista[Direcciones.index(3)] in ListaHijos: xD = True
+			if xD == False:
+				Pila.append([Lista[Direcciones.index(3)], DistanciaManhattan(Lista[Direcciones.index(3)])])
+				ListaHijos.append(Lista[Direcciones.index(3)])
 			break
 	
 	xD = False
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(4)] and x[3] != '':
 			for y in Pila:
-				if not Lista[Direcciones.index(4)] == y[0]: xD = True
-			if xD == False: Pila.append([Lista[Direcciones.index(4)], DistanciaManhattan(Lista[Direcciones.index(4)])])
+				if Lista[Direcciones.index(4)] == y[0] or Lista[Direcciones.index(4)] in ListaHijos: xD = True
+			if xD == False:
+				Pila.append([Lista[Direcciones.index(4)], DistanciaManhattan(Lista[Direcciones.index(4)])])
+				ListaHijos.append(Lista[Direcciones.index(4)])
 			break
 	
 	# ~ for x in ListaHijos:
@@ -1123,6 +1133,8 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 		if x[1] < Menor[1]: Menor = x
 		Cont += 1
 		print('\t', Cont, '-', x)
+	
+	Pila.pop(Pila.index(Menor))
 	
 	print('\n\tMenor:',Menor)
 	
@@ -2274,6 +2286,10 @@ def main():
 										# ~ Arbol.ImprimirArbol(ArbolRaiz)
 										#===============================================
 									
+									if TipoBusqueda == 2:
+										Pila = []; ListaHijos = []
+										seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
+									
 							elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
 								
 								CadenaError2 = 'Bloques Aún No Asignados.'
@@ -2355,6 +2371,10 @@ def main():
 									seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 									# ~ Arbol.ImprimirArbol(ArbolRaiz)
 									#===============================================
+								
+								if TipoBusqueda == 2:
+									Pila = []; ListaHijos = []
+									seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
 								
 						if evento.key == pygame.K_p:
 							
@@ -2700,6 +2720,10 @@ def main():
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)
 						#===============================================
 					
+					if TipoBusqueda == 2:
+						Pila = []; ListaHijos = []
+						seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
+					
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
 					
 					if NumPlayer == None:		# Si el Botón 2 Fue Presionado Pero No se ha seleccionado Personaje Marcara Error.
@@ -2804,6 +2828,9 @@ def main():
 							# ~ Arbol.ImprimirArbol(ArbolRaiz)
 							#===============================================
 						
+						if TipoBusqueda == 2:
+							Pila = []; ListaHijos = []
+							seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
 						
 				elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
 					
