@@ -1037,12 +1037,29 @@ def AgregarAlArbolBacktracking(Actual, Padre, XPOS, YPOS, ArbolRaiz):
 
 
 
-def AEstrella(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
+def DistanciaManhattan(Coord):
+	
+	X1 = LETRAS.index(Coord[0]) + 1
+	Y1 = Coord[1]
+	
+	X2 = LETRAS.index(PuntoDestino[0]) + 1
+	Y2 = PuntoDestino[1]
+	
+	X = X1 - X2
+	X = -X if X < 0 else X
+	Y = Y1 - Y2
+	Y = -Y if Y < 0 else Y
+	
+	return X + Y
+
+
+
+def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	
 	global Direcciones, ListaHijos
 	global Movimientos, Pila
 	
-	# ~ os.system('cls')
+	os.system('cls')
 	
 	Hijos = []
 	xD = False
@@ -1057,24 +1074,25 @@ def AEstrella(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
 	
 	Lista = [Up, Right, Down, Left]
 	
-	if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
+	# ~ if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
 	
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(1)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(1)]); break
+		if x[0] == Lista[Direcciones.index(1)] and x[3] != '': Hijos.append(Lista[Direcciones.index(1)]); break
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(2)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(2)]); break
+		if x[0] == Lista[Direcciones.index(2)] and x[3] != '': Hijos.append(Lista[Direcciones.index(2)]); break
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(3)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(3)]); break
+		if x[0] == Lista[Direcciones.index(3)] and x[3] != '': Hijos.append(Lista[Direcciones.index(3)]); break
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(4)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(4)]); break
+		if x[0] == Lista[Direcciones.index(4)] and x[3] != '': Hijos.append(Lista[Direcciones.index(4)]); break
 	
 	for x in ListaHijos:
 		if Padre == x[0]: xD = True; break
 	
 	if xD == False: ListaHijos.append([Padre, Hijos, []])
 	
+	Val = DistanciaManhattan(Padre)
 	
-	return Actual
+	return Hijos.pop(0)
 
 
 
@@ -1831,9 +1849,9 @@ def main():
 						
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
 						
-					# ~ elif TipoBusqueda == 2:
+					elif TipoBusqueda == 2:
 						
-						# ~ seleccion = AEstrella(XPOS, YPOS, Padre, ArbolRaiz)
+						AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
 						
 				if BtnMostrarArbol:
 					
@@ -1857,7 +1875,7 @@ def main():
 					TextInput7 = Costos[NombrePersonaje[NumPlayer]][6]
 					TextInput8 = Costos[NombrePersonaje[NumPlayer]][7]
 				
-				if evento.key == pygame.K_BACKSPACE:
+				if evento.key == pygame.K_BACKSPACE or evento.key == pygame.K_DELETE:
 					
 					ClicUndo.play()
 					
@@ -1870,7 +1888,7 @@ def main():
 					elif Costo7: TextInput7 = TextInput7[:-1]
 					elif Costo8: TextInput8 = TextInput8[:-1]
 					
-				elif evento.key == pygame.K_PERIOD:
+				elif evento.key == pygame.K_PERIOD or evento.key == pygame.K_KP_PERIOD:
 					
 					ClicSet.play()
 					
@@ -1907,16 +1925,16 @@ def main():
 				C5, C6, C7, C8 = Costo5, Costo6, Costo7, Costo8 
 				
 				# Se Agrega a la Cadena Correspondiente del TextInput Seleccionado, el Número Presionado.
-				if   evento.key == pygame.K_0: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('0', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_1: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('1', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_2: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('2', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_3: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('3', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_4: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('4', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_5: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('5', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_6: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('6', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_7: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('7', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_8: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('8', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
-				elif evento.key == pygame.K_9: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('9', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				if   evento.key == pygame.K_0 or evento.key == pygame.K_KP0: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('0', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_1 or evento.key == pygame.K_KP1: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('1', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_2 or evento.key == pygame.K_KP2: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('2', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_3 or evento.key == pygame.K_KP3: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('3', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_4 or evento.key == pygame.K_KP4: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('4', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_5 or evento.key == pygame.K_KP5: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('5', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_6 or evento.key == pygame.K_KP6: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('6', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_7 or evento.key == pygame.K_KP7: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('7', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_8 or evento.key == pygame.K_KP8: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('8', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
+				elif evento.key == pygame.K_9 or evento.key == pygame.K_KP9: TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8 = InputAdd('9', C1, C2, C3, C4, C5, C6, C7, C8, TI1, TI2, TI3, TI4, TI5, TI6, TI7, TI8); ClicSet.play()
 				
 				# Pasamos El Valor Correspondiente A Su Variable Oroginal 
 				TextInput1, TextInput2, TextInput3, TextInput4 = TI1, TI2, TI3, TI4
