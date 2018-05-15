@@ -544,7 +544,7 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):		# Obti
 
 
 
-def obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, p_inicio, Seleccion, Lista):		# Dibuja El Camino Más Corto Hecho Con Backtracking.
+def DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, p_inicio, Seleccion, Lista):		# Dibuja El Camino Más Corto Hecho Con Backtracking.
 	
 	for i in range(XPOS):
 		
@@ -784,24 +784,25 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS):		# XPOS y YPOS s
 	
 	# Verifica que sean Coordenadas Con Costos, Los que son N/A No se agregan al Árbol.
 	#==================================================================================
+	
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(1)] and x[3] != '':
-			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+			# ~ if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
 				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(1)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(2)] and x[3] != '':
-			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+			# ~ if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
 				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(2)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(3)] and x[3] != '':
-			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+			# ~ if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
 				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(3)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(4)] and x[3] != '':
-			if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
+			# ~ if Y > 1 and  Y < YPOS and  X > 0 and X < XPOS-1:
 				Arbol.Agregar(ArbolRaiz, Actual, Lista[Direcciones.index(4)], NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
 	#==================================================================================
 	
@@ -896,7 +897,7 @@ def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Fuentes):		# Muestra EL Arbol de
 
 
 
-def Backtracking(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
+def Backtracking(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	
 	global Direcciones, ListaHijos
 	global Movimientos, Pila
@@ -1033,6 +1034,47 @@ def AgregarAlArbolBacktracking(Actual, Padre, XPOS, YPOS, ArbolRaiz):
 	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
 	
 	Arbol.AgregarEstado(ArbolRaiz, Actual, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
+
+
+
+def AEstrella(XPOS, YPOS, Padre, personaje, ArbolRaiz, Abue=[]):
+	
+	global Direcciones, ListaHijos
+	global Movimientos, Pila
+	
+	# ~ os.system('cls')
+	
+	Hijos = []
+	xD = False
+	
+	X = LETRAS.index(Padre[0])
+	Y = Padre[1]
+	
+	Up    = [LETRAS[X], Y-1]
+	Right = [LETRAS[X+1], Y]
+	Down  = [LETRAS[X], Y+1]
+	Left  = [LETRAS[X-1], Y]
+	
+	Lista = [Up, Right, Down, Left]
+	
+	if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
+	
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(1)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(1)]); break
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(2)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(2)]); break
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(3)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(3)]); break
+	for x in VALORES:
+		if x[0] == Lista[Direcciones.index(4)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(4)]); break
+	
+	for x in ListaHijos:
+		if Padre == x[0]: xD = True; break
+	
+	if xD == False: ListaHijos.append([Padre, Hijos, []])
+	
+	
+	return Actual
 
 
 
@@ -1789,6 +1831,10 @@ def main():
 						
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
 						
+					# ~ elif TipoBusqueda == 2:
+						
+						# ~ seleccion = AEstrella(XPOS, YPOS, Padre, ArbolRaiz)
+						
 				if BtnMostrarArbol:
 					
 					if   evento.key == pygame.K_LEFT  or evento.key == pygame.K_a:	MoveX += 15
@@ -2172,7 +2218,7 @@ def main():
 										Arbol.AgregarOrden(ArbolRaiz, seleccion, Movimientos)		# Se Agrega La Lista Con El Orden De Visitas.
 										#================================================================================
 										
-										seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+										seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 										# ~ Arbol.ImprimirArbol(ArbolRaiz)
 										#===============================================
 									
@@ -2254,7 +2300,7 @@ def main():
 									Arbol.AgregarOrden(ArbolRaiz, seleccion, Movimientos)		# Se Agrega La Lista Con El Orden De Visitas.
 									#================================================================================
 									
-									seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+									seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 									# ~ Arbol.ImprimirArbol(ArbolRaiz)
 									#===============================================
 								
@@ -2598,7 +2644,7 @@ def main():
 						Arbol.AgregarOrden(ArbolRaiz, seleccion, Movimientos)		# Se Agrega La Lista Con El Orden De Visitas.
 						#================================================================================
 						
-						seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+						seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)
 						#===============================================
 					
@@ -2702,7 +2748,7 @@ def main():
 							Arbol.AgregarEstado(ArbolRaiz, seleccion, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
 							#================================================================================
 							
-							seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz, 'N/A')
+							seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 							# ~ Arbol.ImprimirArbol(ArbolRaiz)
 							#===============================================
 						
@@ -3062,6 +3108,8 @@ def main():
 		#===============================================================
 		
 		if DibujarInfo: DibujarInformacionClic(screen, Fuentes, SelTemp)
+		
+		#===============================================================
 		
 		if Iniciar:
 			
@@ -3531,10 +3579,10 @@ def main():
 				dibujarTexto(screen, 'Selecciona Las Flechas', [49, 61], Fuentes['Droid 15'], COLOR['Verde'])
 				dibujarTexto(screen, 'Selecciona Las Flechas', [50, 62], Fuentes['Droid 15'], COLOR['Verde Claro'])
 				
-				dibujarTexto(screen, 'Cambia El Orden Dando Clic', [29, 171], Fuentes['Droid 15'], COLOR['Verde'])
-				dibujarTexto(screen, 'Cambia El Orden Dando Clic', [30, 172], Fuentes['Droid 15'], COLOR['Verde Claro'])
-				dibujarTexto(screen, 'Sobre Las Flechas.', [29, 191], Fuentes['Droid 15'], COLOR['Verde'])
-				dibujarTexto(screen, 'Sobre Las Flechas.', [30, 192], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Cambia El Orden Dando Clic', [29, 161], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, 'Cambia El Orden Dando Clic', [30, 162], Fuentes['Droid 15'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Izquierdo Sobre Las Flechas.', [29, 181], Fuentes['Droid 15'], COLOR['Verde'])
+				dibujarTexto(screen, 'Izquierdo Sobre Las Flechas.', [30, 182], Fuentes['Droid 15'], COLOR['Verde Claro'])
 				
 				screen.blit(FlechaArr.image, (55, 100))
 				screen.blit(FlechaDer.image, (95, 100))
@@ -3563,8 +3611,8 @@ def main():
 					screen.blit(btnOFF.image, (150, 220))
 					NoRepetir = True
 				
-				dibujarTexto(screen, 'Tipo de Busqueda:', [29, 250], Fuentes['Droid 18'], COLOR['Verde Claro'])
-				dibujarTexto(screen, 'Tipo de Busqueda:', [30, 251], Fuentes['Droid 18'], COLOR['Verde'])
+				dibujarTexto(screen, 'Tipo de Búsqueda:', [29, 250], Fuentes['Droid 18'], COLOR['Verde Claro'])
+				dibujarTexto(screen, 'Tipo de Búsqueda:', [30, 251], Fuentes['Droid 18'], COLOR['Verde'])
 				
 				BtnTipoBusquedaIzq.resize(25,20); screen.blit(BtnTipoBusquedaIzq.image, (30, 277))
 				BtnTipoBusquedaDer.resize(25,20); screen.blit(BtnTipoBusquedaDer.image, (185, 277))
@@ -3616,9 +3664,9 @@ def main():
 						
 						PadreSeleccion = seleccion
 						
-						seleccion = Backtracking(XPOS, YPOS, seleccion, personaje, ArbolRaiz)
+						seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz)
 					
-					obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, seleccion, ListaBT)
+					DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, seleccion, ListaBT)
 					
 				# ~ elif TipoBusqueda == 2:
 					
@@ -3629,7 +3677,7 @@ def main():
 					
 					ContFPS = 0
 					if not seleccion in ListaBT: ListaBT.append(seleccion)
-					obtenerPosicionBusquedas(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
+					DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
 			
 			
 		#===================================================================================================
