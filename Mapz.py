@@ -1076,23 +1076,57 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	
 	# ~ if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
 	
+	xD = False
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(1)] and x[3] != '': Hijos.append(Lista[Direcciones.index(1)]); break
+		if x[0] == Lista[Direcciones.index(1)] and x[3] != '':
+			for y in Pila:
+				if not Lista[Direcciones.index(4)] == y[0]: xD = True
+			if xD == False: Pila.append([Lista[Direcciones.index(1)], DistanciaManhattan(Lista[Direcciones.index(1)])])
+			break
+	
+	xD = False
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(2)] and x[3] != '': Hijos.append(Lista[Direcciones.index(2)]); break
+		if x[0] == Lista[Direcciones.index(2)] and x[3] != '':
+			for y in Pila:
+				if not Lista[Direcciones.index(4)] == y[0]: xD = True
+			if xD == False: Pila.append([Lista[Direcciones.index(2)], DistanciaManhattan(Lista[Direcciones.index(2)])])
+			break
+	
+	xD = False
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(3)] and x[3] != '': Hijos.append(Lista[Direcciones.index(3)]); break
+		if x[0] == Lista[Direcciones.index(3)] and x[3] != '':
+			for y in Pila:
+				if not Lista[Direcciones.index(4)] == y[0]: xD = True
+			if xD == False: Pila.append([Lista[Direcciones.index(3)], DistanciaManhattan(Lista[Direcciones.index(3)])])
+			break
+	
+	xD = False
 	for x in VALORES:
-		if x[0] == Lista[Direcciones.index(4)] and x[3] != '': Hijos.append(Lista[Direcciones.index(4)]); break
+		if x[0] == Lista[Direcciones.index(4)] and x[3] != '':
+			for y in Pila:
+				if not Lista[Direcciones.index(4)] == y[0]: xD = True
+			if xD == False: Pila.append([Lista[Direcciones.index(4)], DistanciaManhattan(Lista[Direcciones.index(4)])])
+			break
 	
-	for x in ListaHijos:
-		if Padre == x[0]: xD = True; break
+	# ~ for x in ListaHijos:
+		# ~ if Padre == x[0]: xD = True; break
 	
-	if xD == False: ListaHijos.append([Padre, Hijos, []])
+	# ~ if xD == False: ListaHijos.append([Padre, Hijos, []])
 	
-	Val = DistanciaManhattan(Padre)
+	# ~ Val = DistanciaManhattan(Padre)
 	
-	return Hijos.pop(0)
+	Menor = [None, 1000]
+	
+	Cont = 0
+	for x in Pila:
+		
+		if x[1] < Menor[1]: Menor = x
+		Cont += 1
+		print('\t', Cont, '-', x)
+	
+	print('\n\tMenor:',Menor)
+	
+	return Menor[0]
 
 
 
@@ -1447,7 +1481,7 @@ Direcciones = [1,2,3,4]	# Lista de Orden de Expansión de Nodos.
 NoRepetir = True
 VISITA = 0
 ListaHijos = []
-TipoBusqueda = 0	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
+TipoBusqueda = 2	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
 
 
 # Variables Globales: ==================================================
@@ -1786,7 +1820,7 @@ def main():
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
 	BtnRepetirNodos = False			# Botón Para Selección de Repetición o No de Nodos.
-	BtnTipoBusqueda = 'Normal'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
+	BtnTipoBusqueda = 'A Estrella'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
 	
 	ContDir = 0
 	
@@ -1851,7 +1885,7 @@ def main():
 						
 					elif TipoBusqueda == 2:
 						
-						AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
+						seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
 						
 				if BtnMostrarArbol:
 					
