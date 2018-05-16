@@ -1,7 +1,7 @@
 # Mapz
 
 ## En Python: 3.5.0
-## Versión Actual: 1.6.4
+## Versión Actual: 1.7.0
 ## Dependencias: Pygame.
 ## Compatibilidad: Windows y Linux.
 
@@ -39,6 +39,7 @@ __Permite Presionar Las Teclas:__
   * ___Flecha Derecha:_ Cambia a Página Siguiente en Seleccion de Terrenos.__
   * ___Clic Izquierdo (Mouse):_ Seleccion de Punto Inicio y Posteriormente Punto Destino, Dar otro Clic en otro Terreno, Reinicia el Punto Inicio y Destino.__
   * ___Clic Derecho (Mouse):_ Da La Información del Terreno Seleccionado en el Mapa.__
+  * ___Tecla 'E':_ Presiona El Botón 'Orden Expansión' del Tipo ON/OFF Para Mostrar un submenu con modificaciones para los Algoritmos de Búsqueda.__
   
 * __Una vez Iniciado El Juego: (Interacción Con El Mapa)__
 
@@ -75,7 +76,9 @@ __Permite Presionar Las Teclas:__
   * ___Penalizaciones:___
   * ___Observaciones:___
 * __Parte 3: _16/05/2018 y 21/05/2018_.__
-
+  * ___Calificación:_ ???/100.__
+  * ___Penalizaciones:___
+  * ___Observaciones:___
 - - -
 
 ### <span style="color:green;">Proyecto Parte 1: Finalizada.</span>
@@ -108,8 +111,13 @@ __Permite Presionar Las Teclas:__
    
    * __v1.6.0: _24/04/2018_, v1.6.1: _24/04/2018_.__
 
-### Proyecto Parte 3: Comenzada.
+### Proyecto Parte 3: "Finalizado".
 
  * __Versión 1.6:__
    
-   * __v1.6.2: _04/05/2018_, v1.6.3: _04/05/2018_, v1.6.4: _04/05/2018_.__
+   * __v1.6.2: _04/05/2018_, v1.6.3: _04/05/2018_, v1.6.4: _04/05/2018_, v1.6.5: _11/05/2018_, v1.6.6: _12/05/2018___
+   * __v1.6.7: _13/05/2018_, v1.6.8: _15/05/2018_, v1.6.9: _15/05/2018___
+   
+ * __Versión 1.7:__
+ 
+   * __v1.7.0: _16/05/2018_.__
