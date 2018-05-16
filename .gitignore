@@ -16,6 +16,7 @@ img/Botones/* 2.*
 img/Botones/*OnOff.*
 Requisitos/*.zip
 Manuales/img/*.png
+Manuales/img2/*.png
 
 # C extensions
 *.so
