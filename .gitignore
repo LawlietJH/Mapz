@@ -15,6 +15,7 @@ Mapas/N*
 img/Botones/* 2.*
 img/Botones/*OnOff.*
 Requisitos/*.zip
+Manuales/img/*.png
 
 # C extensions
 *.so
