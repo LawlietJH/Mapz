@@ -17,6 +17,7 @@ class Arbol:
 		self.Orden = []
 		self.EsIni = False
 		self.EsFin = False
+		self.Dist = 0.0
 		
 	def SetPadre(self, Padre):		self.Padre = Padre			# Posición del Padre, Ejemplo ['E',11] o N/A para el Estado Inicial.
 	
@@ -25,6 +26,8 @@ class Arbol:
 	def SetEstado(self, Estado):	self.Estado = Estado		# Estado Actual del Nodo. (Abierto, Cerrado(Si todos sus hijos ya han sido visitados))
 	
 	def SetOrden(self, Orden):		self.Orden = Orden			# Orden de Visita, Ejemplo: [1,3,5,7,...]
+	
+	def SetDistancia(self, Dist):	self.Dist = Dist			# Distancia Acumulada.
 	
 	def SetIniFin(self, EsIni, EsFin):
 		
@@ -40,6 +43,7 @@ class Arbol:
 				'Hijos':self.PHijos,
 				'Estado':self.Estado,
 				'OrdenVisitas':self.Orden,
+				'Distancia':self.Dist,
 				'EsInicial':self.EsIni,
 				'EsFinal':self.EsFin
 			   }
@@ -78,6 +82,12 @@ def AgregarOrden(arbol, Coord, Orden):
 	for SubArbol in arbol.Hijos:
 		if AgregarOrden(SubArbol, Coord, Orden): return True
 	if Coord == arbol.Coord: arbol.Orden.append(Orden); return True
+
+def AgregarDistancia(arbol, Coord, Dist):
+	
+	for SubArbol in arbol.Hijos:
+		if AgregarDistancia(SubArbol, Coord, Dist): return True
+	if Coord == arbol.Coord: arbol.Dist = Dist; return True
 
 # ~ def AgregarOrdenPrecisa(arbol, Padre, Coord, Visita):
 	
@@ -290,8 +300,9 @@ def ContadorDeNivel(arbol, Cont=-1, Max=0):		# Cuenta Cuantos Niveles de Profund
 
 def ImprimirArbol(raiz):
 	
-	Cont = 100
 	os.system('Cls')
+	
+	Cont = 100
 	
 	# ~ print('\n\n\nLvl 1\tLvl 2\tLvl 3\tLvl 4\tLvl 5\tLvl 6\tLvl 7\tLvl 8\tLvl 9\tLvl 10\tLvl 11\tLvl 12\tLvl 13\tLvl 14\tLvl 15\n')
 	
