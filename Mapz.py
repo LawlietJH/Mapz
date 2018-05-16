@@ -770,8 +770,6 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS):		# XPOS y YPOS s
 	
 	global VISITA, NoRepetir
 	
-	print(Padre, Actual)
-	
 	VISITA += 1
 	# ~ print()
 	# ~ NoRepetir = True	# Sin Repetir Los Nodos.
@@ -837,6 +835,21 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS):		# XPOS y YPOS s
 	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
 	
 	Arbol.AgregarEstado(ArbolRaiz, Actual, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
+	
+	Dist = 0.0
+	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
+	
+	if TipoBusqueda == 2:
+		
+		for x in VALORES:
+			if x[0] == Actual:
+				Dist = float(x[3])
+				break
+		
+		Dist += DistanciaManhattan(Actual)
+		Dist += Val[1]['Distancia']
+		
+		Arbol.AgregarDistancia(ArbolRaiz, Actual, Dist)
 
 
 
@@ -866,6 +879,15 @@ def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Fuentes):		# Muestra EL Arbol de
 	
 	dibujarTexto(screen, 'Estado:   ' + str(arbol.Estado), [PX+6, PY+54], Fuentes['Droid 12'], COLOR['Azul'])
 	dibujarTexto(screen, 'Estado:   ' + str(arbol.Estado), [PX+7, PY+54], Fuentes['Droid 12'], COLOR['Negro'])
+	
+	if TipoBusqueda == 2:
+		
+		if arbol.Dist == 0.0:
+			dibujarTexto(screen, 'F(n):  Sin Dato', [PX+6, PY+66], Fuentes['Droid 12'], COLOR['Azul'])
+			dibujarTexto(screen, 'F(n):  Sin Dato', [PX+7, PY+66], Fuentes['Droid 12'], COLOR['Negro'])
+		else:
+			dibujarTexto(screen, 'F(n):  ' + str(arbol.Dist), [PX+6, PY+66], Fuentes['Droid 12'], COLOR['Azul'])
+			dibujarTexto(screen, 'F(n):  ' + str(arbol.Dist), [PX+7, PY+66], Fuentes['Droid 12'], COLOR['Negro'])
 	
 	if arbol.EsIni: 
 		dibujarTexto(screen, 'EsInicial:  Si', [PX+6, PY+78], Fuentes['Droid 12'], COLOR['Azul'])
@@ -1184,6 +1206,7 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	Lista = [Up, Right, Down, Left]
 	
 	_Padre = Padre
+	
 	for x in Recorrido:
 		
 		if Up == x[0]:    _Padre = Up
@@ -1194,66 +1217,11 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 		# ~ print('\nPadre: ', x[0], Actual, _Padre)
 	
 	# ~ print(Lista)
-		
+	
 	Arbol.ImprimirArbol(ArbolRaiz)
 	AgregarAlArbol(ArbolRaiz, _Padre, Actual, X, Y, YPOS, XPOS)
 	
 	return Actual
-
-
-def AgregarAlArbolAEstrella(Actual, Padre, XPOS, YPOS, ArbolRaiz):
-	
-	global Direcciones, SELECT, NoRepetir
-	global Movimientos, CostoTotal
-	
-	AlFinal = True
-	
-	Arbol.Agregar(ArbolRaiz, Padre, Actual, NoRepetir, AlFinal)		# Se Crea Un Nodo Hijo Para El Nodo Actual.
-	Arbol.AgregarOrden(ArbolRaiz, Actual, Movimientos)				# Se Agrega La Lista Con El Orden De Visitas.
-	
-	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
-	
-	if Val[0]:
-		if Val[1]['Padre'] == None:
-			Arbol.AgregarPadre(ArbolRaiz, Actual, Padre)				# Se le agrega al Nodo Actual cual es su Padre.
-	
-	# ~ if Val[0]:
-		# ~ if Val[1]['Hijos'] == []:
-			# ~ if Arbol.BusquedaPrecisa(ArbolRaiz, Padre, Actual):
-				
-				# ~ # Arbol.AgregarHijos(ArbolRaiz, Padre, Actual)			# Se Le agrega una lista de Hijos al Nodo Actual (Solo las Coordenadas).
-				
-				# ~ #================================================================================
-				# ~ X_2 = LETRAS.index(Actual[0])
-				# ~ Y_2 = Actual[1]
-				
-				# ~ Up_2    = [LETRAS[X_2], Y_2-1]
-				# ~ Right_2 = [LETRAS[X_2+1], Y_2]
-				# ~ Down_2  = [LETRAS[X_2], Y_2+1]
-				# ~ Left_2  = [LETRAS[X_2-1], Y_2]
-				
-				# ~ Lista_2 = [Up_2, Right_2, Down_2, Left_2]
-				
-				# ~ # Se Le agrega a lista de Hijos sus Hijos (Solo las Coordenadas).
-				# ~ for x in VALORES:
-					# ~ if x[0] == Lista_2[Direcciones.index(1)] and x[3] != '' and not Padre == x[0]:
-						# ~ Arbol.AgregarHijos(ArbolRaiz, Actual, Lista_2[Direcciones.index(1)]); break
-				# ~ for x in VALORES:
-					# ~ if x[0] == Lista_2[Direcciones.index(2)] and x[3] != '' and not Padre == x[0]:
-						# ~ Arbol.AgregarHijos(ArbolRaiz, Actual, Lista_2[Direcciones.index(2)]); break
-				# ~ for x in VALORES:
-					# ~ if x[0] == Lista_2[Direcciones.index(3)] and x[3] != '' and not Padre == x[0]:
-						# ~ Arbol.AgregarHijos(ArbolRaiz, Actual, Lista_2[Direcciones.index(3)]); break
-				# ~ for x in VALORES:
-					# ~ if x[0] == Lista_2[Direcciones.index(4)] and x[3] != '' and not Padre == x[0]:
-						# ~ Arbol.AgregarHijos(ArbolRaiz, Actual, Lista_2[Direcciones.index(4)]); break
-				# ~ #================================================================================
-	
-	# Se Indica Si Es El Nodo Inicial.
-	if Actual == PuntoInicio:    Arbol.AgregarIniFin(ArbolRaiz, Actual, True)
-	elif Actual == PuntoDestino: Arbol.AgregarIniFin(ArbolRaiz, Actual, False, True)
-	
-	Arbol.AgregarEstado(ArbolRaiz, Actual, 'Cerrado')	# Si el Nodo es Visitado, Es Cerrado.
 
 
 
