@@ -1218,7 +1218,7 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	
 	# ~ print(Lista)
 	
-	Arbol.ImprimirArbol(ArbolRaiz)
+	# ~ Arbol.ImprimirArbol(ArbolRaiz)
 	AgregarAlArbol(ArbolRaiz, _Padre, Actual, X, Y, YPOS, XPOS)
 	
 	return Actual
@@ -1577,7 +1577,7 @@ NoRepetir = True
 VISITA = 0
 ListaHijos = []
 Recorrido = []
-TipoBusqueda = 2	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
+TipoBusqueda = 0	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
 
 
 # Variables Globales: ==================================================
@@ -1916,7 +1916,7 @@ def main():
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
 	BtnRepetirNodos = False			# Botón Para Selección de Repetición o No de Nodos.
-	BtnTipoBusqueda = 'A Estrella'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
+	BtnTipoBusqueda = 'Normal'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
 	
 	ContDir = 0
 	
@@ -1978,10 +1978,6 @@ def main():
 						elif evento.key == pygame.K_DOWN  or evento.key == pygame.K_s:	seleccion = obtenerPosicion(XPOS, YPOS, 'D', seleccion, personaje, ArbolRaiz)	# Tecla Abajo. Mueve Personaje.
 						
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)		# Imprime El Arbol Con Estructura de Carpetas en La Ventana de Comandos
-						
-					# ~ elif TipoBusqueda == 2:
-						
-						# ~ seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
 						
 				if BtnMostrarArbol:
 					
@@ -3942,16 +3938,16 @@ def main():
 						
 						ListaBT.append(seleccion)
 					
-					# ~ if ContFPS % 8 == 1: print(ListaBT)
-					
 					DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, seleccion, ListaBT)
 					
 			else:
-				if not BtnMostrarArbol:
+				if TipoBusqueda != 0:
 					
-					ContFPS = 0
-					if not seleccion in ListaBT: ListaBT.append(seleccion)
-					DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
+					if not BtnMostrarArbol:
+						
+						ContFPS = 0
+						if not seleccion in ListaBT: ListaBT.append(seleccion)
+						DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
 			
 			
 		#===================================================================================================
