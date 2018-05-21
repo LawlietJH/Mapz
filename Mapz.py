@@ -1218,6 +1218,22 @@ def AEstrella(XPOS, YPOS, Actual, ArbolRaiz, Abue=None):
 	
 	Movimientos += 1
 	
+	for z in VALORES:
+		if z[0] == Actual: CostoTotal += float(z[3]); break
+	
+	for Pos, Movs in SELECT:
+		
+		if Actual == Pos:
+			Movs.append(Movimientos)
+			xD = False
+			break
+			
+		else: xD = True
+		
+	if xD: SELECT.append((Actual, [Movimientos]))
+	
+	MaskTrue(LETRAS.index(Actual[0]), Actual[1]-1, YPOS, XPOS)
+	
 	X = LETRAS.index(Actual[0])
 	Y = Actual[1]
 	
@@ -3970,7 +3986,7 @@ def main():
 							
 			else:
 				
-				if Finalizado == False:
+				if Finalizado == False and TipoBusqueda == 2:
 					
 					PadreSeleccion = seleccion
 					seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
@@ -3998,9 +4014,9 @@ def main():
 						ContFPS = 0
 						if not seleccion in ListaBT: ListaBT.append(seleccion)
 						
-						if TipoBusqueda == 2: DibujarCaminoAEstrella(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
-						
 						if TipoBusqueda == 1: DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
+						
+						if TipoBusqueda == 2: DibujarCaminoAEstrella(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
 						
 			
 		#===================================================================================================
