@@ -18,6 +18,7 @@ class Arbol:
 		self.EsIni = False
 		self.EsFin = False
 		self.Dist = 0.0
+		self.Costo = 0.0
 		
 	def SetPadre(self, Padre):		self.Padre = Padre			# Posición del Padre, Ejemplo ['E',11] o N/A para el Estado Inicial.
 	
@@ -44,6 +45,7 @@ class Arbol:
 				'Estado':self.Estado,
 				'OrdenVisitas':self.Orden,
 				'Distancia':self.Dist,
+				'Costo':self.Costo,
 				'EsInicial':self.EsIni,
 				'EsFinal':self.EsFin
 			   }
@@ -88,6 +90,12 @@ def AgregarDistancia(arbol, Coord, Dist):
 	for SubArbol in arbol.Hijos:
 		if AgregarDistancia(SubArbol, Coord, Dist): return True
 	if Coord == arbol.Coord: arbol.Dist = Dist; return True
+
+def AgregarCosto(arbol, Coord, Costo):
+	
+	for SubArbol in arbol.Hijos:
+		if AgregarCosto(SubArbol, Coord, Costo): return True
+	if Coord == arbol.Coord: arbol.Costo = Costo; return True
 
 # ~ def AgregarOrdenPrecisa(arbol, Padre, Coord, Visita):
 	
@@ -194,6 +202,19 @@ def ExtraerDatos(arbol, Padre, Coord):
 		
 	return [False, None]
 
+def Extraer(arbol, Coord):
+	
+	if Coord == 'N/A': return [True, arbol.GetDatos()]
+	
+	for SubArbol in arbol.Hijos:
+		
+		Val = Extraer(SubArbol, Coord)
+		if Val[0]: return Val
+	
+	if Coord == arbol.Coord: return [True, arbol.GetDatos()]
+	
+	return [False, None]
+
 
 def ActualizaEstado(arbol):
 	
@@ -268,7 +289,7 @@ def Profundidad(arbol, Cont):
 	
 	# ~ print(arbol.Coord, 'Padre:', arbol.Padre, 'Hijos:', arbol.PHijos)
 	# ~ print(arbol.GetDatos())
-	print(arbol.Coord, arbol.Orden, arbol.Estado, arbol.PHijos)
+	print(arbol.Coord, arbol.Orden, arbol.Estado, arbol.PHijos, arbol.Costo, arbol.Dist)
 	
 	for hijo in arbol.Hijos:
 		
