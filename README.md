@@ -1,7 +1,7 @@
 # Mapz
 
 ## En Python: 3.5.0
-## Versión Actual: 1.7.0
+## Versión Actual: 1.7.1
 ## Dependencias: Pygame.
 ## Compatibilidad: Windows y Linux.
 
@@ -120,4 +120,4 @@ __Permite Presionar Las Teclas:__
    
  * __Versión 1.7:__
  
-   * __v1.7.0: _16/05/2018_.__
+   * __v1.7.0: _16/05/2018_, v1.7.1: _20/05/2018_.__
