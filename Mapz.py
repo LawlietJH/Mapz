@@ -1630,7 +1630,7 @@ NoRepetir = True
 VISITA = 0
 ListaHijos = []
 Recorrido = []
-TipoBusqueda = 2	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
+TipoBusqueda = 1	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
 
 
 # Variables Globales: ==================================================
@@ -1966,12 +1966,12 @@ def main():
 	ArbolRaiz = None				# Variable Para Almacenar el Objeto Raiz del Arbol.
 	
 	BtnMutePressed = False			# Botón Para Poner Mute en False Por Defecto.
-	BtnMaskPressed = False			# Botón Para Poner Enmascaramiento en True Por Defecto.
+	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
 	BtnRepetirNodos = False			# Botón Para Selección de Repetición o No de Nodos.
 	Finalizado = False
-	BtnTipoBusqueda = 'A Estrella'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
+	BtnTipoBusqueda = 'Backtracking'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
 	
 	Bandera = False
 	
