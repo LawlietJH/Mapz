@@ -3,7 +3,7 @@
 
 # Python:  3.5.0
 # Script:  Mapz
-# Versión: 1.7.0
+# Versión: 1.7.1
 
 import Arbol
 import pygame
@@ -304,7 +304,7 @@ def dibujarMapa(XPOS, YPOS, screen, dimension, p_inicio, tamanio_fuente, Fuentes
 			#===========================================================
 			
 			# Si se Inicio el Juego Cargará el personaje en la posición de la seleccion.
-			if PuntoInicio != None and Iniciar:
+			if PuntoInicio != None and Iniciar and Bandera == False:
 				
 				if seleccion[0] == LETRAS[i] and j == seleccion[1] - 1:
 					
@@ -545,6 +545,50 @@ def obtenerPosicionClic(XPOS, YPOS, mouse, dimension, p_inicio, actual):		# Obti
 
 
 def DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, p_inicio, Seleccion, Lista):		# Dibuja El Camino Más Corto Hecho Con Backtracking.
+	
+	for i in range(XPOS):
+		
+		for j in range(YPOS):
+			
+			Actual = [LETRAS[i], j + 1]
+			
+			if Actual in Lista:
+				
+				x = i * dimension + p_inicio[0]
+				y = j * dimension + p_inicio[1]
+				
+				if Actual == PuntoInicio or Actual == PuntoDestino: pygame.draw.circle(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], 6)
+					
+				Padre = Lista[Lista.index(Actual)-1]
+				try: Hijo = Lista[Lista.index(Actual)+1]
+				except: Hijo = Seleccion
+				
+				X1 = LETRAS.index(Actual[0])
+				Y1 = Actual[1]
+				# ~ print(Padre == [LETRAS[X1], Y1+1])
+				# ~ Pause()
+				if Padre == [LETRAS[X1], Y1-1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y], 5)
+				if Padre == [LETRAS[X1+1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+dimension, y+(dimension//2)], 5)
+				if Padre == [LETRAS[X1], Y1+1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y+dimension], 5)
+				if Padre == [LETRAS[X1-1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x, y+(dimension//2)], 5)
+				
+				#===================================================
+				
+				if Hijo == [LETRAS[X1], Y1-1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y], 5)
+				if Hijo == [LETRAS[X1+1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+dimension, y+(dimension//2)], 5)
+				if Hijo == [LETRAS[X1], Y1+1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x+(dimension//2), y+dimension], 5)
+				if Hijo == [LETRAS[X1-1], Y1]:
+					pygame.draw.line(screen, COLOR['Morado'], [x+(dimension//2), y+(dimension//2)], [x, y+(dimension//2)], 5)
+
+
+def DibujarCaminoAEstrella(screen, XPOS, YPOS, dimension, p_inicio, Seleccion, Lista):		# Dibuja El Camino Más Corto Hecho Con Backtracking.
 	
 	for i in range(XPOS):
 		
@@ -839,18 +883,99 @@ def AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS):		# XPOS y YPOS s
 	Dist = 0.0
 	Val = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
 	
-	if TipoBusqueda == 2:
+	if Val[0]:
+		if TipoBusqueda == 2:
+			
+			for x in VALORES:
+				if x[0] == Actual:
+					Arbol.AgregarCosto(ArbolRaiz, Actual, Val[1]['Costo'] + float(x[3]) if Padre != 'N/A' else 0.0)
+					Dist = float(x[3]) if Padre != 'N/A' else 0
+					break
+			
+			Dist += DistanciaManhattan(Actual, PuntoDestino)
+			Dist += Val[1]['Costo']
+			
+			Arbol.AgregarDistancia(ArbolRaiz, Actual, Dist)
 		
-		for x in VALORES:
-			if x[0] == Actual:
-				Dist = float(x[3])
-				break
-		
-		Dist += DistanciaManhattan(Actual)
-		Dist += Val[1]['Distancia']
-		
-		Arbol.AgregarDistancia(ArbolRaiz, Actual, Dist)
-
+		if Val[1]['Hijos'] != []:
+			
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(1)]):
+				
+				Val1 = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
+				
+				if Val1[0]:
+					Hijo_ = Lista[Direcciones.index(1)]
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					for x in VALORES:
+						if x[0] == Hijo_:
+							Arbol.AgregarCosto(ArbolRaiz, Hijo_, Val1[1]['Costo'] + float(x[3]))
+							Dist = float(x[3])
+							break
+							
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					Dist += DistanciaManhattan(Hijo_, PuntoDestino)
+					Dist += Val2[1]['Costo']
+					
+					Arbol.AgregarDistancia(ArbolRaiz, Hijo_ , Dist)
+				
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(2)]):
+				
+				Val1 = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
+				
+				if Val1[0]:
+					Hijo_ = Lista[Direcciones.index(2)]
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					for x in VALORES:
+						if x[0] == Hijo_:
+							Arbol.AgregarCosto(ArbolRaiz, Hijo_, Val1[1]['Costo'] + float(x[3]))
+							Dist = float(x[3])
+							break
+							
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					Dist += DistanciaManhattan(Hijo_, PuntoDestino)
+					Dist += Val2[1]['Costo']
+					
+					Arbol.AgregarDistancia(ArbolRaiz, Hijo_ , Dist)
+				
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(3)]):
+				
+				Val1 = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
+				
+				if Val1[0]:
+					Hijo_ = Lista[Direcciones.index(3)]
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					for x in VALORES:
+						if x[0] == Hijo_:
+							Arbol.AgregarCosto(ArbolRaiz, Hijo_, Val1[1]['Costo'] + float(x[3]))
+							Dist = float(x[3])
+							break
+							
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					Dist += DistanciaManhattan(Hijo_, PuntoDestino)
+					Dist += Val2[1]['Costo']
+					
+					Arbol.AgregarDistancia(ArbolRaiz, Hijo_ , Dist)
+				
+			if Arbol.BusquedaPrecisa(ArbolRaiz, Actual, Lista[Direcciones.index(4)]):
+				
+				Val1 = Arbol.ExtraerDatos(ArbolRaiz, Padre, Actual)
+				
+				if Val1[0]:
+					Hijo_ = Lista[Direcciones.index(4)]
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					for x in VALORES:
+						if x[0] == Hijo_:
+							Arbol.AgregarCosto(ArbolRaiz, Hijo_, Val1[1]['Costo'] + float(x[3]))
+							Dist = float(x[3])
+							break
+							
+					Val2 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo_)
+					Dist += DistanciaManhattan(Hijo_, PuntoDestino)
+					Dist += Val2[1]['Costo']
+					
+					Arbol.AgregarDistancia(ArbolRaiz, Hijo_ , Dist)
+				
+	
 
 
 def MostrarArbol(arbol, screen, PX, PY, X1, Y1, Fuentes):		# Muestra EL Arbol de Forma Grafica. (Recorrido en Profundidad).
@@ -941,7 +1066,9 @@ def Backtracking(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	
 	Lista = [Up, Right, Down, Left]
 	
-	if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
+	try:
+		if Padre != PuntoInicio and Abue == []: Abue = Pila[-2][0]
+	except: return
 	
 	for x in VALORES:
 		if x[0] == Lista[Direcciones.index(1)] and x[3] != '' and not Abue == x[0]: Hijos.append(Lista[Direcciones.index(1)]); break
@@ -971,8 +1098,10 @@ def Backtracking(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 				X = ListaHijos.index([Pos, Hijs, Movs])
 				ListaHijos[X][1].pop(0)
 				
-			else: Pila.pop()
-			
+			else:
+				
+				try: Pila.pop()
+				except: return
 			break
 			
 	# ~ print('\n\nPila:')
@@ -981,7 +1110,9 @@ def Backtracking(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	# ~ print('\n\nLista:')
 	# ~ for x in ListaHijos: print(x)
 	
-	Actual = Pila[-1][0]
+	try:
+		Actual = Pila[-1][0]
+	except: return
 	
 	AgregarAlArbolBacktracking(Actual, Padre, XPOS, YPOS, ArbolRaiz)
 	
@@ -1061,13 +1192,13 @@ def AgregarAlArbolBacktracking(Actual, Padre, XPOS, YPOS, ArbolRaiz):
 
 
 
-def DistanciaManhattan(Coord):
+def DistanciaManhattan(Coord, Destino):
 	
 	X1 = LETRAS.index(Coord[0]) + 1
 	Y1 = Coord[1]
 	
-	X2 = LETRAS.index(PuntoDestino[0]) + 1
-	Y2 = PuntoDestino[1]
+	X2 = LETRAS.index(Destino[0]) + 1
+	Y2 = Destino[1]
 	
 	X = X1 - X2
 	X = -X if X < 0 else X
@@ -1077,123 +1208,15 @@ def DistanciaManhattan(Coord):
 	return X + Y
 
 
-def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
+
+def AEstrella(XPOS, YPOS, Actual, ArbolRaiz, Abue=None):
 	
-	global Direcciones, ListaHijos, CostoTotal, SELECT
+	global Direcciones, CostoTotal, SELECT
 	global Movimientos, Pila, Recorrido
 	
+	xD = False
+	
 	Movimientos += 1
-	
-	if Abue != []: ListaHijos.append(Abue)
-	
-	# ~ os.system('cls')
-	
-	xD = False
-	
-	X = LETRAS.index(Padre[0])
-	Y = Padre[1]
-	
-	Up    = [LETRAS[X], Y-1]
-	Right = [LETRAS[X+1], Y]
-	Down  = [LETRAS[X], Y+1]
-	Left  = [LETRAS[X-1], Y]
-	
-	Lista = [Up, Right, Down, Left]
-	
-	Valores = [Padre, [], 0.0]
-	
-	Recorrido.append(Valores)
-	
-	xD = False
-	for x in VALORES:
-		Hijo = Lista[Direcciones.index(1)]
-		if x[0] == Hijo and x[3] != '':
-			
-			Recorrido[-1][1].append(Hijo)
-			
-			for y in Pila:
-				if Hijo == y[0] or Hijo in ListaHijos: xD = True
-			if xD == False:
-				Pila.append([Hijo, DistanciaManhattan(Hijo)])
-				ListaHijos.append(Hijo)
-			break
-	
-	xD = False
-	for x in VALORES:
-		Hijo = Lista[Direcciones.index(2)]
-		if x[0] == Hijo and x[3] != '':
-			
-			Recorrido[-1][1].append(Hijo)
-			
-			for y in Pila:
-				if Hijo == y[0] or Hijo in ListaHijos: xD = True
-			if xD == False:
-				Pila.append([Hijo, DistanciaManhattan(Hijo)])
-				ListaHijos.append(Hijo)
-			break
-	
-	xD = False
-	for x in VALORES:
-		Hijo = Lista[Direcciones.index(3)]
-		if x[0] == Hijo and x[3] != '':
-			
-			Recorrido[-1][1].append(Hijo)
-			
-			for y in Pila:
-				if Hijo == y[0] or Hijo in ListaHijos: xD = True
-			if xD == False:
-				Pila.append([Hijo, DistanciaManhattan(Hijo)])
-				ListaHijos.append(Hijo)
-			break
-	
-	xD = False
-	for x in VALORES:
-		Hijo = Lista[Direcciones.index(4)]
-		if x[0] == Hijo and x[3] != '':
-			
-			Recorrido[-1][1].append(Hijo)
-			
-			for y in Pila:
-				if Hijo == y[0] or Hijo in ListaHijos: xD = True
-			if xD == False:
-				Pila.append([Hijo, DistanciaManhattan(Hijo)])
-				ListaHijos.append(Hijo)
-			break
-	
-	Menor = [None, 1000]
-	
-	Cont = 0
-	for x in Pila:
-		
-		if x[1] < Menor[1]: Menor = x
-		Cont += 1
-		# ~ print('\t', Cont, '-', x)
-	
-	Pila.pop(Pila.index(Menor))
-	
-	# ~ print('\n\tMenor:',Menor,'\n\n')
-	
-	# ~ for x in Recorrido: print(x)
-	
-	Actual = Menor[0]
-	
-	MaskTrue(LETRAS.index(Actual[0]), Actual[1]-1, YPOS, XPOS)
-	
-	xD = False
-	
-	for z in VALORES:
-		if z[0] == Actual: CostoTotal += float(z[3]); break
-	
-	for Pos, Movs in SELECT:
-		
-		if Actual == Pos:
-			Movs.append(Movimientos)
-			xD = False
-			break
-			
-		else: xD = True
-		
-	if xD: SELECT.append((Actual, [Movimientos]))
 	
 	X = LETRAS.index(Actual[0])
 	Y = Actual[1]
@@ -1205,23 +1228,53 @@ def AEstrella(XPOS, YPOS, Padre, ArbolRaiz, Abue=[]):
 	
 	Lista = [Up, Right, Down, Left]
 	
-	_Padre = Padre
+	if Abue == 'N/A': Val = Arbol.ExtraerDatos(ArbolRaiz, 'N/A', Actual)
+	else: Val = Arbol.Extraer(ArbolRaiz, Actual)
 	
-	for x in Recorrido:
-		
-		if Up == x[0]:    _Padre = Up
-		if Right == x[0]: _Padre = Right
-		if Down == x[0]:  _Padre = Down
-		if Left == x[0]:  _Padre = Left
-		
-		# ~ print('\nPadre: ', x[0], Actual, _Padre)
+	Padre = Val[1]['Padre']
 	
-	# ~ print(Lista)
+	AgregarAlArbol(ArbolRaiz, Padre, Actual, X, Y, YPOS, XPOS)
 	
 	# ~ Arbol.ImprimirArbol(ArbolRaiz)
-	AgregarAlArbol(ArbolRaiz, _Padre, Actual, X, Y, YPOS, XPOS)
 	
-	return Actual
+	if Val[0]:
+		for Hijo in Val[1]['Hijos']:
+			
+			xD = False
+			
+			if NoRepetir:
+				for x in Pila:
+					if Hijo == x[0]: xD = True; break
+				
+			if xD == False:
+				Val1 = Arbol.ExtraerDatos(ArbolRaiz, Actual, Hijo)
+				Pila.append([Hijo, Val1[1]['Distancia']])
+	
+		if Actual not in Recorrido: Recorrido.append(Actual)
+		
+		Menor = [None, 1000]
+		
+		Cont = 0
+		for x in Pila:
+			
+			if x[1] < Menor[1]: Menor = x
+			Cont += 1
+			# ~ print('\t', Cont, '-', x)
+		
+		try:
+			Pila.pop(Pila.index(Menor))
+		except:
+			return
+		
+		# ~ print('\n\tMenor:',Menor,'\n\n')
+		
+		# ~ for x in Recorrido: print(x)
+		
+		Hijo = Menor[0]
+	
+	# ~ os.system('Pause > Nul')
+	
+	return Hijo
 
 
 
@@ -1577,7 +1630,7 @@ NoRepetir = True
 VISITA = 0
 ListaHijos = []
 Recorrido = []
-TipoBusqueda = 0	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
+TipoBusqueda = 2	# Variable Para Elegir El Tipo de Algoritmo de Busqueda a Utilizar: 0 = Normal (Manual), 1 = Backtracking, 2 = A* (A Estrella).
 
 
 # Variables Globales: ==================================================
@@ -1598,7 +1651,7 @@ DibujarInfo = False		# Booleano que Indica si se debe o no Dibujar la Informacio
 InfoSelTemp = []		# Lista que almacenara la Selección Temporal para poder mostrar la Información Constante.
 Costos = {}				# Diccionario de los Costos de Cada Tipo de Terreno.
 CostoTotal = 0			# Suma Costos en cada Movimiento.
-Movimientos = 1
+Movimientos = 0
 NombrePersonaje = []
 DibujarInfoXY = False
 NumPlayer = None				# Variable Que Almacena el Numero de Jugador (Num Player)
@@ -1616,6 +1669,7 @@ Nieve	= 0
 
 Mask = []
 Pila = []
+Bandera = False
 
 #===================================================================================================
 #============================================== Main ===============================================
@@ -1627,7 +1681,7 @@ def main():
 	global seleccion, PuntoInicio, PuntoDestino, Iniciar, Costos, CostoTotal
 	global Error, Error2, CadenaError, CadenaError2, NombrePersonaje, NumPlayer
 	global Bosque, Camino, Pared, Lava, Agua, Arena, Montaña, Nieve, Mask
-	global Direcciones, NoRepetir, Pila, ListaHijos, TipoBusqueda
+	global Direcciones, NoRepetir, Pila, ListaHijos, TipoBusqueda, Bandera, Recorrido
 	
 	XPOS = 1			# Variable con la Cantidad de columnas en la Matriz, solo la Inicializamos, para modificar poseteriormente.
 	YPOS = 1			# Lo Mismo Con La Anterior pero con Columnas.
@@ -1912,11 +1966,14 @@ def main():
 	ArbolRaiz = None				# Variable Para Almacenar el Objeto Raiz del Arbol.
 	
 	BtnMutePressed = False			# Botón Para Poner Mute en False Por Defecto.
-	BtnMaskPressed = True			# Botón Para Poner Enmascaramiento en True Por Defecto.
+	BtnMaskPressed = False			# Botón Para Poner Enmascaramiento en True Por Defecto.
 	BtnMostrarArbol = False			# Botón Para Mostrar El Árbol Generado en False Por Defecto.
 	BtnOrdenExpansion = False		# Botón Para Mostrar La Selección del Orden De Expansión de Nodos.
 	BtnRepetirNodos = False			# Botón Para Selección de Repetición o No de Nodos.
-	BtnTipoBusqueda = 'Normal'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
+	Finalizado = False
+	BtnTipoBusqueda = 'A Estrella'		# Botón Para Selección del Tipo de Busqueda {Manual, Backtracking, A* (A Estrella)}.
+	
+	Bandera = False
 	
 	ContDir = 0
 	
@@ -2287,6 +2344,7 @@ def main():
 									
 									Iniciar = True	# Inicia El Juego.
 									Victory = True
+									Bandera = False
 									
 									MusicFondo2.stop()
 									MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
@@ -2381,7 +2439,7 @@ def main():
 										AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 										# ~ Arbol.ImprimirArbol(ArbolRaiz)
 										
-										seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
+										seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 										#===============================================
 										
 							elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
@@ -2397,6 +2455,7 @@ def main():
 								MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
 								MusicFondo2.play(-1)
 								
+								Bandera = False
 								Victory = True
 								Error = False
 								CadenaError = ''
@@ -2481,7 +2540,7 @@ def main():
 									AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 									# ~ Arbol.ImprimirArbol(ArbolRaiz)
 									
-									seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
+									seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 									#===============================================
 									
 						if evento.key == pygame.K_p:
@@ -2759,6 +2818,7 @@ def main():
 					MusicFondo2 = MusicFondos[random.randint(0,len(MusicFondos)-1)]
 					MusicFondo2.play(-1)
 					
+					Bandera = False
 					Victory = True
 					Error = False
 					CadenaError = ''
@@ -2843,7 +2903,7 @@ def main():
 						AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 						# ~ Arbol.ImprimirArbol(ArbolRaiz)
 						
-						seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
+						seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 						#===============================================
 						
 				if Btn2Pressed and not Error2:		# Si el Botón 2 (Comenzar) Fue Presionado.
@@ -2871,6 +2931,7 @@ def main():
 					
 					else:			# Si Se Selecciono Un Personaje, Se Iniciará.
 						
+						Bandera = False
 						Iniciar = True	# Inicia El Juego.
 						Victory = True
 						
@@ -2894,8 +2955,8 @@ def main():
 						Objetos['Personaje'] = personaje		# Se Guarda el Objeto Personaje en el Diccionario.
 						SelectPerson = False					# Ya No Permite Seleccionar otro Personaje hasta Presionar el Botón 4 (Seleccionar Personaje)
 						
-						for val in VALORES:
-							if val[0] == PuntoInicio: CostoTotal += float(val[3])
+						# ~ for val in VALORES:
+							# ~ if val[0] == PuntoInicio: CostoTotal += float(val[3])
 								
 						Movimientos += 1
 						SELECT.append((seleccion, [Movimientos]))
@@ -2965,7 +3026,7 @@ def main():
 							AgregarAlArbol(ArbolRaiz, 'N/A', seleccion, x, y, YPOS, XPOS)
 							# ~ Arbol.ImprimirArbol(ArbolRaiz)
 							
-							seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, seleccion)
+							seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz, 'N/A')
 							#===============================================
 							
 				elif Btn2Pressed and Error2:		# Si el Botón 2 (Comenzar) Fue Presionado y Ocurrio un Error.
@@ -3707,13 +3768,17 @@ def main():
 			
 			if seleccion == PuntoDestino:
 				
-				dibujarTexto(screen, 'Mapa Finalizado!', [16, 449], Fuentes['Droid 30'], COLOR['Negro'])
-				dibujarTexto(screen, 'Mapa Finalizado!', [17, 450], Fuentes['Droid 30'], COLOR['Rojo'])
-				
-				if Victory:
+				if Bandera:
+					dibujarTexto(screen, '    Sin Solución', [16, 449], Fuentes['Droid 30'], COLOR['Negro'])
+					dibujarTexto(screen, '    Sin Solución', [17, 450], Fuentes['Droid 30'], COLOR['Rojo'])
+				else:
+					dibujarTexto(screen, 'Mapa Finalizado!', [16, 449], Fuentes['Droid 30'], COLOR['Negro'])
+					dibujarTexto(screen, 'Mapa Finalizado!', [17, 450], Fuentes['Droid 30'], COLOR['Rojo'])
 					
-					Victoria.play()
-					Victory = False
+					if Victory:
+						
+						Victoria.play()
+						Victory = False
 		
 		
 		
@@ -3861,7 +3926,7 @@ def main():
 			#======================== Busquedas ========================
 			#===========================================================
 			
-			if seleccion != PuntoDestino:
+			if seleccion != PuntoDestino and Bandera == False:
 				
 				if TipoBusqueda == 1 and not BtnMostrarArbol:
 					
@@ -3880,24 +3945,15 @@ def main():
 						PadreSeleccion = seleccion
 						
 						seleccion = Backtracking(XPOS, YPOS, seleccion, ArbolRaiz)
-					
+						
+						if seleccion == None:
+							
+							seleccion = PuntoDestino
+							Bandera = True
+						
 					DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, seleccion, ListaBT)
 					
 				elif TipoBusqueda == 2 and not BtnMostrarArbol:
-					
-					# ~ if not PadreSeleccion in ListaBT: ListaBT.append(PadreSeleccion)
-					
-					# ~ if seleccion in ListaBT:
-						# ~ Ind = ListaBT.index(seleccion) + 1
-						# ~ ListaBT = ListaBT[:Ind]
-					
-					if not PadreSeleccion in ListaBT: ListaBT.append(PadreSeleccion)
-					
-					if seleccion in ListaBT:
-						Ind = ListaBT.index(seleccion) + 1
-						ListaBT = ListaBT[:Ind]
-					else:
-						if not seleccion in ListaBT: ListaBT.append(seleccion)
 					
 					ContFPS += 1
 					
@@ -3906,49 +3962,46 @@ def main():
 						PadreSeleccion = seleccion
 						
 						seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
-					
-					X1_ = LETRAS.index(PadreSeleccion[0]) + 1
-					Y1_ = PadreSeleccion[1]
-					X2_ = LETRAS.index(seleccion[0]) + 1
-					Y2_ = seleccion[1]
-					
-					X_ = X1_ - X2_
-					X_ = -X_ if X_ < 0 else X_
-					Y_ = Y1_ - Y2_
-					Y_ = -Y_ if Y_ < 0 else Y_
-					
-					Distancia = X_ + Y_
-					
-					if Distancia > 1:
 						
-						X_ = LETRAS.index(seleccion[0])
-						Y_ = seleccion[1]
-						
-						Up_    = [LETRAS[X_], Y_-1]
-						Right_ = [LETRAS[X_+1], Y_]
-						Down_  = [LETRAS[X_], Y_+1]
-						Left_  = [LETRAS[X_-1], Y_]
-						
-						Lista_ = [Up_, Right_, Down_, Left_]
-						
-						for x in ListaBT:
-							if x in Lista_:
-								Ind = ListaBT.index(x) + 1
-								ListaBT = ListaBT[:Ind]
-						
-						ListaBT.append(seleccion)
-					
-					DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, seleccion, ListaBT)
-					
+						if seleccion == None:
+							
+							seleccion = PuntoDestino
+							Bandera = True
+							
 			else:
-				if TipoBusqueda != 0:
+				
+				if Finalizado == False:
+					
+					PadreSeleccion = seleccion
+					seleccion = AEstrella(XPOS, YPOS, seleccion, ArbolRaiz)
+					
+					if seleccion == None: Bandera = True
+					seleccion = PuntoDestino
+					
+					ListaBT = []
+					
+					val = Arbol.Extraer(ArbolRaiz, seleccion)
+					ListaBT.append(val[1]['Padre'])
+					
+					while True:
+						
+						val = Arbol.Extraer(ArbolRaiz, val[1]['Padre'])
+						if not val[1]['Padre'] in ListaBT: ListaBT.append(val[1]['Padre'])
+						if val[1]['Coordenadas'] == PuntoInicio: break
+					
+					Finalizado = True
+					
+				if TipoBusqueda != 0 and Bandera == False:
 					
 					if not BtnMostrarArbol:
 						
 						ContFPS = 0
 						if not seleccion in ListaBT: ListaBT.append(seleccion)
-						DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
-			
+						
+						if TipoBusqueda == 2: DibujarCaminoAEstrella(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
+						
+						if TipoBusqueda == 1: DibujarCaminoBacktracing(screen, XPOS, YPOS, dimension, puntoInicio, PadreSeleccion, ListaBT)
+						
 			
 		#===================================================================================================
 		#===================================================================================================
